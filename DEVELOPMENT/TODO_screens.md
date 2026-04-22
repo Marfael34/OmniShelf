@@ -4,13 +4,19 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
 
 ## 1. Routage & Navigation
 
-- [ ] **Router** (dans `src/router/router.jsx`) :
-  - Configurer les routes en utilisant ce modèle d'objet pour les liens :
+- [ ] **Router** :
+  - Configurer le tableau de routes (`src/router/router.jsx`) en utilisant ce modèle d'objet pour les liens :
     ```javascript
     {
         path: "/", // chemin de la vue
         element: <Home/>, // élément retourné
     }
+    ```
+  - Créer le composant `src/router/AppRouter.jsx` avec comme modèle :
+    ```javascript
+    const AppRouter = () => {
+      return <RouterProvider router={Router} />;
+    };
     ```
   - Définir les chemins principaux : `/` (Accueil), `/profile` (Profil), `/search` (Recherche), `/collection` (Collection).
 - [ ] **NavBar** (dans `src/components/layout/NavBar.jsx`) :
