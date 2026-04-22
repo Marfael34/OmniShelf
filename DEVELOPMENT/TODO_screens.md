@@ -4,8 +4,14 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
 
 ## 1. Routage & Navigation
 
-- [ ] **Router** (dans `src/router/AppRouter.jsx`) :
-  - Configurer les routes avec `react-router-dom` pour englober toute l'application.
+- [ ] **Router** (dans `src/router/router.jsx`) :
+  - Configurer les routes en utilisant ce modèle d'objet pour les liens :
+    ```javascript
+    {
+        path: "/", // chemin de la vue
+        element: <Home/>, // élément retourné
+    }
+    ```
   - Définir les chemins principaux : `/` (Accueil), `/profile` (Profil), `/search` (Recherche), `/collection` (Collection).
 - [ ] **NavBar** (dans `src/components/layout/NavBar.jsx`) :
   - Intégrer le logo OmniShelf.
