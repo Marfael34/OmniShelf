@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainLayout from "../components/layout/MainLayout";
-import Home from "../screens/Home";
+import MainLayout from "../components/layout/MainLayout.jsx";
+import Home from "../screens/Home.jsx";
 
 // Composant temporaire pour les routes non développées
 const Placeholder = ({ title }) => (
