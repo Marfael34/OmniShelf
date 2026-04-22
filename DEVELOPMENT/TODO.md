@@ -78,4 +78,4 @@ Feuille de route pour le développement du projet, basée sur le document `archi
 
 - [ ] Configurer une pipeline CI/CD simple (ex: GitHub Actions).
 - [ ] Préparer les configurations de production (variables d'environnement, désactivation du mode debug).
-- [ ] Mettre en place un reverse proxy (Nginx ou Traefik) pour le déploiement.
+- [ ] Mettre en place un reverse proxy (Apache ou ) pour le déploiement.
