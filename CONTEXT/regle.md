@@ -28,6 +28,12 @@ Utilisez les mots-clés et la structure de répertoire suivants pour organiser l
 - **DEVELOPMENT/** : Ce répertoire est utilisé pour tous les documents de travail destinés aux développeurs (ex: `TODO.md`, `architecture.md`, notes temporaires).
 - **CONTEXT/** : Ce répertoire est utilisé pour la documentation de fond qui sera utile à d'autres développeurs pour comprendre le projet sur le long terme (ex: spécifications fonctionnelles, diagrammes de haut niveau).
 
+### Gestion des Commits Git
+
+- **Proposition de Commit** : À chaque fois qu'une tâche est terminée, tu dois proposer une commande de commit Git résumant le travail accompli.
+- **Format exigé** : La commande doit strictement suivre le format suivant (où `{COMMIT}` est un message concis et descriptif que tu auras généré) : `git add . && git commit -m "{COMMIT}" && git push`
+- **Rôle** : Tu dois uniquement proposer cette commande à l'utilisateur (dans un bloc de code). Tu ne dois pas essayer de l'exécuter.
+
 ---
 
 # Standards de Développement

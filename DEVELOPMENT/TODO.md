@@ -62,11 +62,11 @@ Feuille de route pour le développement du projet, basée sur le document `archi
 ### 2.2. Fonctionnalités
 
 - [x] **Authentification** : Créer les formulaires de connexion/inscription et gérer le token JWT avec Zustand.
-- [ ] **Scanner** :
-  - Intégrer la librairie `html5-qrcode` dans un composant React.
-  - Sur détection, appeler la route `/api/scan/{barcode}` via un hook `useQuery` de TanStack Query.
-  - Afficher un état de chargement (skeleton) pendant l'appel.
-  - Afficher les données de la figurine reçues.
+- [x] **Scanner** :
+  - [x] Intégrer la librairie `html5-qrcode` dans un composant React.
+  - [x] Sur détection, appeler la route `/api/scan/{barcode}` via un hook `useQuery` de TanStack Query.
+  - [x] Afficher un état de chargement (skeleton) pendant l'appel (Loader HUD Sci-Fi).
+  - [x] Afficher les données de la figurine reçues.
 - [ ] **Collection** :
   - Créer une page qui affiche la collection de l'utilisateur (via `GET /api/collection`).
   - Implémenter les boutons "Ajouter" et "Supprimer" en utilisant le hook `useMutation` de TanStack Query.
