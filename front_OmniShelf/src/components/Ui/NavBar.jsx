@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
 import { useScannerStore } from "../../store/useScannerStore";
 
-export default function NavBar() {
+export default function NavBar({ user, onLogout }) {
   const openScanner = useScannerStore((state) => state.openScanner);
-
-  // TODO: Remplacer par l'état Zustand de l'authentification
-  const isConnected = true;
 
   return (
     <header className="bg-gray-900/80 backdrop-blur-lg border-b border-green-500/30 sticky top-0 z-40">
@@ -46,13 +43,21 @@ export default function NavBar() {
             [ SCAN ]
           </button>
 
-          {isConnected ? (
-            <Link
-              to="/profile"
-              className="px-4 py-2 bg-gray-800 text-white border border-gray-600 font-bold rounded hover:bg-gray-700 transition-colors uppercase text-xs tracking-wider"
-            >
-              Profil
-            </Link>
+          {user ? (
+            <div className="flex items-center gap-4">
+              <Link
+                to="/profile"
+                className="px-4 py-2 bg-gray-800 text-white border border-gray-600 font-bold rounded hover:bg-gray-700 transition-colors uppercase text-xs tracking-wider"
+              >
+                Profil
+              </Link>
+              <button
+                onClick={onLogout}
+                className="px-4 py-2 text-red-400 hover:text-red-300 font-bold uppercase text-xs tracking-wider transition-colors"
+              >
+                Déconnexion
+              </button>
+            </div>
           ) : (
             <Link
               to="/login"

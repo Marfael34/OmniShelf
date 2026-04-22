@@ -1,15 +1,10 @@
-import { Outlet } from "react-router-dom";
-import NavBar from "./components/Ui/NavBar";
-import Scanner from "./screens/Scanner";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
 
-export default function MainLayout() {
-  return (
-    <div className="min-h-screen bg-slate-900 text-white pb-20">
-      <NavBar />
-      <main className="max-w-7xl mx-auto w-full pt-8">
-        <Outlet />
-      </main>
-      <Scanner />
-    </div>
-  );
-}
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
