@@ -24,6 +24,8 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
 - [ ] **Page Profil** (`Profile.jsx`) :
   - Afficher les informations du compte de l'utilisateur connecté.
   - Intégrer une vue d'ensemble des différentes collections possédées par l'utilisateur.
+- [ ] **Page Mes Collections** (`MyCollections.jsx`) :
+  - Afficher uniquement et en détail l'ensemble des collections de l'utilisateur connecté.
 
 ## 3. Fonctionnalité de Recherche
 
