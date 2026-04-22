@@ -35,13 +35,13 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
 
 ## 2. Écrans Principaux (dans `src/screens/`)
 
-- [] **Page d'Accueil** (`Home.jsx`) :
-  - [] Message de bienvenue interactif et présentation globale du site.
-  - [] Créer une section visuelle divisée en 4 catégories, chacune avec un background thématique :
-    - [] 🎮 Jeux Vidéo
-    - [] 📚 Manga
-    - [] 💿 Vinyle
-    - [] 🦸‍♂️ Figurine POP
+- [x] **Page d'Accueil** (`Home.jsx`) :
+  - [x] Message de bienvenue interactif et présentation globale du site.
+  - [x] Créer une section visuelle divisée en 4 catégories, chacune avec un background thématique :
+    - [x] 🎮 Jeux Vidéo
+    - [x] 📚 Manga
+    - [x] 💿 Vinyle
+    - [x] 🦸‍♂️ Figurine POP
 - [ ] **Page Profil** (`Profile.jsx`) :
   - Afficher les informations du compte de l'utilisateur connecté.
   - Intégrer une vue d'ensemble des différentes collections possédées par l'utilisateur.
