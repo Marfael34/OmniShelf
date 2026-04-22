@@ -1,12 +1,20 @@
 import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../components/layout/MainLayout";
+import Home from "../screens/Home";
+
+// Composant temporaire pour les routes non développées
+const Placeholder = ({ title }) => (
+  <div className="p-8 text-center text-green-400 font-mono text-2xl uppercase tracking-widest">
+    {title} (EN CONSTRUCTION)
+  </div>
+);
 
 export const Router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
-      { path: "/", element: <Placeholder title="Accueil" /> },
+      { path: "/", element: <Home /> },
       { path: "/profile", element: <Placeholder title="Profil Utilisateur" /> },
       {
         path: "/my-collections",
