@@ -20,6 +20,7 @@ Aim to be thorough in your review, and offer code suggestions where improvements
 ### Gestion des Fichiers
 
 - **Ne pas créer de fichier `.md`** si cela n'est pas explicitement demandé.
+- **Placement des fichiers de code** : Les fichiers de code source (`.js`, `.jsx`, `.php`, etc.) doivent impérativement être placés dans leur arborescence projet respective (ex: `src/`, etc.). Ne **jamais** les créer dans le dossier `DEVELOPMENT/`.
 - **Création de dossiers** : Tu es autorisé (et encouragé) à créer de nouveaux dossiers si l'implémentation de l'architecture ou d'une fonctionnalité le requiert (par exemple : `src/components/layout/`).
 - **Déplacement et suppression** : Si besoin, tu es autorisé à supprimer ou déplacer un fichier pour maintenir l'architecture propre.
 
@@ -27,7 +28,7 @@ Aim to be thorough in your review, and offer code suggestions where improvements
 
 Utilisez les mots-clés et la structure de répertoire suivants pour organiser les documents :
 
-- **DEVELOPMENT/** : Ce répertoire est utilisé pour tous les documents de travail destinés aux développeurs (ex: `TODO.md`, `architecture.md`, notes temporaires).
+- **DEVELOPMENT/** : Ce répertoire est **exclusivement réservé aux fichiers `.md`** de travail destinés aux développeurs (ex: `TODO.md`, `architecture.md`, notes temporaires). Aucun autre type de fichier ne doit y figurer.
 - **CONTEXT/** : Ce répertoire est utilisé pour la documentation de fond qui sera utile à d'autres développeurs pour comprendre le projet sur le long terme (ex: spécifications fonctionnelles, diagrammes de haut niveau).
 
 ### Gestion des Commits Git

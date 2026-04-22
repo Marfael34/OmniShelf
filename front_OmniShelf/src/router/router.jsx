@@ -1,43 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
-import MainLayout from "../components/layout/MainLayout.jsx";
-import Home from "../screens/Home.jsx";
-
-// Composant temporaire pour les routes non développées
-const Placeholder = ({ title }) => (
-  <div className="p-8 text-center text-green-400 font-mono text-2xl uppercase tracking-widest">
-    {title} (EN CONSTRUCTION)
-  </div>
-);
+import Home from "../screens/Home";
+import Profile from "../screens/Profile";
+import MyCollections from "../screens/MyCollections";
+import Wishlist from "../screens/Wishlist";
+import Search from "../screens/Search";
+import GameDetails from "../screens/GameDetails";
+import MangaDetails from "../screens/MangaDetails";
+import VinylDetails from "../screens/VinylDetails";
+import PopDetails from "../screens/PopDetails";
 
 export const Router = createBrowserRouter([
-  {
-    path: "/",
-    element: <MainLayout />,
-    children: [
-      { path: "/", element: <Home /> },
-      { path: "/profile", element: <Placeholder title="Profil Utilisateur" /> },
-      {
-        path: "/my-collections",
-        element: <Placeholder title="Mes Collections" />,
-      },
-      { path: "/wishlist", element: <Placeholder title="Wishlist Commune" /> },
-      { path: "/search", element: <Placeholder title="Recherche avancée" /> },
-      {
-        path: "/details/game/:id",
-        element: <Placeholder title="Détails Jeu Vidéo" />,
-      },
-      {
-        path: "/details/manga/:id",
-        element: <Placeholder title="Détails Manga" />,
-      },
-      {
-        path: "/details/vinyl/:id",
-        element: <Placeholder title="Détails Vinyle" />,
-      },
-      {
-        path: "/details/pop/:id",
-        element: <Placeholder title="Détails Figurine POP" />,
-      },
-    ],
-  },
+  { path: "/", element: <Home /> },
+  { path: "/profile", element: <Profile /> },
+  { path: "/my-collections", element: <MyCollections /> },
+  { path: "/wishlist", element: <Wishlist /> },
+  { path: "/search", element: <Search /> },
+  { path: "/details/game/:id", element: <GameDetails /> },
+  { path: "/details/manga/:id", element: <MangaDetails /> },
+  { path: "/details/vinyl/:id", element: <VinylDetails /> },
+  { path: "/details/pop/:id", element: <PopDetails /> },
 ]);

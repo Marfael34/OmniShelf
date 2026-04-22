@@ -28,20 +28,20 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
     - `/details/manga/:id` (Vue détaillée : Manga)
     - `/details/vinyl/:id` (Vue détaillée : Vinyle)
     - `/details/pop/:id` (Vue détaillée : Figurine POP)
-- [x] **NavBar** (dans `src/components/layout/NavBar.jsx`) :
-  - [x] Intégrer le logo OmniShelf.
-  - [x] Ajouter les liens de navigation.
-  - [x] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
+- [] **NavBar** (dans `src/components/layout/NavBar.jsx`) :
+  - [] Intégrer le logo OmniShelf.
+  - [] Ajouter les liens de navigation.
+  - [] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
 
 ## 2. Écrans Principaux (dans `src/screens/`)
 
-- [x] **Page d'Accueil** (`Home.jsx`) :
-  - [x] Message de bienvenue interactif et présentation globale du site.
-  - [x] Créer une section visuelle divisée en 4 catégories, chacune avec un background thématique :
-    - [x] 🎮 Jeux Vidéo
-    - [x] 📚 Manga
-    - [x] 💿 Vinyle
-    - [x] 🦸‍♂️ Figurine POP
+- [] **Page d'Accueil** (`Home.jsx`) :
+  - [] Message de bienvenue interactif et présentation globale du site.
+  - [] Créer une section visuelle divisée en 4 catégories, chacune avec un background thématique :
+    - [] 🎮 Jeux Vidéo
+    - [] 📚 Manga
+    - [] 💿 Vinyle
+    - [] 🦸‍♂️ Figurine POP
 - [ ] **Page Profil** (`Profile.jsx`) :
   - Afficher les informations du compte de l'utilisateur connecté.
   - Intégrer une vue d'ensemble des différentes collections possédées par l'utilisateur.
