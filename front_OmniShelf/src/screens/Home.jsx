@@ -1,7 +1,14 @@
-export default function Home() {
+const Home = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-      <h1 className="text-3xl font-bold text-green-400">Accueil OmniShelf</h1>
+    <div>
+      <h1 className="text-3xl font-bold text-green-400">
+        Bienvenue sur OmniShelf
+      </h1>
+      <p className="mt-2 text-gray-400">
+        Sélectionnez une catégorie ou commencez à explorer !
+      </p>
     </div>
   );
-}
+};
+
+export default Home;

@@ -1,9 +1,9 @@
-export default function MyCollections() {
+const MyCollections = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <h1 className="text-2xl font-bold text-green-400 mb-6">
-        Mes Collections
-      </h1>
+    <div>
+      <h1 className="text-3xl font-bold text-green-400">Mes Collections</h1>
     </div>
   );
-}
+};
+
+export default MyCollections;

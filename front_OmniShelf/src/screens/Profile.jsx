@@ -1,7 +1,9 @@
-export default function Profile() {
+const Profile = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <h1 className="text-2xl font-bold text-green-400 mb-6">Mon Profil</h1>
+    <div>
+      <h1 className="text-3xl font-bold text-green-400">Mon Profil</h1>
     </div>
   );
-}
+};
+
+export default Profile;

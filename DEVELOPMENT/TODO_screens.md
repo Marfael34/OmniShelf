@@ -19,19 +19,19 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
     };
     ```
   - [x] Définir l'ensemble des chemins de l'application :
-    - `/` (Accueil)
-    - `/profile` (Profil)
-    - `/my-collections` (Mes Collections)
-    - `/wishlist` (Wishlist Commune)
-    - `/search` (Recherche avancée)
-    - `/details/game/:id` (Vue détaillée : Jeu Vidéo)
-    - `/details/manga/:id` (Vue détaillée : Manga)
-    - `/details/vinyl/:id` (Vue détaillée : Vinyle)
-    - `/details/pop/:id` (Vue détaillée : Figurine POP)
-- [] **NavBar** (dans `src/components/layout/NavBar.jsx`) :
-  - [] Intégrer le logo OmniShelf.
-  - [] Ajouter les liens de navigation.
-  - [] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
+    - [x] `/` (Accueil)
+    - [x] `/profile` (Profil)
+    - [x] `/my-collections` (Mes Collections)
+    - [x] `/wishlist` (Wishlist Commune)
+    - [x] `/search` (Recherche avancée)
+    - [x] `/details/game/:id` (Vue détaillée : Jeu Vidéo)
+    - [x] `/details/manga/:id` (Vue détaillée : Manga)
+    - [x] `/details/vinyl/:id` (Vue détaillée : Vinyle)
+    - [x] `/details/pop/:id` (Vue détaillée : Figurine POP)
+- [x] **NavBar** (dans `src/components/Ui/NavBar.jsx`) :
+  - [x] Intégrer le logo OmniShelf.
+  - [x] Ajouter les liens de navigation.
+  - [x] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
 
 ## 2. Écrans Principaux (dans `src/screens/`)
 
