@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import { useQuery } from "@tanstack/react-query";
-import { useScannerStore } from "../../store/useScannerStore";
+import { useScannerStore } from "../store/useScannerStore";
 
 export default function Scanner() {
   const { isOpen, closeScanner } = useScannerStore();

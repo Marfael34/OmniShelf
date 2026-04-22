@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "./components/Ui/NavBar";
-import Scanner from "./screens/Scanner";
+import NavBar from "./NavBar";
+import Scanner from "../../screens/Scanner";
 
 export default function MainLayout() {
   return (

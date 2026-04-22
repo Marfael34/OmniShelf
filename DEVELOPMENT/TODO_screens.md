@@ -4,21 +4,21 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
 
 ## 1. Routage & Navigation
 
-- [ ] **Router** :
-  - Configurer le tableau de routes (`src/router/router.jsx`) en utilisant ce modèle d'objet pour les liens :
+- [x] **Router** :
+  - [x] Configurer le tableau de routes (`src/router/router.jsx`) en utilisant ce modèle d'objet pour les liens :
     ```javascript
     {
         path: "/", // chemin de la vue
         element: <Home/>, // élément retourné
     }
     ```
-  - Créer le composant `src/router/AppRouter.jsx` avec comme modèle :
+  - [x] Créer le composant `src/router/AppRouter.jsx` avec comme modèle :
     ```javascript
     const AppRouter = () => {
       return <RouterProvider router={Router} />;
     };
     ```
-  - Définir l'ensemble des chemins de l'application :
+  - [x] Définir l'ensemble des chemins de l'application :
     - `/` (Accueil)
     - `/profile` (Profil)
     - `/my-collections` (Mes Collections)
@@ -28,10 +28,10 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
     - `/details/manga/:id` (Vue détaillée : Manga)
     - `/details/vinyl/:id` (Vue détaillée : Vinyle)
     - `/details/pop/:id` (Vue détaillée : Figurine POP)
-- [ ] **NavBar** (dans `src/components/layout/NavBar.jsx`) :
-  - Intégrer le logo OmniShelf.
-  - Ajouter les liens de navigation.
-  - Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
+- [x] **NavBar** (dans `src/components/layout/NavBar.jsx`) :
+  - [x] Intégrer le logo OmniShelf.
+  - [x] Ajouter les liens de navigation.
+  - [x] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
 
 ## 2. Écrans Principaux (dans `src/screens/`)
 
