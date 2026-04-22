@@ -67,10 +67,10 @@ Feuille de route pour le développement du projet, basée sur le document `archi
   - [x] Sur détection, appeler la route `/api/scan/{barcode}` via un hook `useQuery` de TanStack Query.
   - [x] Afficher un état de chargement (skeleton) pendant l'appel (Loader HUD Sci-Fi).
   - [x] Afficher les données de la figurine reçues.
-- [ ] **Collection** :
-  - Créer une page qui affiche la collection de l'utilisateur (via `GET /api/collection`).
-  - Implémenter les boutons "Ajouter" et "Supprimer" en utilisant le hook `useMutation` de TanStack Query.
-  - Utiliser le hook `useOptimistic` pour une mise à jour instantanée de l'interface.
+- [x] **Collection** :
+  - [x] Créer une page qui affiche la collection de l'utilisateur (via `GET /api/collection`).
+  - [x] Implémenter les boutons "Ajouter" et "Supprimer" en utilisant le hook `useMutation` de TanStack Query.
+  - [x] Utiliser le hook `useOptimistic` pour une mise à jour instantanée de l'interface.
 
 ---
 
