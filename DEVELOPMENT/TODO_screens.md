@@ -18,7 +18,16 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
       return <RouterProvider router={Router} />;
     };
     ```
-  - Définir les chemins principaux : `/` (Accueil), `/profile` (Profil), `/search` (Recherche), `/collection` (Collection).
+  - Définir l'ensemble des chemins de l'application :
+    - `/` (Accueil)
+    - `/profile` (Profil)
+    - `/my-collections` (Mes Collections)
+    - `/wishlist` (Wishlist Commune)
+    - `/search` (Recherche avancée)
+    - `/details/game/:id` (Vue détaillée : Jeu Vidéo)
+    - `/details/manga/:id` (Vue détaillée : Manga)
+    - `/details/vinyl/:id` (Vue détaillée : Vinyle)
+    - `/details/pop/:id` (Vue détaillée : Figurine POP)
 - [ ] **NavBar** (dans `src/components/layout/NavBar.jsx`) :
   - Intégrer le logo OmniShelf.
   - Ajouter les liens de navigation.
