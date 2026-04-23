@@ -4,68 +4,68 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
 
 ## 1. Routage & Navigation
 
-- [] **Router** :
-  - [] Configurer le tableau de routes (`src/router/router.jsx`) en utilisant ce modèle d'objet pour les liens :
+- [x] **Router** :
+  - [x] Configurer le tableau de routes (`src/router/router.jsx`) en utilisant ce modèle d'objet pour les liens :
     ```javascript
     {
         path: "/", // chemin de la vue
         element: <Home/>, // élément retourné
     }
     ```
-  - [] Créer le composant `src/router/AppRouter.jsx` avec comme modèle :
+  - [x] Créer le composant `src/router/AppRouter.jsx` avec comme modèle :
     ```javascript
     const AppRouter = () => {
       return <RouterProvider router={Router} />;
     };
     ```
-  - [] Définir l'ensemble des chemins de l'application :
-    - [] `/` (Accueil)
-    - [] `/profile` (Profil)
-    - [] `/my-collections` (Mes Collections)
-    - [] `/wishlist` (Wishlist Commune)
-    - [] `/search` (Recherche avancée)
-    - [] `/details/game/:id` (Vue détaillée : Jeu Vidéo)
-    - [] `/details/manga/:id` (Vue détaillée : Manga)
-    - [] `/details/vinyl/:id` (Vue détaillée : Vinyle)
-    - [] `/details/pop/:id` (Vue détaillée : Figurine POP)
-- [] **NavBar** (dans `src/components/UI/NavBar.jsx`) :
-  - [] Intégrer le logo OmniShelf.
-  - [] Ajouter les liens de navigation.
-  - [] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
+  - [x] Définir l'ensemble des chemins de l'application :
+    - [x] `/` (Accueil)
+    - [x] `/profile` (Profil)
+    - [x] `/my-collections` (Mes Collections)
+    - [x] `/wishlist` (Wishlist Commune)
+    - [x] `/search` (Recherche avancée)
+    - [x] `/details/game/:id` (Vue détaillée : Jeu Vidéo)
+    - [x] `/details/manga/:id` (Vue détaillée : Manga)
+    - [x] `/details/vinyl/:id` (Vue détaillée : Vinyle)
+    - [x] `/details/pop/:id` (Vue détaillée : Figurine POP)
+- [x] **NavBar** (dans `src/components/UI/NavBar.jsx`) :
+  - [x] Intégrer le logo OmniShelf.
+  - [x] Ajouter les liens de navigation.
+  - [x] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
 
 ## 2. Écrans Principaux (dans `src/screens/`)
 
-- [] **Page d'Accueil** (`Home.jsx`) :
-  - [] Message de bienvenue interactif et présentation globale du site.
-  - [] Créer une section visuelle divisée en 4 catégories, chacune avec un background thématique :
-    - [] 🎮 Jeux Vidéo
-    - [] 📚 Manga
-    - [] 💿 Vinyle
-    - [] 🦸‍♂️ Figurine POP
-- [] **Page Profil** (`Profile.jsx`) :
-  - [] Afficher les informations du compte de l'utilisateur connecté.
-  - [] Intégrer une vue d'ensemble des différentes collections possédées par l'utilisateur.
-- [] **Page Mes Collections** (`MyCollections.jsx`) :
-  - [] Afficher uniquement et en détail l'ensemble des collections de l'utilisateur connecté avec un système de filtres.
+- [x] **Page d'Accueil** (`Home.jsx`) :
+  - [x] Message de bienvenue interactif et présentation globale du site.
+  - [x] Créer une section visuelle divisée en 4 catégories, chacune avec un background thématique :
+    - [x] 🎮 Jeux Vidéo
+    - [x] 📚 Manga
+    - [x] 💿 Vinyle
+    - [x] 🦸‍♂️ Figurine POP
+- [x] **Page Profil** (`Profile.jsx`) :
+  - [x] Afficher les informations du compte de l'utilisateur connecté.
+  - [x] Intégrer une vue d'ensemble des différentes collections possédées par l'utilisateur.
+- [x] **Page Mes Collections** (`MyCollections.jsx`) :
+  - [x] Afficher uniquement et en détail l'ensemble des collections de l'utilisateur connecté avec un système de filtres.
 
 ## 3. Vues Détaillées par Catégorie
 
 _Note : Chaque vue détaillée doit inclure les boutons d'action "Ajouter à la collection" et "Ajouter à la wishlist"._
 
-- [] **Jeu Vidéo** : Titre, Genre, Nom de l'éditeur, Image, PEGI, et lien d'achat.
-- [] **Manga** : Titre, Nom de l'auteur, Genre, Maison d'édition, Image, et lien d'achat.
-- [] **Vinyle** : Titre, Nom de l'artiste, Genre, Image, et tracklist (liste des chansons, si disponible).
-- [] **Figurine POP** : Numéro de la POP, Nom de la série, Nom du personnage, Image.
+- [x] **Jeu Vidéo** : Titre, Genre, Nom de l'éditeur, Image, PEGI, et lien d'achat.
+- [x] **Manga** : Titre, Nom de l'auteur, Genre, Maison d'édition, Image, et lien d'achat.
+- [x] **Vinyle** : Titre, Nom de l'artiste, Genre, Image, et tracklist (liste des chansons, si disponible).
+- [x] **Figurine POP** : Numéro de la POP, Nom de la série, Nom du personnage, Image.
 
 ## 4. Wishlist Commune
 
-- [] **Page Wishlist** (`Wishlist.jsx`) :
-  - [] Afficher une liste de souhaits globale regroupant toutes les thématiques.
-  - [] Intégrer un système de filtres pour rechercher/trier facilement par catégorie ou thématique.
+- [x] **Page Wishlist** (`Wishlist.jsx`) :
+  - [x] Afficher une liste de souhaits globale regroupant toutes les thématiques.
+  - [x] Intégrer un système de filtres pour rechercher/trier facilement par catégorie ou thématique.
 
 ## 5. Fonctionnalité de Recherche
 
-- [] **Système de Recherche Avancée** :
-  - [] Créer une barre de recherche (soit dans la NavBar, soit sur une page dédiée).
-  - [] Permettre une recherche multicritères : Titre, Nom d'auteur, Maison d'édition, Nom du studio, PEGI.
-  - [] Afficher les résultats sous forme de grille de cartes.
+- [x] **Système de Recherche Avancée** :
+  - [x] Créer une barre de recherche (soit dans la NavBar, soit sur une page dédiée).
+  - [x] Permettre une recherche multicritères : Titre, Nom d'auteur, Maison d'édition, Nom du studio, PEGI.
+  - [x] Afficher les résultats sous forme de grille de cartes.
