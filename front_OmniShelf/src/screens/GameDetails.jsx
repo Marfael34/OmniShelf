@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useAffiliationLink } from "../hooks/useAffiliationLink";
 
 const GameDetails = () => {
   const { id } = useParams();
@@ -9,9 +10,10 @@ const GameDetails = () => {
     genre: "Action-Aventure",
     publisher: "Nintendo",
     pegi: "12",
-    purchaseLink: "https://www.nintendo.com",
     image: "https://via.placeholder.com/400x600?text=Zelda"
   };
+
+  const { amazon, fnac } = useAffiliationLink(game.title, "game", id);
 
   return (
     <div className="max-w-4xl mx-auto py-8">
@@ -42,9 +44,14 @@ const GameDetails = () => {
                 Ajouter à la wishlist
               </button>
             </div>
-            <a href={game.purchaseLink} target="_blank" rel="noreferrer" className="block w-full text-center py-2 text-(--text-dim) hover:text-(--text-main) underline">
-              Lien d'achat
-            </a>
+            <div className="flex space-x-4 pt-4 border-t border-gray-800">
+              <a href={amazon} target="_blank" rel="noreferrer" className="flex-1 text-center py-2 bg-[#FF9900] text-black font-bold rounded-xl hover:opacity-90 transition-opacity">
+                Acheter sur Amazon
+              </a>
+              <a href={fnac} target="_blank" rel="noreferrer" className="flex-1 text-center py-2 bg-[#E1A925] text-black font-bold rounded-xl hover:opacity-90 transition-opacity">
+                Acheter sur Fnac
+              </a>
+            </div>
           </div>
         </div>
       </div>

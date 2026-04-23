@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useAffiliationLink } from "../hooks/useAffiliationLink";
 
 const VinylDetails = () => {
   const { id } = useParams();
@@ -10,6 +11,8 @@ const VinylDetails = () => {
     image: "https://via.placeholder.com/500x500?text=Pink+Floyd",
     tracklist: ["Speak to Me", "Breathe", "On the Run", "Time", "The Great Gig in the Sky", "Money", "Us and Them", "Any Colour You Like", "Brain Damage", "Eclipse"]
   };
+
+  const { amazon, fnac } = useAffiliationLink(`${vinyl.artist} ${vinyl.title}`, "vinyl", id);
 
   return (
     <div className="max-w-4xl mx-auto py-8">
@@ -49,6 +52,14 @@ const VinylDetails = () => {
               <button className="flex-1 border-2 border-(--color-accent) text-(--color-accent) font-bold py-3 rounded-xl hover:bg-(--color-accent) hover:text-(--bg-main) transition-colors">
                 Wishlist
               </button>
+            </div>
+            <div className="flex space-x-4 pt-4 border-t border-gray-800">
+              <a href={amazon} target="_blank" rel="noreferrer" className="flex-1 text-center py-2 bg-[#FF9900] text-black font-bold rounded-xl hover:opacity-90 transition-opacity">
+                Acheter sur Amazon
+              </a>
+              <a href={fnac} target="_blank" rel="noreferrer" className="flex-1 text-center py-2 bg-[#E1A925] text-black font-bold rounded-xl hover:opacity-90 transition-opacity">
+                Acheter sur Fnac
+              </a>
             </div>
           </div>
         </div>
