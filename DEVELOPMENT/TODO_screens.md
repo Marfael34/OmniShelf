@@ -59,13 +59,13 @@ _Note : Chaque vue détaillée doit inclure les boutons d'action "Ajouter à la 
 
 ## 4. Wishlist Commune
 
-- [ ] **Page Wishlist** (`Wishlist.jsx`) :
-  - Afficher une liste de souhaits globale regroupant toutes les thématiques.
-  - Intégrer un système de filtres pour rechercher/trier facilement par catégorie ou thématique.
+- [x] **Page Wishlist** (`Wishlist.jsx`) :
+  - [x] Afficher une liste de souhaits globale regroupant toutes les thématiques.
+  - [x] Intégrer un système de filtres pour rechercher/trier facilement par catégorie ou thématique.
 
 ## 5. Fonctionnalité de Recherche
 
-- [ ] **Système de Recherche Avancée** :
-  - Créer une barre de recherche (soit dans la NavBar, soit sur une page dédiée).
-  - Permettre une recherche multicritères : Titre, Nom d'auteur, Maison d'édition, Nom du studio, PEGI.
-  - Afficher les résultats sous forme de grille de cartes.
+- [x] **Système de Recherche Avancée** :
+  - [x] Créer une barre de recherche (soit dans la NavBar, soit sur une page dédiée).
+  - [x] Permettre une recherche multicritères : Titre, Nom d'auteur, Maison d'édition, Nom du studio, PEGI.
+  - [x] Afficher les résultats sous forme de grille de cartes.
