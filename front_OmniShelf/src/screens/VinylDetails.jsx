@@ -1,7 +1,10 @@
 export default function VinylDetails() {
   return (
-    <div>
-      <h1>Détails Vinyle</h1>
+    <div className="flex flex-col gap-6 animate-fade-in">
+      <h1 className="text-3xl font-bold text-slate-50">Détail Vinyle 💿</h1>
+      <div className="bg-slate-800 border border-purple-500/30 rounded-xl p-6 shadow-[0_0_15px_rgba(168,85,247,0.15)]">
+        <p className="text-slate-300">Fiche de détails à venir...</p>
+      </div>
     </div>
   );
 }

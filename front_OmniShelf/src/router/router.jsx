@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App.jsx";
-
 import Home from "../screens/Home.jsx";
 import Profile from "../screens/Profile.jsx";
 import MyCollections from "../screens/MyCollections.jsx";
@@ -11,9 +10,8 @@ import MangaDetails from "../screens/MangaDetails.jsx";
 import VinylDetails from "../screens/VinylDetails.jsx";
 import PopDetails from "../screens/PopDetails.jsx";
 
-export const Router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
-    path: "/",
     element: <App />,
     children: [
       { path: "/", element: <Home /> },

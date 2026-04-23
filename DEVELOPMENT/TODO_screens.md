@@ -5,8 +5,19 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
 ## 1. Routage & Navigation
 
 - [x] **Router** :
-  - [x] Configurer le tableau de routes (`src/router/router.jsx`).
-  - [x] Créer le composant `src/router/AppRouter.jsx`.
+  - [x] Configurer le tableau de routes (`src/router/router.jsx`) en utilisant ce modèle d'objet pour les liens :
+    ```javascript
+    {
+        path: "/", // chemin de la vue
+        element: <Home/>, // élément retourné
+    }
+    ```
+  - [x] Créer le composant `src/router/AppRouter.jsx` avec comme modèle :
+    ```javascript
+    const AppRouter = () => {
+      return <RouterProvider router={Router} />;
+    };
+    ```
   - [x] Définir l'ensemble des chemins de l'application :
     - [x] `/` (Accueil)
     - [x] `/profile` (Profil)
@@ -17,20 +28,20 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
     - [x] `/details/manga/:id` (Vue détaillée : Manga)
     - [x] `/details/vinyl/:id` (Vue détaillée : Vinyle)
     - [x] `/details/pop/:id` (Vue détaillée : Figurine POP)
-- [] **NavBar** (dans `src/components/Ui/NavBar.jsx`) :
-  - [] Intégrer le logo OmniShelf.
-  - [] Ajouter les liens de navigation.
-  - [] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
+- [x] **NavBar** (dans `src/components/UI/NavBar.jsx`) :
+  - [x] Intégrer le logo OmniShelf.
+  - [x] Ajouter les liens de navigation.
+  - [x] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
 
 ## 2. Écrans Principaux (dans `src/screens/`)
 
-- [] **Page d'Accueil** (`Home.jsx`) :
-  - [] Message de bienvenue interactif et présentation globale du site.
-  - [] Créer une section visuelle divisée en 4 catégories, chacune avec un background thématique :
-    - [] 🎮 Jeux Vidéo
-    - [] 📚 Manga
-    - [] 💿 Vinyle
-    - [] 🦸‍♂️ Figurine POP
+- [x] **Page d'Accueil** (`Home.jsx`) :
+  - [x] Message de bienvenue interactif et présentation globale du site.
+  - [x] Créer une section visuelle divisée en 4 catégories, chacune avec un background thématique :
+    - [x] 🎮 Jeux Vidéo
+    - [x] 📚 Manga
+    - [x] 💿 Vinyle
+    - [x] 🦸‍♂️ Figurine POP
 - [] **Page Profil** (`Profile.jsx`) :
   - [] Afficher les informations du compte de l'utilisateur connecté.
   - [] Intégrer une vue d'ensemble des différentes collections possédées par l'utilisateur.

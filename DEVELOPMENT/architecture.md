@@ -87,25 +87,19 @@ Le frontend est une **Progressive Web App (PWA)** construite avec React et Vite,
 
 Conformément au fichier `regle.md`, et après consolidation des différentes spécifications, voici l'architecture de dossiers officielle pour le frontend. Elle est conçue pour la clarté, la modularité et le respect strict des standards du projet (React 19 en JS natif, pas de TypeScript).
 
-```plaintext
+````plaintext
 src/
-├── assets/          # Polices, icônes globales, etc.
-├── components/      # Composants UI atomiques et réutilisables (max 60 lignes)
-│   ├── ui/          # Éléments de base (Button.jsx, Input.jsx, Card.jsx)
-│   └── layout/      # Composants de structure (NavBar.jsx, Footer.jsx, MainLayout.jsx)
-├── config/          # Fichiers de configuration (constantes, instance Axios)
-├── features/        # Logique métier par domaine (ex: authentification, collection)
-│   └── auth/        # Exemple avec le domaine 'auth'
-│       ├── api/     # Appels API (login, register)
-│       ├── components/ # Composants spécifiques (LoginForm.jsx)
-│       └── hooks/   # Hooks spécifiques (useAuth.js)
-├── hooks/           # Hooks personnalisés globaux (ex: useMediaQuery.js)
-├── router/          # Configuration du routage (AppRouter.jsx, routes.js)
-├── screens/         # Écrans/Pages de l'application (assemblage de composants)
-├── services/        # Services transverses (ex: client API générique)
-├── store/           # Stores Zustand pour l'état global client (authStore.js)
-└── utils/           # Fonctions utilitaires pures (formatters, validateurs)
-```
+├── assets/          # Images, polices, icônes globales
+├── components/     # Composants UI atomiques et réutilisables (Max 60 lignes, Boutons, Inputs, Navbar)
+|   ├── UI
+├── constants/       # toute les constante de l'application et de l'api
+├── contexts         # contexte pour l'authentification
+├── hooks/           # Hooks personnalisés globaux (useAuth, useLocalStorage)
+├── router/          # Fichiers de configuration du routage (contenant "router")
+├── screens/         # Écrans de l'application
+├── services/        # Logique métier transverse (Analytics, Sentry)
+└── store/           # État global (Redux Toolkit, Zustand, Pinia)
+---
 
 ## 4. Workflow Détaillé : Scan d'une nouvelle Funko Pop
 

@@ -24,6 +24,8 @@ Aim to be thorough in your review, and offer code suggestions where improvements
 - **Création de dossiers et Architecture** : Tu as le droit de modifier l'architecture en ajoutant de nouveaux dossiers si l'implémentation le requiert. **Si tu modifies l'architecture, tu dois impérativement mettre à jour le fichier `DEVELOPMENT/architecture.md`**.
 - **Déplacement et suppression** : Si besoin, tu es autorisé à supprimer ou déplacer un fichier pour maintenir l'architecture propre.
 - **Modification de fichiers existants** : Tu as le droit de modifier un fichier s'il existe déjà, qu'il soit vide ou non.
+- **Doute sur l'emplacement** : Si tu as un doute sur l'emplacement d'un fichier, demande-moi le chemin.
+- **Création de dossiers** : Si tu as besoin de créer un dossier n'importe où dans mon architecture, tu peux le faire.
 
 ### Mots-clés pour la Portée des Fichiers
 
@@ -95,24 +97,15 @@ React 19 représente le plus grand changement de paradigme depuis l'introduction
 ````plaintext
 src/
 ├── assets/          # Images, polices, icônes globales
-├── components/      # Composants UI atomiques et réutilisables (Max 60 lignes, Boutons, Inputs)
-├── config/          # Variables d'environnement, instances Axios, constantes
-├── features/        # Le cœur de l'application (logique métier par domaine)
-│   ├── auth/        # Exemple : Authentification
-│   │   ├── api/     # Appels API spécifiques à l'auth
-│   │   ├── components/
-│   │   ├── hooks/
-│   │   └── types/
-│   └── products/    # Exemple : Catalogue produit
+├── components/     # Composants UI atomiques et réutilisables (Max 60 lignes, Boutons, Inputs, Navbar)
+|   ├── UI
+├── constants/       # toute les constante de l'application et de l'api
+├── contexts         # contexte pour l'authentification
 ├── hooks/           # Hooks personnalisés globaux (useAuth, useLocalStorage)
-├── layouts/         # Templates de pages (MainLayout, AuthLayout)
 ├── router/          # Fichiers de configuration du routage (contenant "router")
 ├── screens/         # Écrans de l'application
 ├── services/        # Logique métier transverse (Analytics, Sentry)
-├── store/           # État global (Redux Toolkit, Zustand, Pinia)
-├── types/           # Définitions TypeScript globales
-└── utils/           # Fonctions utilitaires (formatage de date, calculs)
-
+└── store/           # État global (Redux Toolkit, Zustand, Pinia)
 ---
 
 ## 3. Charte Graphique - OmniShelf
