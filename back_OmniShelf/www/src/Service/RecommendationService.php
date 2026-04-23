@@ -6,7 +6,6 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
-
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Entity\CollectionItem;
 
@@ -20,71 +19,83 @@ final readonly class RecommendationService
     public function getRecommendationsForUser(Uuid $userId): array
     {
         // 1. Récupérer les items de la collection de l'utilisateur
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('f.brand', 'f.barcode')
-           ->from(CollectionItem::class, 'ci')
-           ->join('ci.figurine', 'f')
-           ->where('ci.user = :userId')
-           ->setParameter('userId', $userId->toRfc4122());
+        $collectionItems = $this->entityManager->getRepository(CollectionItem::class)->findBy(['user' => $userId]);
+        
+        $categories = [];
+        foreach ($collectionItems as $item) {
+            $categories[] = $item->getCategory();
+        }
+        
+        // Fréquence des catégories
+        $categoryCounts = array_count_values($categories);
+        arsort($categoryCounts);
+        $topCategory = !empty($categoryCounts) ? array_key_first($categoryCounts) : 'all';
 
-        $results = $qb->getQuery()->getScalarResult();
-        $excludedIds = array_column($results, 'barcode');
-        $brands = array_unique(array_filter(array_column($results, 'brand')));
-
-        // 2. Analyser les thèmes (on prend les marques possédées)
         $recommendations = [];
-        if (!empty($brands)) {
-            $mainBrand = $brands[array_rand($brands)];
-            try {
-                $response = $this->httpClient->request('GET', 'https://openlibrary.org/search.json', [
-                    'query' => ['q' => $mainBrand, 'limit' => 5]
+
+        try {
+            if ($topCategory === 'game' || $topCategory === 'all') {
+                $apiKey = $_ENV['RAWG_API_KEY'] ?? null;
+                $response = $this->httpClient->request('GET', 'https://api.rawg.io/api/games', [
+                    'query' => [
+                        'key' => $apiKey,
+                        'ordering' => '-rating',
+                        'page_size' => 5
+                    ]
                 ]);
                 $data = $response->toArray();
-                foreach ($data['docs'] ?? [] as $doc) {
+                foreach ($data['results'] ?? [] as $item) {
                     $recommendations[] = [
-                        'title' => $doc['title'] ?? 'Livre suggéré',
-                        'category' => 'book',
-                        'external_id' => $doc['key'],
-                        'reason' => "Basé sur votre intérêt pour $mainBrand"
+                        'id' => (string)$item['id'],
+                        'externalProductId' => (string)$item['id'],
+                        'title' => $item['name'] ?? 'Jeu suggéré',
+                        'category' => 'game',
+                        'imageUrl' => $item['background_image'] ?? null,
+                        'reason' => "Parce que vous aimez les jeux vidéo"
                     ];
                 }
-            } catch (\Exception $e) {
-                // Silently fail or log
             }
-        } else {
-            // Cold Start: Fetch popular items
-            try {
-                $response = $this->httpClient->request('GET', 'https://openlibrary.org/search.json', [
-                    'query' => ['q' => 'popular', 'limit' => 5]
+
+            if ($topCategory === 'manga' || $topCategory === 'book' || $topCategory === 'all') {
+                $apiKey = $_ENV['BOOKS_API_KEY'] ?? null;
+                $response = $this->httpClient->request('GET', 'https://www.googleapis.com/books/v1/volumes', [
+                    'query' => [
+                        'q' => 'subject:manga',
+                        'orderBy' => 'relevance',
+                        'maxResults' => 5,
+                        'key' => $apiKey
+                    ]
                 ]);
                 $data = $response->toArray();
-                foreach ($data['docs'] ?? [] as $doc) {
+                foreach ($data['items'] ?? [] as $item) {
                     $recommendations[] = [
-                        'title' => $doc['title'] ?? 'Populaire',
-                        'category' => 'book',
-                        'external_id' => $doc['key'],
-                        'reason' => "Populaire en ce moment"
+                        'id' => $item['id'],
+                        'externalProductId' => $item['id'],
+                        'title' => $item['volumeInfo']['title'] ?? 'Manga suggéré',
+                        'category' => 'manga',
+                        'imageUrl' => $item['volumeInfo']['imageLinks']['thumbnail'] ?? null,
+                        'reason' => "Basé sur votre collection de mangas"
                     ];
                 }
-            } catch (\Exception $e) {
-                // Silently fail
             }
+        } catch (\Exception $e) {
+            // Log error
         }
 
-        // 3. Fallback final si toujours rien
+        // Fallback final si vide
         if (empty($recommendations)) {
             $recommendations[] = [
+                'externalProductId' => 'zelda-botw',
                 'title' => 'The Legend of Zelda: Breath of the Wild',
                 'category' => 'game',
-                'external_id' => 'zelda-botw',
                 'reason' => 'Indispensable de la communauté'
             ];
         }
 
         return [
-            'user_id' => $userId->toRfc4122(),
-            'excluded_ids' => $excludedIds,
+            'userId' => $userId->toRfc4122(),
             'recommendations' => $recommendations,
         ];
     }
 }
+

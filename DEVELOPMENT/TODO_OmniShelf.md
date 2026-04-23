@@ -9,13 +9,13 @@ Ce document suit l'avancement du projet par rapport au cahier des charges et aux
 - [x] **Validation des Props** : Passer en revue les composants pour utiliser les valeurs par défaut ES6 au lieu de PropTypes (Standard JS).
 
 ## 🟠 Fonctionnalités Core (En cours)
-- [ ] **Scanner de Code-barres** :
-    - [ ] Tester l'API Torch (flash) sur mobile.
-    - [ ] Ajouter le feedback haptique (`navigator.vibrate`) lors d'un scan réussi.
-    - [ ] Gérer le cas "EAN Inconnu" avec une redirection vers un ajout manuel ou message d'erreur gracieux.
-- [ ] **Moteur de Recommandation** :
-    - [ ] Vérifier/Optimiser la logique backend pour agréger les tags des items possédés.
-    - [ ] Implémenter le "Cold Start" (afficher les tendances si la collection est vide).
+- [x] **Scanner de Code-barres** :
+    - [x] Tester l'API Torch (flash) sur mobile.
+    - [x] Ajouter le feedback haptique (`navigator.vibrate`) lors d'un scan réussi.
+    - [x] Gérer le cas "EAN Inconnu" avec une redirection vers un ajout manuel ou message d'erreur gracieux.
+- [x] **Moteur de Recommandation** :
+    - [x] Vérifier/Optimiser la logique backend pour agréger les tags des items possédés.
+    - [x] Implémenter le "Cold Start" (afficher les tendances si la collection est vide).
 - [ ] **Affiliation Dynamique** : 
     - [ ] Valider les tags Amazon/Fnac dans le hook `useAffiliationLink`.
 

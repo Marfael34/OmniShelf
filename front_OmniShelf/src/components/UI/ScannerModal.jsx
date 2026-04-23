@@ -145,15 +145,31 @@ const ScannerModal = ({ onClose = () => {} }) => {
             )}
 
             {error && (
-              <div className="space-y-4 py-8">
-                <div className="text-red-400 font-black text-2xl">NOT_FOUND</div>
-                <p className="text-dim">Le code {scannedCode} ne correspond à aucun produit connu.</p>
-                <button 
-                  onClick={() => setScannedCode(null)}
-                  className="bg-accent text-bg-main px-8 py-3 rounded-xl font-bold hover:opacity-90 transition-all"
-                >
-                  RÉESSAYER
-                </button>
+              <div className="space-y-6 py-8">
+                <div className="inline-flex p-4 bg-red-500/10 rounded-2xl">
+                    <X className="w-12 h-12 text-red-500" />
+                </div>
+                <div className="space-y-2">
+                    <div className="text-red-400 font-black text-2xl tracking-tighter uppercase italic">Code inconnu</div>
+                    <p className="text-dim text-sm font-medium px-4">Le code {scannedCode} ne figure pas dans nos bases de données (Google, RAWG, Discogs).</p>
+                </div>
+                <div className="flex flex-col space-y-3 px-8">
+                    <button 
+                    onClick={() => setScannedCode(null)}
+                    className="w-full bg-accent text-bg-main py-4 rounded-xl font-black uppercase tracking-tighter hover:opacity-90 transition-all shadow-lg shadow-accent/20"
+                    >
+                    Réessayer le scan
+                    </button>
+                    <button 
+                    onClick={() => {
+                        onClose();
+                        window.location.href = "/search";
+                    }}
+                    className="w-full bg-surface border-2 border-gray-800 text-main py-4 rounded-xl font-black uppercase tracking-tighter hover:border-accent transition-all"
+                    >
+                    Chercher manuellement
+                    </button>
+                </div>
               </div>
             )}
 
