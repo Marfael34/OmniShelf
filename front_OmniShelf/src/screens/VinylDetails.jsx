@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import ActionButtons from "../components/UI/ActionButtons.jsx";
+import AffiliationButtons from "../components/UI/AffiliationButtons.jsx";
 
 export default function VinylDetails() {
   const { id } = useParams();
@@ -41,6 +42,10 @@ export default function VinylDetails() {
             ))}
           </ol>
         </div>
+        <AffiliationButtons
+          productName={`${vinyl.artist} ${vinyl.title} vinyle`}
+          category="vinyl"
+        />
         <ActionButtons />
       </div>
     </div>

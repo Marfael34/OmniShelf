@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import ActionButtons from "../components/UI/ActionButtons.jsx";
+import AffiliationButtons from "../components/UI/AffiliationButtons.jsx";
 
 export default function MangaDetails() {
   const { id } = useParams();
@@ -10,7 +11,6 @@ export default function MangaDetails() {
     genre: "Seinen",
     publisher: "Glénat",
     image: "https://placehold.co/300x400/1e293b/6366f1?text=Berserk",
-    buyLink: "#",
   };
 
   return (
@@ -33,12 +33,10 @@ export default function MangaDetails() {
             Édition: {manga.publisher}
           </span>
         </div>
-        <a
-          href={manga.buyLink}
-          className="text-indigo-400 hover:underline mb-2"
-        >
-          Acheter ce manga
-        </a>
+        <AffiliationButtons
+          productName={`${manga.title} ${manga.author}`}
+          category="manga"
+        />
         <ActionButtons />
       </div>
     </div>

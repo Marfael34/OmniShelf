@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import ActionButtons from "../components/UI/ActionButtons.jsx";
+import AffiliationButtons from "../components/UI/AffiliationButtons.jsx";
 
 export default function GameDetails() {
   const { id } = useParams();
@@ -10,7 +11,6 @@ export default function GameDetails() {
     publisher: "Nintendo",
     pegi: "12",
     image: "https://placehold.co/300x400/1e293b/06b6d4?text=Zelda",
-    buyLink: "#",
   };
 
   return (
@@ -35,9 +35,7 @@ export default function GameDetails() {
             PEGI {game.pegi}
           </span>
         </div>
-        <a href={game.buyLink} className="text-cyan-400 hover:underline mb-2">
-          Acheter ce jeu
-        </a>
+        <AffiliationButtons productName={game.title} category="game" />
         <ActionButtons />
       </div>
     </div>

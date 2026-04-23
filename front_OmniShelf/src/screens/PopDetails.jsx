@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import ActionButtons from "../components/UI/ActionButtons.jsx";
+import AffiliationButtons from "../components/UI/AffiliationButtons.jsx";
 
 export default function PopDetails() {
   const { id } = useParams();
@@ -28,6 +29,7 @@ export default function PopDetails() {
             N° {pop.number}
           </span>
         </div>
+        <AffiliationButtons productName={`Funko Pop ${pop.title} ${pop.number}`} category="pop" />
         <ActionButtons />
       </div>
     </div>

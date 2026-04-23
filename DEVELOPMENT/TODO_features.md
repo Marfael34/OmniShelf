@@ -27,12 +27,12 @@ Ce document liste les tâches de développement restantes basées sur les spéci
 
 ## 3. Frontend - Affiliation Dynamique
 
-- [ ] **Hook Personnalisé** :
-  - [ ] Créer le hook `useAffiliationLink(productName, category, fallbackEan)`.
-  - [ ] Implémenter la logique d'URL pour Amazon : `https://www.amazon.fr/s?k=[PRODUIT_ENCODE]&tag=[TAG_AMAZON]`.
-  - [ ] Implémenter la logique d'URL pour la Fnac : `https://www.awin1.com/cread.php?awinmid=[ID]&p=[URL_FNAC_ENCODEE]`.
-- [ ] **Intégration UI** :
-  - [ ] Remplacer les liens statiques des vues détaillées (`GameDetails`, `MangaDetails`, etc.) par les URL générées dynamiquement par ce hook.
+- [x] **Hook Personnalisé** :
+  - [x] Créer le hook `useAffiliationLink(productName, category, fallbackEan)`.
+  - [x] Implémenter la logique d'URL pour Amazon : `https://www.amazon.fr/s?k=[PRODUIT_ENCODE]&tag=[TAG_AMAZON]`.
+  - [x] Implémenter la logique d'URL pour la Fnac : `https://www.awin1.com/cread.php?awinmid=[ID]&p=[URL_FNAC_ENCODEE]`.
+- [x] **Intégration UI** :
+  - [x] Remplacer les liens statiques des vues détaillées (`GameDetails`, `MangaDetails`, etc.) par les URL générées dynamiquement par ce hook.
 
 ## 4. Frontend - PWA & Live Data (TanStack Query)
 
