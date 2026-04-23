@@ -23,25 +23,25 @@ const VinylDetails = () => {
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center py-24 space-y-4">
       <Loader2 className="animate-spin text-accent" size={48} />
-      <p className="text-(--text-dim) font-bold animate-pulse">Chargement des données Discogs...</p>
+      <p className="text-(--text-text-dim) font-bold animate-pulse">Chargement des données Discogs...</p>
     </div>
   );
 
   if (error || !release) return (
     <div className="text-center py-24 space-y-6">
         <h1 className="text-4xl font-black">Oups !</h1>
-        <p className="text-xl text-(--text-dim)">Impossible de récupérer les détails de ce vinyle.</p>
+        <p className="text-xl text-(--text-text-dim)">Impossible de récupérer les détails de ce vinyle.</p>
         <button onClick={() => navigate('/search')} className="inline-block px-8 py-3 bg-gray-800 rounded-xl font-bold">Retour à la recherche</button>
     </div>
   );
 
   return (
     <div className="max-w-6xl mx-auto py-12 px-4 space-y-8">
-      <button onClick={() => navigate(-1)} className="flex items-center text-(--text-dim) hover:text-accent font-bold transition-colors">
+      <button onClick={() => navigate(-1)} className="flex items-center text-(--text-text-dim) hover:text-accent font-bold transition-colors">
         <ArrowLeft size={20} className="mr-2" /> Retour
       </button>
 
-      <div className="bg-(--bg-surface) rounded-3xl overflow-hidden border border-gray-800 shadow-2xl flex flex-col md:flex-row relative">
+      <div className="bg-(--bg-bg-surface) rounded-3xl overflow-hidden border border-gray-800 shadow-2xl flex flex-col md:flex-row relative">
         <div className="md:w-1/2 bg-gray-900 min-h-[400px] flex items-center justify-center p-12">
           <div className="relative group w-full max-w-[320px]">
             <div className="absolute -inset-4 bg-purple-500 blur-3xl opacity-10 group-hover:opacity-20 transition-opacity"></div>
@@ -58,7 +58,7 @@ const VinylDetails = () => {
         <div className="p-10 md:w-1/2 flex flex-col justify-between space-y-8">
           <div className="space-y-6">
             <div>
-              <h1 className="text-5xl font-black text-(--text-main) leading-tight tracking-tighter mb-2">
+              <h1 className="text-5xl font-black text-text-text-main leading-tight tracking-tighter mb-2">
                 {release.title}
               </h1>
               <h2 className="text-2xl text-purple-400 font-bold">{release.artists_sort}</h2>
@@ -74,7 +74,7 @@ const VinylDetails = () => {
             </div>
 
             <div className="bg-gray-900/50 rounded-2xl p-6 border border-gray-800">
-              <div className="flex items-center space-x-2 font-black text-xs uppercase tracking-widest text-(--text-dim) mb-4">
+              <div className="flex items-center space-x-2 font-black text-xs uppercase tracking-widest text-(--text-text-dim) mb-4">
                 <Music size={14} />
                 <span>Tracklist</span>
               </div>
@@ -82,7 +82,7 @@ const VinylDetails = () => {
                 {release.tracklist?.map((track, i) => (
                   <li key={i} className="flex justify-between text-sm font-bold border-b border-white/5 pb-2 last:border-0">
                     <span className="text-gray-300">{track.position}. {track.title}</span>
-                    <span className="text-(--text-dim)">{track.duration}</span>
+                    <span className="text-(--text-text-dim)">{track.duration}</span>
                   </li>
                 ))}
               </ul>

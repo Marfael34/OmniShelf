@@ -17,6 +17,9 @@ use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: CollectionItemRepository::class)]
 #[ORM\Table(name: 'collection_item')]
@@ -29,12 +32,14 @@ use ApiPlatform\Metadata\Link;
             uriVariables: [
                 'userId' => new Link(toProperty: 'user', fromClass: User::class)
             ],
-            security: "is_granted('ROLE_USER') and userId == user.getId().toRfc4122()"
+            security: "is_granted('ROLE_USER') and userId == user.getId()"
         ),
         new Post(security: "is_granted('ROLE_USER')"),
         new Delete(security: "is_granted('COLLECTION_ITEM_DELETE', object)")
     ]
 )]
+#[ApiFilter(BooleanFilter::class, properties: ['isWishlist'])]
+#[ApiFilter(SearchFilter::class, properties: ['category' => 'exact'])]
 class CollectionItem
 {
     #[ORM\Id]
@@ -44,6 +49,10 @@ class CollectionItem
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    #[ORM\ManyToOne(targetEntity: UserCollection::class, inversedBy: 'items')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?UserCollection $collection = null;
 
     #[ORM\Column(length: 255)]
     private ?string $externalProductId = null;
@@ -120,5 +129,15 @@ class CollectionItem
     {
         return $this->addedAt;
     }
-}
 
+    public function getCollection(): ?UserCollection
+    {
+        return $this->collection;
+    }
+
+    public function setCollection(?UserCollection $collection): static
+    {
+        $this->collection = $collection;
+        return $this;
+    }
+}

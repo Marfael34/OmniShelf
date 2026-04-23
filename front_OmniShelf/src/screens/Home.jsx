@@ -29,16 +29,16 @@ const Home = () => {
     <div className="flex flex-col items-center py-12 space-y-24">
       {/* Hero Section */}
       <section className="text-center space-y-4">
-        <h1 className="text-6xl font-black tracking-tighter text-main">
+        <h1 className="text-6xl font-black tracking-tighter text-text-main">
           OMNI<span className="text-accent">SHELF</span>
         </h1>
-        <p className="text-xl text-dim font-medium max-w-2xl mx-auto">
+        <p className="text-xl text-text-dim font-medium max-w-2xl mx-auto">
           Votre univers, digitalisé. Scannez, collectionnez et explorez vos passions en un instant.
         </p>
         <div className="pt-4">
           <Link 
             to="/search" 
-            className="inline-flex items-center space-x-3 bg-accent text-bg-main px-8 py-4 rounded-2xl font-black uppercase tracking-tighter hover:scale-105 transition-all shadow-xl shadow-accent/20"
+            className="inline-flex items-center space-x-3 bg-accent text-bg-bg-main px-8 py-4 rounded-2xl font-black uppercase tracking-tighter hover:scale-105 transition-all shadow-xl shadow-accent/20"
           >
             <span>Démarrer l'exploration</span>
             <ArrowRight size={20} />
@@ -51,7 +51,7 @@ const Home = () => {
         <section className="w-full max-w-6xl px-4 space-y-8">
           <div className="flex justify-between items-end">
             <div>
-              <h2 className="text-3xl font-black text-main tracking-tighter uppercase">Suggestions</h2>
+              <h2 className="text-3xl font-black text-text-main tracking-tighter uppercase">Suggestions</h2>
               <p className="text-accent font-mono text-[10px] tracking-widest">PROPULSÉ_PAR_IA</p>
             </div>
             <Link to="/search" className="text-accent font-bold hover:underline">Voir plus</Link>
@@ -60,7 +60,7 @@ const Home = () => {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
             {isRecLoading ? (
               [1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="bg-surface rounded-2xl h-72 animate-pulse border border-gray-800"></div>
+                <div key={i} className="bg-bg-surface rounded-2xl h-72 animate-pulse border border-gray-800"></div>
               ))
             ) : (
               recData?.recommendations?.map((item, idx) => (
@@ -73,7 +73,7 @@ const Home = () => {
 
       {/* Categories Section */}
       <section className="w-full max-w-6xl px-4">
-        <h2 className="text-3xl font-black mb-12 text-center text-main">Explorez par Univers</h2>
+        <h2 className="text-3xl font-black mb-12 text-center text-text-main">Explorez par Univers</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {categories.map((cat) => (
             <Link 

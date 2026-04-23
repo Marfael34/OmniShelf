@@ -29,7 +29,7 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 p-8 bg-(--bg-surface) rounded-2xl border border-gray-800 shadow-(--shadow-soft)">
+    <div className="max-w-md mx-auto mt-20 p-8 bg-(--bg-bg-surface) rounded-2xl border border-gray-800 shadow-(--shadow-soft)">
       <h2 className="text-3xl font-bold mb-6 text-center text-(--color-accent)">Inscription</h2>
       
       {success ? (
@@ -47,7 +47,7 @@ const Register = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 bg-(--bg-main) border border-gray-700 rounded-xl focus:border-(--color-accent) outline-none transition-colors"
+                className="w-full p-3 bg-(--bg-bg-main) border border-gray-700 rounded-xl focus:border-(--color-accent) outline-none transition-colors"
                 required
               />
             </div>
@@ -57,7 +57,7 @@ const Register = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 bg-(--bg-main) border border-gray-700 rounded-xl focus:border-(--color-accent) outline-none transition-colors"
+                className="w-full p-3 bg-(--bg-bg-main) border border-gray-700 rounded-xl focus:border-(--color-accent) outline-none transition-colors"
                 required
               />
             </div>
@@ -67,18 +67,18 @@ const Register = () => {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full p-3 bg-(--bg-main) border border-gray-700 rounded-xl focus:border-(--color-accent) outline-none transition-colors"
+                className="w-full p-3 bg-(--bg-bg-main) border border-gray-700 rounded-xl focus:border-(--color-accent) outline-none transition-colors"
                 required
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-(--color-accent) text-(--bg-main) font-bold py-3 rounded-xl hover:opacity-90 transition-opacity mt-4"
+              className="w-full bg-(--color-accent) text-(--bg-bg-main) font-bold py-3 rounded-xl hover:opacity-90 transition-opacity mt-4"
             >
               S'inscrire
             </button>
           </form>
-          <p className="mt-6 text-center text-(--text-dim)">
+          <p className="mt-6 text-center text-(--text-text-dim)">
             Déjà un compte ?{" "}
             <Link to="/login" className="text-(--color-accent) hover:underline">
               Se connecter

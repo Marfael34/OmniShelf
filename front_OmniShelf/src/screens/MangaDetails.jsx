@@ -24,14 +24,14 @@ const MangaDetails = () => {
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center py-24 space-y-4">
       <Loader2 className="animate-spin text-accent" size={48} />
-      <p className="text-(--text-dim) font-bold animate-pulse">Chargement des données Google Books...</p>
+      <p className="text-(--text-text-dim) font-bold animate-pulse">Chargement des données Google Books...</p>
     </div>
   );
 
   if (error || !book) return (
     <div className="text-center py-24 space-y-6">
         <h1 className="text-4xl font-black">Oups !</h1>
-        <p className="text-xl text-(--text-dim)">Impossible de récupérer les détails de ce livre.</p>
+        <p className="text-xl text-(--text-text-dim)">Impossible de récupérer les détails de ce livre.</p>
         <button onClick={() => navigate('/search')} className="inline-block px-8 py-3 bg-gray-800 rounded-xl font-bold">Retour à la recherche</button>
     </div>
   );
@@ -52,7 +52,7 @@ const MangaDetails = () => {
           </div>
         </div>
 
-      <div className="bg-(--bg-surface) rounded-3xl overflow-hidden border border-gray-800 shadow-2xl flex flex-col md:flex-row relative">
+      <div className="bg-(--bg-bg-surface) rounded-3xl overflow-hidden border border-gray-800 shadow-2xl flex flex-col md:flex-row relative">
         <div className="md:w-1/3 bg-gray-900 flex items-center justify-center p-12">
           <div className="relative group">
             <div className="absolute inset-0 bg-accent blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
@@ -67,7 +67,7 @@ const MangaDetails = () => {
         <div className="p-10 md:w-2/3 flex flex-col justify-between space-y-8">
           <div className="space-y-6">
             <div>
-              <h1 className="text-5xl font-black text-(--text-main) leading-tight tracking-tighter mb-4">
+              <h1 className="text-5xl font-black text-text-text-main leading-tight tracking-tighter mb-4">
                 {info.title}
               </h1>
               <div className="flex items-center text-accent font-black text-lg">
@@ -87,23 +87,23 @@ const MangaDetails = () => {
 
             <div className="grid grid-cols-2 gap-6 pt-4 border-t border-gray-800/50">
               <div className="space-y-1">
-                <div className="flex items-center text-(--text-dim) text-xs font-bold uppercase tracking-widest mb-1">
+                <div className="flex items-center text-(--text-text-dim) text-xs font-bold uppercase tracking-widest mb-1">
                     <Building size={12} className="mr-2" /> Éditeur
                 </div>
-                <div className="text-sm font-bold text-(--text-main)">{info.publisher || "N/A"} ({info.publishedDate})</div>
+                <div className="text-sm font-bold text-text-text-main">{info.publisher || "N/A"} ({info.publishedDate})</div>
               </div>
               <div className="space-y-1">
-                <div className="flex items-center text-(--text-dim) text-xs font-bold uppercase tracking-widest mb-1">
+                <div className="flex items-center text-(--text-text-dim) text-xs font-bold uppercase tracking-widest mb-1">
                     <BookOpen size={12} className="mr-2" /> Format
                 </div>
-                <div className="text-sm font-bold text-(--text-main) uppercase tracking-tighter">
+                <div className="text-sm font-bold text-text-text-main uppercase tracking-tighter">
                     {info.printType || "Volume"}
                 </div>
               </div>
             </div>
 
             <div className="prose prose-invert max-w-none">
-                <p className="text-(--text-dim) leading-relaxed line-clamp-6 hover:line-clamp-none transition-all cursor-pointer" dangerouslySetInnerHTML={{ __html: info.description }}></p>
+                <p className="text-(--text-text-dim) leading-relaxed line-clamp-6 hover:line-clamp-none transition-all cursor-pointer" dangerouslySetInnerHTML={{ __html: info.description }}></p>
             </div>
           </div>
           

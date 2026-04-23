@@ -39,7 +39,8 @@ final readonly class ProxyService
                         'author' => $item['volumeInfo']['authors'][0] ?? 'Inconnu',
                     ]);
                 }
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         }
 
         // 2. RAWG
@@ -52,6 +53,9 @@ final readonly class ProxyService
                         'key' => $apiKey,
                         'page' => $page,
                         'page_size' => $itemsPerPage
+                    ],
+                    'headers' => [
+                        'User-Agent' => 'OmniShelf/1.0'
                     ]
                 ]);
                 $data = $response->toArray();
@@ -64,7 +68,9 @@ final readonly class ProxyService
                         'rating' => $item['rating'] ?? null,
                     ]);
                 }
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+                error_log("RAWG Exception: " . $e->getMessage());
+            }
         }
 
         // 3. Discogs
@@ -92,7 +98,8 @@ final readonly class ProxyService
                         'year' => $item['year'] ?? null,
                     ]);
                 }
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         }
 
         return $results;
@@ -122,7 +129,8 @@ final readonly class ProxyService
                 $response = $this->httpClient->request('GET', "https://www.googleapis.com/books/v1/volumes/{$externalId}");
                 return $response->toArray();
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return null;
     }
@@ -161,7 +169,8 @@ final readonly class ProxyService
                     'imageUrl' => $item['cover_image'] ?? null,
                 ]);
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         return null;
     }

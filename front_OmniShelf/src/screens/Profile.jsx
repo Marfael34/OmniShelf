@@ -33,7 +33,7 @@ const Profile = () => {
   return (
     <div className="max-w-4xl mx-auto py-12 space-y-12">
       {/* Header Profile */}
-      <div className="bg-(--bg-surface) p-8 rounded-3xl border border-gray-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+      <div className="bg-(--bg-bg-surface) p-8 rounded-3xl border border-gray-800 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
         
         <div className="flex items-center space-x-6 z-10">
@@ -41,8 +41,8 @@ const Profile = () => {
             {user?.email?.charAt(0).toUpperCase()}
           </div>
           <div>
-            <h1 className="text-3xl font-extrabold text-(--text-main)">{user?.email}</h1>
-            <p className="text-(--text-dim) flex items-center">
+            <h1 className="text-3xl font-extrabold text-text-text-main">{user?.email}</h1>
+            <p className="text-(--text-text-dim) flex items-center">
                 <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
                 Collectionneur OmniShelf
             </p>
@@ -61,10 +61,10 @@ const Profile = () => {
       {/* Global Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, idx) => (
-          <div key={idx} className="bg-(--bg-surface) p-6 rounded-2xl border border-gray-800 text-center space-y-2 hover:border-gray-700 transition-colors">
+          <div key={idx} className="bg-(--bg-bg-surface) p-6 rounded-2xl border border-gray-800 text-center space-y-2 hover:border-gray-700 transition-colors">
             <stat.icon className={`mx-auto ${stat.color}`} size={24} />
-            <div className="text-2xl font-bold text-(--text-main)">{stat.value}</div>
-            <div className="text-xs text-(--text-dim) uppercase tracking-wider font-bold">{stat.label}</div>
+            <div className="text-2xl font-bold text-text-text-main">{stat.value}</div>
+            <div className="text-xs text-(--text-text-dim) uppercase tracking-wider font-bold">{stat.label}</div>
           </div>
         ))}
       </div>
@@ -72,7 +72,7 @@ const Profile = () => {
       {/* Categories Detail */}
       <section className="space-y-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-extrabold text-(--text-main)">Répartition par univers</h2>
+          <h2 className="text-2xl font-extrabold text-text-text-main">Répartition par univers</h2>
           <Link to="/my-collections" className="text-accent hover:underline font-bold flex items-center">
             Gérer ma collection <ArrowRight size={16} className="ml-1" />
           </Link>
