@@ -85,3 +85,96 @@ React 19 représente le plus grand changement de paradigme depuis l'introduction
 - **Expérience Utilisateur Optimiste** : Utilisez systématiquement le hook `useOptimistic` lors d'actions utilisateur (comme l'ajout d'un manga à la collection). L'UI doit se mettre à jour instantanément, et React fera le "rollback" en arrière-plan si l'API Symfony renvoie une erreur.
 - **L'API `use()` pour la lecture** : Pour consommer un contexte ou lire une promesse de donnée, utilisez la nouvelle API `use()`. Contrairement aux autres hooks, elle peut être appelée de manière conditionnelle (dans un `if`), ce qui simplifie énormément la logique d'affichage.
 - **Fonctions de nettoyage dans les Refs** : Les callbacks de `ref` peuvent désormais retourner une fonction de nettoyage. Utilisez ce standard pour détruire proprement l'instance de la caméra (Html5-Qrcode) lorsque le composant de scan est démonté, évitant ainsi les fuites de mémoire.
+
+### Architecture de Dossiers Frontend
+
+```plaintext
+src/
+├── assets/          # Images, polices, icônes globales
+├── components/      # Composants UI atomiques et réutilisables (Boutons, Inputs)
+├── config/          # Variables d'environnement, instances Axios, constantes
+├── features/        # Le cœur de l'application (logique métier par domaine)
+│   ├── auth/        # Exemple : Authentification
+│   │   ├── api/     # Appels API spécifiques à l'auth
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   └── types/
+│   └── products/    # Exemple : Catalogue produit
+├── hooks/           # Hooks personnalisés globaux (useAuth, useLocalStorage)
+├── layouts/         # Templates de pages (MainLayout, AuthLayout)
+├── pages/           # Composants de routage (liés à React Router)
+├── services/        # Logique métier transverse (Analytics, Sentry)
+├── store/           # État global (Redux Toolkit, Zustand, Pinia)
+├── types/           # Définitions TypeScript globales
+└── utils/           # Fonctions utilitaires (formatage de date, calculs)
+
+---
+
+## 3. Charte Graphique - OmniShelf
+
+### 1. LE CONCEPT VISUEL
+
+OmniShelf se veut être le "hub" ultime de la collection personnelle.
+L'identité visuelle doit évoquer la clarté, l'organisation et la passion.
+Le logo isométrique suggère la profondeur et l'aspect multidimensionnel de la collection.
+
+### 2. PALETTE DE COULEURS (Basée sur le logo)
+
+L'utilisation de dégradés (gradients) est recommandée pour rappeler l'aspect "tech" et premium.
+
+**A. Couleurs Principales (Brand Colors) :**
+- Midnight Navy : `#0A2647` (Le bleu foncé du texte)
+- Teal Blue : `#144272` (Transition)
+- Cyan Glow : `#205295` (Accents brillants)
+- Deep Purple : `#2C016D` (Ombres et profondeur du logo)
+
+**B. Couleurs d'Interface (UI Colors) :**
+- Background (Dark Mode) : `#0F172A` (Bleu ardoise très foncé)
+- Surface (Cartes/Étagères) : `#1E293B` (Légèrement plus clair pour le relief)
+- Text Primary : `#F8FAFC` (Blanc cassé pour la lisibilité)
+- Text Secondary : `#94A3B8` (Gris bleuté pour les détails)
+- Accent / CTA : `#06B6D4` (Cyan vif pour les boutons d'action)
+
+### 3. TYPOGRAPHIE
+
+La police doit être moderne, géométrique et sans empattement (Sans-serif).
+
+- **Titres (Headings)** : 'Inter' ou 'Montserrat' (Bold/ExtraBold)
+  -> Espacement des lettres (letter-spacing) : -0.02em
+- **Corps de texte** : 'Inter' or 'Roboto' (Regular/Medium)
+  -> Taille de base : 16px
+
+### 4. ÉLÉMENTS GRAPHIQUES & UI
+
+- **Rayons de bordure (Border Radius)** : 12px (pour un look moderne mais structuré).
+- **Effets de verre (Glassmorphism)** :
+  -> Utiliser 'backdrop-filter: blur(10px)' sur les modales et la barre de navigation.
+- **Éléments de collection** : Chaque catégorie (Jeu, Manga, Vinyle, Pop) peut avoir un liseré de couleur subtil :
+  * Jeux Vidéo : Cyan
+  * Mangas : Indigo
+  * Vinyles : Purple
+  * Figurines Pop : Teal
+
+### 5. TON DE VOIX
+
+- Professionnel mais passionné.
+- Direct ("Ajoutez à votre étagère", "Votre univers en un coup d'œil").
+
+### 6. RECOMMANDATIONS REACT (CSS Variables)
+
+A insérer dans votre fichier `index.css` ou `global.css` :
+
+```css
+:root {
+  --color-primary: #0A2647;
+  --color-secondary: #2C016D;
+  --color-accent: #06B6D4;
+  --bg-main: #0F172A;
+  --bg-surface: #1E293B;
+  --text-main: #F8FAFC;
+  --text-dim: #94A3B8;
+  --gradient-brand: linear-gradient(135deg, #0A2647 0%, #2C016D 100%);
+  --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+```
+```
