@@ -83,6 +83,30 @@ Le frontend est une **Progressive Web App (PWA)** construite avec React et Vite,
 - **TanStack Query**: Toute interaction avec le backend Symfony passe par React Query pour gérer automatiquement le cache, les états de chargement (`isLoading`), les erreurs et la synchronisation des données.
 - **Scanner via `html5-qrcode`**: La librairie est intégrée dans un composant React qui, une fois un code-barres détecté, déclenche un appel à l'API `/api/scan/{barcode}` via React Query.
 
+### Structure des Dossiers Frontend
+
+Conformément au fichier `regle.md`, et après consolidation des différentes spécifications, voici l'architecture de dossiers officielle pour le frontend. Elle est conçue pour la clarté, la modularité et le respect strict des standards du projet (React 19 en JS natif, pas de TypeScript).
+
+```plaintext
+src/
+├── assets/          # Polices, icônes globales, etc.
+├── components/      # Composants UI atomiques et réutilisables (max 60 lignes)
+│   ├── ui/          # Éléments de base (Button.jsx, Input.jsx, Card.jsx)
+│   └── layout/      # Composants de structure (NavBar.jsx, Footer.jsx, MainLayout.jsx)
+├── config/          # Fichiers de configuration (constantes, instance Axios)
+├── features/        # Logique métier par domaine (ex: authentification, collection)
+│   └── auth/        # Exemple avec le domaine 'auth'
+│       ├── api/     # Appels API (login, register)
+│       ├── components/ # Composants spécifiques (LoginForm.jsx)
+│       └── hooks/   # Hooks spécifiques (useAuth.js)
+├── hooks/           # Hooks personnalisés globaux (ex: useMediaQuery.js)
+├── router/          # Configuration du routage (AppRouter.jsx, routes.js)
+├── screens/         # Écrans/Pages de l'application (assemblage de composants)
+├── services/        # Services transverses (ex: client API générique)
+├── store/           # Stores Zustand pour l'état global client (authStore.js)
+└── utils/           # Fonctions utilitaires pures (formatters, validateurs)
+```
+
 ## 4. Workflow Détaillé : Scan d'une nouvelle Funko Pop
 
 1.  **Scan (Frontend)**: L'utilisateur ouvre la modale de scan. `html5-qrcode` détecte le code-barres `0889698565551`.
