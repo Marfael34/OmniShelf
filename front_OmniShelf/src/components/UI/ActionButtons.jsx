@@ -1,73 +1,73 @@
-import { useState } from "react";
+import { useOptimistic, useActionState, useTransition } from "react";
 import api from "../../services/api";
 import { useUiStore } from "../../store/uiStore";
 
 const ActionButtons = ({ externalId, category }) => {
-  const [isAdding, setIsAdding] = useState(false);
-  const [success, setSuccess] = useState(false);
   const showToast = useUiStore((state) => state.showToast);
+  const [isPending, startTransition] = useTransition();
 
-  const handleAdd = async () => {
-    setIsAdding(true);
-    try {
-      await api.post("/collection_items", {
-        externalProductId: externalId,
-        category: category
-      });
-      setSuccess(true);
-      showToast("Ajouté à votre collection !", "success");
-    } catch (err) {
-      console.error("Erreur d'ajout", err);
-      showToast("Une erreur est survenue lors de l'ajout.", "error");
-    } finally {
-      setIsAdding(false);
-    }
-  };
+  // État optimiste pour le bouton "Collection" et "Wishlist"
+  const [optimisticState, setOptimisticState] = useOptimistic(
+    { inCollection: false, inWishlist: false },
+    (state, newState) => ({ ...state, ...newState })
+  );
 
-  const [isWishlisting, setIsWishlisting] = useState(false);
-  const [wishlistSuccess, setWishlistSuccess] = useState(false);
+  const [formState, formAction] = useActionState(async (prevState, formData) => {
+    const type = formData.get("type"); // "collection" or "wishlist"
+    const isWishlist = type === "wishlist";
 
-  const handleWishlist = async () => {
-    setIsWishlisting(true);
     try {
       await api.post("/collection_items", {
         externalProductId: externalId,
         category: category,
-        isWishlist: true
+        isWishlist: isWishlist
       });
-      setWishlistSuccess(true);
-      showToast("Ajouté à votre wishlist !", "success");
+      showToast(isWishlist ? "Ajouté à votre wishlist !" : "Ajouté à votre collection !", "success");
+      return { success: true, type };
     } catch (err) {
-      console.error("Erreur wishlist", err);
+      console.error("Erreur", err);
       showToast("Une erreur est survenue lors de l'ajout.", "error");
-    } finally {
-      setIsWishlisting(false);
+      return { success: false, error: err.message };
     }
+  }, { success: false });
+
+  const handleAdd = (type) => {
+    startTransition(() => {
+      // Mise à jour optimiste immédiate
+      setOptimisticState(type === "wishlist" ? { inWishlist: true } : { inCollection: true });
+      
+      const formData = new FormData();
+      formData.append("type", type);
+      formAction(formData);
+    });
   };
+
+  const inCollection = optimisticState.inCollection || (formState.success && formState.type === "collection");
+  const inWishlist = optimisticState.inWishlist || (formState.success && formState.type === "wishlist");
 
   return (
     <div className="flex space-x-4">
       <button 
-        onClick={handleAdd}
-        disabled={isAdding || success}
+        onClick={() => handleAdd("collection")}
+        disabled={isPending || inCollection}
         className={`flex-1 font-bold py-3 rounded-xl transition-all ${
-            success 
+            inCollection 
             ? "bg-green-600 text-white cursor-default" 
-            : "bg-accent text-(--bg-main) hover:opacity-90 shadow-lg shadow-accent/20"
+            : "bg-accent text-bg-main hover:opacity-90 shadow-lg shadow-accent/20"
         }`}
       >
-        {isAdding ? "Ajout..." : success ? "Possédé" : "Ajouter à la collection"}
+        {isPending && optimisticState.inCollection ? "Ajout..." : inCollection ? "Possédé" : "Ajouter à la collection"}
       </button>
       <button 
-        onClick={handleWishlist}
-        disabled={isWishlisting || wishlistSuccess}
+        onClick={() => handleAdd("wishlist")}
+        disabled={isPending || inWishlist}
         className={`flex-1 font-bold py-3 rounded-xl transition-all border-2 ${
-            wishlistSuccess
+            inWishlist
             ? "bg-purple-600 border-purple-600 text-white cursor-default"
-            : "border-accent text-accent hover:bg-accent hover:text-(--bg-main)"
+            : "border-accent text-accent hover:bg-accent hover:text-bg-main"
         }`}
       >
-        {isWishlisting ? "Ajout..." : wishlistSuccess ? "Dans la Wishlist" : "Wishlist"}
+        {isPending && optimisticState.inWishlist ? "Ajout..." : inWishlist ? "Dans la Wishlist" : "Wishlist"}
       </button>
     </div>
   );

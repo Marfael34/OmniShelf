@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { Trash2, ExternalLink, Package } from "lucide-react";
 
-const ProductCard = ({ item, onDelete, showDelete = false }) => {
+const ProductCard = ({ item = {}, onDelete = null, showDelete = false }) => {
   return (
     <Link 
       to={`/details/${item.category}/${item.externalProductId || item.id}`}
-      className="group relative bg-(--bg-surface) rounded-2xl overflow-hidden border border-gray-800 hover:border-accent transition-all duration-300 flex flex-col h-72 shadow-lg hover:shadow-accent/10 animate-zoom-in"
+      className="group relative bg-surface rounded-2xl overflow-hidden border border-gray-800 hover:border-accent transition-all duration-300 flex flex-col h-72 shadow-lg hover:shadow-accent/10 animate-zoom-in"
     >
       {showDelete && onDelete && (
         <button 

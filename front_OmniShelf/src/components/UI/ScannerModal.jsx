@@ -5,7 +5,7 @@ import { X, Zap, Loader2 } from "lucide-react";
 import api from "../../services/api";
 import { useUiStore } from "../../store/uiStore";
 
-const ScannerModal = ({ onClose }) => {
+const ScannerModal = ({ onClose = () => {} }) => {
   const [scannedCode, setScannedCode] = useState(null);
   const [torchOn, setTorchOn] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -64,30 +64,30 @@ const ScannerModal = ({ onClose }) => {
   }, [torchOn]);
 
   const scannerNodeRef = useCallback((node) => {
-    if (node) {
-      const html5QrCode = new Html5Qrcode(node.id);
-      scannerRef.current = html5QrCode;
-      
-      html5QrCode.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 250, height: 150 } },
-        handleScanSuccess,
-        () => {}
-      ).catch((err) => {
-        console.error("Camera start error", err);
-      });
+    if (!node) return;
+    
+    const html5QrCode = new Html5Qrcode(node.id);
+    scannerRef.current = html5QrCode;
+    
+    html5QrCode.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: { width: 250, height: 150 } },
+      handleScanSuccess,
+      () => {}
+    ).catch((err) => {
+      console.error("Camera start error", err);
+    });
 
-      return () => {
-        if (html5QrCode.isScanning) {
-          html5QrCode.stop().then(() => html5QrCode.clear()).catch(console.error);
-        }
-      };
-    }
+    return () => {
+      if (html5QrCode.isScanning) {
+        html5QrCode.stop().then(() => html5QrCode.clear()).catch(console.error);
+      }
+    };
   }, [handleScanSuccess]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 animate-fade-in">
-      <div className="relative w-full max-w-lg bg-(--bg-surface) rounded-3xl overflow-hidden border border-accent/30 shadow-2xl shadow-accent/20">
+      <div className="relative w-full max-w-lg bg-surface rounded-3xl overflow-hidden border border-accent/30 shadow-2xl shadow-accent/20">
         
         {/* Header HUD */}
         <div className="flex justify-between items-center p-6 border-b border-gray-800">
@@ -113,7 +113,7 @@ const ScannerModal = ({ onClose }) => {
                 <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-accent"></div>
                 <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-accent"></div>
                 <div className="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-accent"></div>
-                <div className="absolute left-0 right-0 h-0.5 bg-accent/50 shadow-[0_0_15px_var(--color-accent)] animate-scan"></div>
+                <div className="absolute left-0 right-0 h-0.5 bg-accent/50 shadow-[0_0_15px_rgba(6,182,212,0.5)] animate-scan"></div>
               </div>
             </div>
 
@@ -121,7 +121,7 @@ const ScannerModal = ({ onClose }) => {
               <button 
                 onClick={toggleTorch}
                 className={`p-4 rounded-full transition-all ${
-                  torchOn ? "bg-accent text-(--bg-main) shadow-lg shadow-accent/40" : "bg-gray-800 text-gray-400"
+                  torchOn ? "bg-accent text-bg-main shadow-lg shadow-accent/40" : "bg-gray-800 text-gray-400"
                 }`}
               >
                 <Zap size={24} fill={torchOn ? "currentColor" : "none"} />
@@ -147,10 +147,10 @@ const ScannerModal = ({ onClose }) => {
             {error && (
               <div className="space-y-4 py-8">
                 <div className="text-red-400 font-black text-2xl">NOT_FOUND</div>
-                <p className="text-(--text-dim)">Le code {scannedCode} ne correspond à aucun produit connu.</p>
+                <p className="text-dim">Le code {scannedCode} ne correspond à aucun produit connu.</p>
                 <button 
                   onClick={() => setScannedCode(null)}
-                  className="bg-accent text-(--bg-main) px-8 py-3 rounded-xl font-bold hover:opacity-90 transition-all"
+                  className="bg-accent text-bg-main px-8 py-3 rounded-xl font-bold hover:opacity-90 transition-all"
                 >
                   RÉESSAYER
                 </button>
@@ -173,7 +173,7 @@ const ScannerModal = ({ onClose }) => {
                 <button 
                   onClick={handleAdd}
                   disabled={isAdding}
-                  className="w-full bg-accent text-(--bg-main) py-4 rounded-2xl font-black uppercase tracking-tighter hover:opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-accent/20"
+                  className="w-full bg-accent text-bg-main py-4 rounded-2xl font-black uppercase tracking-tighter hover:opacity-90 transition-all disabled:opacity-50 shadow-lg shadow-accent/20"
                 >
                   {isAdding ? "Synchronisation..." : "Ajouter à ma collection"}
                 </button>

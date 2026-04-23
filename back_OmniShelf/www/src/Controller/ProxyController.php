@@ -22,6 +22,8 @@ final class ProxyController extends AbstractController
     {
         $query = $request->query->getString('query');
         $category = $request->query->getString('category', 'all');
+        $page = $request->query->getInt('page', 1);
+        $itemsPerPage = 10;
 
         if (!$query) {
             return $this->json(['data' => []]);
@@ -36,7 +38,8 @@ final class ProxyController extends AbstractController
                 $response = $this->httpClient->request('GET', 'https://www.googleapis.com/books/v1/volumes', [
                     'query' => [
                         'q' => $query,
-                        'maxResults' => 10,
+                        'maxResults' => $itemsPerPage,
+                        'startIndex' => ($page - 1) * $itemsPerPage,
                         'key' => $apiKey
                     ]
                 ]);
@@ -62,7 +65,8 @@ final class ProxyController extends AbstractController
                     'query' => [
                         'search' => $query,
                         'key' => $apiKey,
-                        'page_size' => 10
+                        'page' => $page,
+                        'page_size' => $itemsPerPage
                     ]
                 ]);
                 $data = $response->toArray();
@@ -89,7 +93,8 @@ final class ProxyController extends AbstractController
                         'type' => 'release',
                         'format' => 'vinyl',
                         'token' => $token,
-                        'per_page' => 10
+                        'page' => $page,
+                        'per_page' => $itemsPerPage
                     ],
                     'headers' => [
                         'User-Agent' => 'OmniShelfApp/1.0'
@@ -109,7 +114,11 @@ final class ProxyController extends AbstractController
             } catch (\Exception $e) {}
         }
 
-        return $this->json(['data' => $results]);
+        return $this->json([
+            'data' => $results,
+            'page' => $page,
+            'hasMore' => count($results) >= $itemsPerPage
+        ]);
     }
 
     #[Route('/details', name: 'api_proxy_details', methods: ['GET'])]

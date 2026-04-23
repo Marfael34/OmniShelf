@@ -1,28 +1,41 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import api from "../services/api";
 import ProductCard from "../components/UI/ProductCard";
-import { Search as SearchIcon, Loader2 } from "lucide-react";
+import { Search as SearchIcon, Loader2, ChevronDown } from "lucide-react";
 
 const Search = () => {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [searchTerms, setSearchTerms] = useState("");
+  const [activeCategory, setActiveCategory] = useState("all");
 
-  const { data: results = [], isLoading, isFetching } = useQuery({
-    queryKey: ["search", searchTerms, category],
-    queryFn: async () => {
-      if (!searchTerms) return [];
-      const res = await api.get(`/proxy/search?query=${searchTerms}&category=${category}`);
-      return res.data.data;
+  const { 
+    data, 
+    fetchNextPage, 
+    hasNextPage, 
+    isFetchingNextPage, 
+    isLoading, 
+    isFetching 
+  } = useInfiniteQuery({
+    queryKey: ["search", searchTerms, activeCategory],
+    queryFn: async ({ pageParam = 1 }) => {
+      if (!searchTerms) return { data: [], hasMore: false };
+      const res = await api.get(`/proxy/search?query=${searchTerms}&category=${activeCategory}&page=${pageParam}`);
+      return res.data;
     },
+    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.page + 1 : undefined,
     enabled: !!searchTerms,
+    initialPageParam: 1,
   });
 
   const handleSearch = (e) => {
     e.preventDefault();
     setSearchTerms(query);
+    setActiveCategory(category);
   };
+
+  const results = data?.pages.flatMap(page => page.data) || [];
 
   return (
     <div className="max-w-6xl mx-auto py-12 space-y-12 px-4">
@@ -57,7 +70,7 @@ const Search = () => {
             type="submit"
             className="bg-accent text-bg-main px-10 py-4 font-black rounded-xl hover:opacity-90 transition-all flex items-center space-x-2"
           >
-            {isFetching ? <Loader2 className="animate-spin" /> : <SearchIcon size={20} />}
+            {isFetching && !isFetchingNextPage ? <Loader2 className="animate-spin" /> : <SearchIcon size={20} />}
             <span>CHERCHER</span>
           </button>
         </form>
@@ -78,10 +91,31 @@ const Search = () => {
                 ))}
             </div>
         ) : results.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-                {results.map((item, idx) => (
-                    <ProductCard key={item.id || idx} item={item} />
-                ))}
+            <div className="space-y-12">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+                    {results.map((item, idx) => (
+                        <ProductCard key={item.id || idx} item={item} />
+                    ))}
+                </div>
+                
+                {hasNextPage && (
+                    <div className="flex justify-center pt-8">
+                        <button
+                            onClick={() => fetchNextPage()}
+                            disabled={isFetchingNextPage}
+                            className="bg-surface border-2 border-gray-800 text-main px-8 py-4 rounded-2xl font-black flex items-center space-x-3 hover:border-accent transition-all group"
+                        >
+                            {isFetchingNextPage ? (
+                                <Loader2 className="animate-spin text-accent" />
+                            ) : (
+                                <>
+                                    <span>CHARGER PLUS</span>
+                                    <ChevronDown className="group-hover:translate-y-1 transition-transform" />
+                                </>
+                            )}
+                        </button>
+                    </div>
+                )}
             </div>
         ) : (
             <div className="text-center py-24 bg-surface rounded-3xl border-2 border-dashed border-gray-800">
@@ -95,4 +129,5 @@ const Search = () => {
 };
 
 export default Search;
+
 

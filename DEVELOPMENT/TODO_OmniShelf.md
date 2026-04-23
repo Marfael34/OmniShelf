@@ -3,10 +3,10 @@
 Ce document suit l'avancement du projet par rapport au cahier des charges et aux standards techniques.
 
 ## 🔴 Priorités Immédiates (Stabilité & Standards)
-- [ ] **Error Boundaries & Suspense** : Encapsuler les routes dans `App.jsx` ou `router.jsx` avec `<Suspense>` et un `<ErrorBoundary>` global (Standard React 19).
-- [ ] **Optimistic UI** : Implémenter `useOptimistic` pour l'ajout/suppression d'items dans la collection (Standard React 19).
-- [ ] **Pagination** : Ajouter la pagination sur l'endpoint `/api/proxy/search` et l'UI de recherche (Standard API).
-- [ ] **Validation des Props** : Passer en revue les composants pour utiliser les valeurs par défaut ES6 au lieu de PropTypes (Standard JS).
+- [x] **Error Boundaries & Suspense** : Encapsuler les routes dans `App.jsx` ou `router.jsx` avec `<Suspense>` et un `<ErrorBoundary>` global (Standard React 19).
+- [x] **Optimistic UI** : Implémenter `useOptimistic` pour l'ajout/suppression d'items dans la collection (Standard React 19).
+- [x] **Pagination** : Ajouter la pagination sur l'endpoint `/api/proxy/search` et l'UI de recherche (Standard API).
+- [x] **Validation des Props** : Passer en revue les composants pour utiliser les valeurs par défaut ES6 au lieu de PropTypes (Standard JS).
 
 ## 🟠 Fonctionnalités Core (En cours)
 - [ ] **Scanner de Code-barres** :
