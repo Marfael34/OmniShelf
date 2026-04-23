@@ -1,5 +1,7 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./components/UI/NavBar.jsx";
+import FloatingScanBtn from "./components/UI/FloatingScanBtn.jsx";
+import ScannerModal from "./features/scanner/ScannerModal.jsx";
 
 export default function App() {
   return (
@@ -9,6 +11,8 @@ export default function App() {
       <main className="container mx-auto px-4 py-8">
         <Outlet />
       </main>
+      <FloatingScanBtn />
+      <ScannerModal />
     </div>
   );
 }

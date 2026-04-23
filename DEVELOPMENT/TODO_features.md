@@ -14,16 +14,16 @@ Ce document liste les tâches de développement restantes basées sur les spéci
 
 ## 2. Frontend - Scanner EAN-13 (PWA)
 
-- [ ] **Composant UI du Scanner** :
-  - [ ] Créer un composant avec un "Floating Action Button" (FAB) pour lancer le scan n'importe où.
-  - [ ] Intégrer la librairie `Html5-Qrcode` dans une modale plein écran.
-  - [ ] Gérer l'accès à la caméra (`navigator.mediaDevices.getUserMedia`) et l'API Torch (lampe torche).
-  - [ ] Implémenter un Loader visuel de type "HUD Sci-Fi" superposé à la caméra.
-  - [ ] **Crucial (React 19)** : Détruire proprement l'instance de la caméra dans une fonction de nettoyage du callback `ref` lors du démontage du composant.
-- [ ] **Logique & Feedback** :
-  - [ ] Ajouter un feedback haptique (`navigator.vibrate(200)`) lors d'une détection réussie.
-  - [ ] Interroger l'API `/api/scan/{barcode}` via `useQuery` de TanStack Query à la détection.
-  - [ ] Gérer gracieusement l'erreur 404 (Produit Inconnu) : fermer le loader et proposer une interface "Ajout Manuel".
+- [x] **Composant UI du Scanner** :
+  - [x] Créer un composant avec un "Floating Action Button" (FAB) pour lancer le scan n'importe où.
+  - [x] Intégrer la librairie `Html5-Qrcode` dans une modale plein écran.
+  - [x] Gérer l'accès à la caméra (`navigator.mediaDevices.getUserMedia`) et l'API Torch (lampe torche).
+  - [x] Implémenter un Loader visuel de type "HUD Sci-Fi" superposé à la caméra.
+  - [x] **Crucial (React 19)** : Détruire proprement l'instance de la caméra dans une fonction de nettoyage du callback `ref` lors du démontage du composant.
+- [x] **Logique & Feedback** :
+  - [x] Ajouter un feedback haptique (`navigator.vibrate(200)`) lors d'une détection réussie.
+  - [x] Interroger l'API `/api/scan/{barcode}` via `useQuery` de TanStack Query à la détection.
+  - [x] Gérer gracieusement l'erreur 404 (Produit Inconnu) : fermer le loader et proposer une interface "Ajout Manuel".
 
 ## 3. Frontend - Affiliation Dynamique
 
