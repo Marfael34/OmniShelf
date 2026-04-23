@@ -35,7 +35,7 @@ const Search = () => {
     setActiveCategory(category);
   };
 
-  const results = data?.pages.flatMap(page => page.data) || [];
+  const results = data?.pages.flatMap(page => page.data || []).filter(Boolean) || [];
 
   return (
     <div className="max-w-6xl mx-auto py-12 space-y-12 px-4">
