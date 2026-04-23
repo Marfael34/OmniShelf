@@ -42,20 +42,20 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
     - [x] 📚 Manga
     - [x] 💿 Vinyle
     - [x] 🦸‍♂️ Figurine POP
-- [] **Page Profil** (`Profile.jsx`) :
-  - [] Afficher les informations du compte de l'utilisateur connecté.
-  - [] Intégrer une vue d'ensemble des différentes collections possédées par l'utilisateur.
-- [] **Page Mes Collections** (`MyCollections.jsx`) :
-  - [] Afficher uniquement et en détail l'ensemble des collections de l'utilisateur connecté avec un système de filtres.
+- [x] **Page Profil** (`Profile.jsx`) :
+  - [x] Afficher les informations du compte de l'utilisateur connecté.
+  - [x] Intégrer une vue d'ensemble des différentes collections possédées par l'utilisateur.
+- [x] **Page Mes Collections** (`MyCollections.jsx`) :
+  - [x] Afficher uniquement et en détail l'ensemble des collections de l'utilisateur connecté avec un système de filtres.
 
 ## 3. Vues Détaillées par Catégorie
 
 _Note : Chaque vue détaillée doit inclure les boutons d'action "Ajouter à la collection" et "Ajouter à la wishlist"._
 
-- [] **Jeu Vidéo** : Titre, Genre, Nom de l'éditeur, Image, PEGI, et lien d'achat.
-- [] **Manga** : Titre, Nom de l'auteur, Genre, Maison d'édition, Image, et lien d'achat.
-- [] **Vinyle** : Titre, Nom de l'artiste, Genre, Image, et tracklist (liste des chansons, si disponible).
-- [] **Figurine POP** : Numéro de la POP, Nom de la série, Nom du personnage, Image.
+- [x] **Jeu Vidéo** : Titre, Genre, Nom de l'éditeur, Image, PEGI, et lien d'achat.
+- [x] **Manga** : Titre, Nom de l'auteur, Genre, Maison d'édition, Image, et lien d'achat.
+- [x] **Vinyle** : Titre, Nom de l'artiste, Genre, Image, et tracklist (liste des chansons, si disponible).
+- [x] **Figurine POP** : Numéro de la POP, Nom de la série, Nom du personnage, Image.
 
 ## 4. Wishlist Commune
 
