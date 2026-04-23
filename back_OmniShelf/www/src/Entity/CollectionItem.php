@@ -29,18 +29,16 @@ use ApiPlatform\Metadata\Link;
             uriVariables: [
                 'userId' => new Link(toProperty: 'user', fromClass: User::class)
             ],
-            security: "is_granted('ROLE_USER') and object == user"
+            security: "is_granted('ROLE_USER') and userId == user.getId().toRfc4122()"
         ),
         new Post(security: "is_granted('ROLE_USER')"),
-        new Delete(security: "is_granted('ROLE_USER') and object.getUser() == user")
+        new Delete(security: "is_granted('COLLECTION_ITEM_DELETE', object)")
     ]
 )]
 class CollectionItem
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private ?Uuid $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -61,6 +59,7 @@ class CollectionItem
 
     public function __construct()
     {
+        $this->id = Uuid::v7();
         $this->addedAt = new \DateTimeImmutable();
     }
 

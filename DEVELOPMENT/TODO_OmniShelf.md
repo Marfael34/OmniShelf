@@ -26,9 +26,9 @@ Ce document suit l'avancement du projet par rapport au cahier des charges et aux
 - [x] **Offline UX** : Afficher un indicateur "Mode Hors-ligne" si la connexion est perdue (Standard PWA).
 
 ## 🟢 Backend & Sécurité
-- [ ] **Voters Symfony** : S'assurer qu'un utilisateur ne peut pas voir/modifier la collection d'un autre.
-- [ ] **DTOs & ObjectMapper** : Refactoriser les entrées/sorties de `ProxyController` pour utiliser des DTOs au lieu de tableaux associatifs bruts (Standard Symfony 8).
-- [ ] **UUID v7** : Vérifier que les nouvelles entités utilisent bien des UUID v7.
+- [x] **Voters Symfony** : S'assurer qu'un utilisateur ne peut pas voir/modifier la collection d'un autre.
+- [x] **DTOs & ObjectMapper** : Refactoriser les entrées/sorties de `ProxyController` pour utiliser des DTOs au lieu de tableaux associatifs bruts (Standard Symfony 8).
+- [x] **UUID v7** : Vérifier que les nouvelles entités utilisent bien des UUID v7.
 
 ## ✅ Terminé
 - [x] Infrastructure Docker (Apache 8013, MariaDB 3318).
