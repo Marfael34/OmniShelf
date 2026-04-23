@@ -1,68 +1,63 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function Search() {
+const Search = () => {
   const [query, setQuery] = useState("");
-
-  const results = [
-    {
-      id: "1",
-      title: "Batman: Arkham Knight",
-      type: "Jeux Vidéo",
-      icon: "🎮",
-      link: "/details/game/1",
-    },
-    {
-      id: "2",
-      title: "Batman - The Dark Knight Returns",
-      type: "Manga/Comics",
-      icon: "📚",
-      link: "/details/manga/2",
-    },
-    {
-      id: "3",
-      title: "Batman Funko POP #144",
-      type: "Figurine POP",
-      icon: "🦸‍♂️",
-      link: "/details/pop/3",
-    },
-  ];
+  const [category, setCategory] = useState("all");
 
   return (
-    <div className="flex flex-col gap-8 animate-fade-in max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-slate-50">Recherche Avancée</h1>
-
-      {/* Barre de recherche Glassmorphism */}
-      <div className="bg-slate-800/80 p-6 rounded-2xl border border-slate-700 shadow-soft backdrop-blur-sm">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Rechercher par Titre, Auteur, Éditeur, PEGI..."
-          className="w-full bg-slate-900 border border-slate-600 rounded-xl px-6 py-4 text-slate-50 text-lg placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all shadow-inner"
-        />
+    <div className="max-w-5xl mx-auto py-8 space-y-8">
+      <div className="text-center space-y-4 max-w-2xl mx-auto">
+        <h1 className="text-4xl font-extrabold text-(--text-main)">Recherche Avancée</h1>
+        <p className="text-(--text-dim)">Trouvez l'élément parfait à ajouter à votre étagère.</p>
+        
+        <div className="flex bg-(--bg-surface) rounded-full border border-gray-700 overflow-hidden shadow-lg mt-8 focus-within:border-(--color-accent) transition-colors">
+          <select 
+            className="bg-gray-800 text-(--text-main) px-4 py-3 outline-none border-r border-gray-700 font-medium"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="all">Toutes les catégories</option>
+            <option value="game">Jeux Vidéo</option>
+            <option value="manga">Mangas</option>
+            <option value="vinyl">Vinyles</option>
+            <option value="pop">Figurines POP</option>
+          </select>
+          <input 
+            type="text" 
+            placeholder="Titre, Auteur, Éditeur..."
+            className="flex-1 bg-transparent text-(--text-main) px-6 py-3 outline-none"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className="bg-(--color-accent) text-(--bg-main) px-8 py-3 font-bold hover:opacity-90 transition-opacity">
+            Chercher
+          </button>
+        </div>
       </div>
 
-      {/* Grille de résultats simulés */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {results.map((r) => (
-          <Link
-            key={r.id}
-            to={r.link}
-            className="p-6 bg-slate-800 border border-slate-700 rounded-xl flex gap-5 items-center hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all group shadow-soft"
-          >
-            <span className="text-4xl group-hover:scale-110 transition-transform">
-              {r.icon}
-            </span>
-            <div>
-              <h3 className="font-bold text-slate-200 line-clamp-1">
-                {r.title}
-              </h3>
-              <p className="text-sm text-cyan-400/80 font-medium">{r.type}</p>
-            </div>
-          </Link>
-        ))}
+      <div className="pt-12">
+        <h2 className="text-2xl font-bold mb-6">Résultats pour "{query || "Tout"}"</h2>
+        
+        {/* Grille de résultats mock */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <Link 
+              key={i} 
+              to={`/details/game/${i}`}
+              className="bg-(--bg-surface) rounded-xl overflow-hidden border border-gray-800 hover:border-(--color-accent) transition-colors flex flex-col h-56"
+            >
+              <div className="flex-1 bg-gray-800"></div>
+              <div className="p-3">
+                <h3 className="font-bold text-sm truncate">Résultat {i}</h3>
+                <p className="text-xs text-(--text-dim) uppercase mt-1">{category === 'all' ? 'Mixte' : category}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Search;

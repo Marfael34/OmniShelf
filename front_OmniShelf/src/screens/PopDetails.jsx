@@ -1,37 +1,48 @@
 import { useParams } from "react-router-dom";
-import ActionButtons from "../components/UI/ActionButtons.jsx";
-import AffiliationButtons from "../components/UI/AffiliationButtons.jsx";
 
-export default function PopDetails() {
+const PopDetails = () => {
   const { id } = useParams();
-  // Mock data
+  
   const pop = {
-    title: "Batman",
-    number: "144",
-    series: "DC Comics",
-    image: "https://placehold.co/300x400/1e293b/14b8a6?text=Batman+POP",
+    number: "10",
+    series: "Marvel",
+    character: "Iron Man",
+    image: "https://via.placeholder.com/400x500?text=Iron+Man+POP"
   };
 
   return (
-    <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 animate-fade-in">
-      <img
-        src={pop.image}
-        alt={pop.title}
-        className="w-full md:w-1/3 rounded-xl border border-teal-500/30 shadow-[0_0_15px_rgba(20,184,166,0.2)] object-cover bg-white"
-      />
-      <div className="flex-1 flex flex-col justify-center">
-        <h1 className="text-4xl font-extrabold text-slate-50 mb-2">
-          {pop.title}
-        </h1>
-        <p className="text-xl text-slate-400 mb-6">{pop.series}</p>
-        <div className="flex flex-wrap gap-3 mb-6">
-          <span className="px-4 py-2 bg-slate-800 border border-teal-500/50 rounded-lg text-lg font-black text-teal-400 shadow-[0_0_10px_rgba(20,184,166,0.2)]">
-            N° {pop.number}
-          </span>
+    <div className="max-w-4xl mx-auto py-8">
+      <div className="bg-(--bg-surface) rounded-2xl overflow-hidden border border-gray-800 shadow-(--shadow-soft) flex flex-col md:flex-row">
+        <div className="md:w-1/3 bg-white min-h-[300px] flex items-center justify-center p-8">
+          <img src={pop.image} alt={pop.character} className="w-full h-full object-contain drop-shadow-2xl" />
         </div>
-        <AffiliationButtons productName={`Funko Pop ${pop.title} ${pop.number}`} category="pop" />
-        <ActionButtons />
+        <div className="p-8 md:w-2/3 flex flex-col justify-between">
+          <div>
+            <div className="flex justify-between items-start">
+              <h1 className="text-4xl font-extrabold text-(--text-main) mb-2">
+                {pop.character} <span className="text-sm text-(--text-dim) ml-2">({id})</span>
+              </h1>
+              <span className="bg-teal-900/40 text-teal-400 px-3 py-1 rounded-full font-bold border border-teal-500/30 text-xl">#{pop.number}</span>
+            </div>
+            <div className="space-y-2 mt-6 text-(--text-dim)">
+              <p><strong className="text-gray-300">Série:</strong> {pop.series}</p>
+            </div>
+          </div>
+          
+          <div className="mt-8 space-y-4">
+            <div className="flex space-x-4">
+              <button className="flex-1 bg-(--color-accent) text-(--bg-main) font-bold py-3 rounded-xl hover:opacity-90 transition-opacity">
+                Ajouter à la collection
+              </button>
+              <button className="flex-1 border-2 border-(--color-accent) text-(--color-accent) font-bold py-3 rounded-xl hover:bg-(--color-accent) hover:text-(--bg-main) transition-colors">
+                Ajouter à la wishlist
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default PopDetails;
