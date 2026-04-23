@@ -8,8 +8,6 @@ namespace App\Entity;
 use App\Repository\FigurineRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: FigurineRepository::class)]
 #[ORM\Table(name: 'figurine')]
@@ -17,10 +15,9 @@ use Symfony\Component\Uid\Uuid;
 class Figurine
 {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private ?Uuid $id = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $barcode = null;
@@ -45,7 +42,7 @@ class Figurine
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): ?int
     {
         return $this->id;
     }

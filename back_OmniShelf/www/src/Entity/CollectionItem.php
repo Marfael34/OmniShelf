@@ -5,12 +5,9 @@ declare(strict_types=1);
 // Entité de liaison entre la collection d'un utilisateur et une figurine
 namespace App\Entity;
 
-use App\Entity\Figurine;
 use App\Entity\User;
 use App\Repository\CollectionItemRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Uid\Uuid;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -43,8 +40,9 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 class CollectionItem
 {
     #[ORM\Id]
-    #[ORM\Column(type: UuidType::NAME, unique: true)]
-    private ?Uuid $id = null;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
@@ -68,11 +66,10 @@ class CollectionItem
 
     public function __construct()
     {
-        $this->id = Uuid::v7();
         $this->addedAt = new \DateTimeImmutable();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): ?int
     {
         return $this->id;
     }
