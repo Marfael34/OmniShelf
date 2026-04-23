@@ -1,0 +1,47 @@
+import { Link } from "react-router-dom";
+import { Trash2, ExternalLink, Package } from "lucide-react";
+
+const ProductCard = ({ item, onDelete, showDelete = false }) => {
+  return (
+    <Link 
+      to={`/details/${item.category}/${item.externalProductId || item.id}`}
+      className="group relative bg-(--bg-surface) rounded-2xl overflow-hidden border border-gray-800 hover:border-accent transition-all duration-300 flex flex-col h-72 shadow-lg hover:shadow-accent/10 animate-zoom-in"
+    >
+      {showDelete && onDelete && (
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onDelete(item.id);
+          }}
+          className="absolute top-3 right-3 p-2 bg-red-900/50 text-red-400 rounded-xl opacity-0 group-hover:opacity-100 hover:bg-red-600 hover:text-white transition-all z-10 backdrop-blur-md"
+        >
+          <Trash2 size={16} />
+        </button>
+      )}
+
+      <div className="flex-1 overflow-hidden relative">
+        {item.imageUrl ? (
+          <img 
+            src={item.imageUrl} 
+            alt={item.title} 
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+          />
+        ) : (
+          <div className="w-full h-full bg-gray-900 flex items-center justify-center text-gray-700">
+            <Package size={40} />
+          </div>
+        )}
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+      </div>
+
+      <div className="p-4 bg-surface/50 backdrop-blur-sm">
+        <h3 className="font-bold text-sm line-clamp-1 group-hover:text-accent transition-colors">
+          {item.title || "Produit sans titre"}
+        </h3>
+      </div>
+    </Link>
+  );
+};
+
+export default ProductCard;

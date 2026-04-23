@@ -22,7 +22,7 @@ services:
         condition: service_healthy # attendre que MariaDB soit prêt
     healthcheck:
       # vérification de santé du container (utilise wget qui est installé)
-      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/" ]
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/api/proxy/search?query=healthcheck" ]
       interval: 30s
       timeout: 10s
       retries: 3

@@ -1,8 +1,25 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export const useAuthStore = create((set) => ({
-  isAuthenticated: false, // Passer à true pour visualiser l'état connecté en dev
-  user: null,
-  login: (userData) => set({ isAuthenticated: true, user: userData }),
-  logout: () => set({ isAuthenticated: false, user: null }),
-}));
+export const useAuthStore = create(
+  persist(
+    (set) => ({
+      isAuthenticated: false,
+      user: null,
+      token: null,
+      login: (userData, token) => set({ 
+        isAuthenticated: true, 
+        user: userData, 
+        token: token 
+      }),
+      logout: () => set({ 
+        isAuthenticated: false, 
+        user: null, 
+        token: null 
+      }),
+    }),
+    {
+      name: 'omnishelf-auth',
+    }
+  )
+);

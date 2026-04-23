@@ -174,8 +174,58 @@ A insérer dans votre fichier `index.css` ou `global.css` :
   --gradient-brand: linear-gradient(135deg, #0A2647 0%, #2C016D 100%);
   --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
 }
-````
-
 ```
 
-```
+---
+
+## 4. Back-end : Architecture et Bonnes Pratiques (Symfony 8)
+
+### Séparation des Responsabilités (Entities vs DTOs)
+- **Protection des données** : Ne jamais exposer directement une entité Doctrine complexe à l'API si elle contient des données sensibles ou des relations lourdes.
+- **DTOs** : Utiliser systématiquement des objets de transfert de données (*Data Transfer Objects*) couplés au composant `ObjectMapper` ou aux State Providers/Processors d'API Platform pour gérer les requêtes entrantes (`POST`, `PUT`, `PATCH`) et sortantes.
+
+### Contrôleurs "Maigres" (Thin Controllers)
+- **Logique métier** : Les contrôleurs ne doivent contenir aucune logique métier. Leur seul rôle est de réceptionner la requête HTTP, d'appeler un service dédié (situé dans `src/Service/` ou `src/UseCase/`), et de retourner une réponse.
+
+### Gestion des Variables d'Environnement (.env)
+- **Secrets** : Aucune clé d'API tierce (Google Books, RAWG, Discogs) ou mot de passe de base de données ne doit apparaître en clair dans le code.
+- **Injection** : Ces valeurs doivent être injectées via des variables d'environnement (`$_ENV`) et validées au démarrage de l'application via les attributs d'injection de configuration.
+
+### Qualité du Code et Formatage (PER Coding Style)
+- **Standards** : Le code PHP doit strictement respecter le standard *PER Coding Style* (qui remplace le PSR-12).
+- **Natif** : Utiliser les fonctions natives de PHP plutôt que des surcouches (ex: `str_contains()` plutôt que des Regex complexes si ce n'est pas nécessaire).
+
+### Sécurité et Authentification
+- **Protection** : Toutes les routes (hors création de compte et login) doivent être protégées par une vérification de token JWT.
+- **Voters** : Vérifier systématiquement l'appartenance des ressources : un utilisateur A ne peut pas modifier, supprimer ou voir un `CollectionItem` appartenant à un utilisateur B (*Voter Symfony* ou restriction API Platform).
+
+## 5. Front-end : Gestion des Données et UI (React 19)
+
+### Appels API et React Query (TanStack Query)
+- **Isolation** : Aucun fetch ou axios direct dans les composants UI. Tous les appels réseaux doivent être encapsulés dans des fonctions isolées dans le dossier `src/services/api/`.
+- **Consommation** : Ces fonctions sont ensuite consommées via les hooks de React Query (pour le cache, la déduplication et l'invalidation automatique lors d'une mutation).
+
+### Gestion du State Global (Zustand)
+- **Portée** : Le store global ne doit stocker que l'état de l'application (Theme Mode, User Token, Modal Open/Close).
+- **Pas de doublons** : Ne pas utiliser Zustand pour stocker les données de l'API (cela fait doublon avec React Query).
+- **Slices** : Découper le store en "Slices" (ex: `createAuthSlice`, `createThemeSlice`) pour éviter d'avoir un fichier store gigantesque.
+
+### Stylisation avec Tailwind CSS
+- **Zéro CSS externe** : Pas de fichiers CSS externes (sauf le `global.css` pour les variables de la charte graphique).
+- **Ordre des classes** : Layout (flex, grid) > Spacing (p, m) > Typography (text, font) > Visuals (bg, border) > States (hover, focus).
+- **Utilitaire** : Utiliser les packages `clsx` et `tailwind-merge` (`twMerge`) pour gérer dynamiquement les classes sans conflit.
+
+### Suspense et Error Boundaries
+- **Chargement** : Puisque l'API `use()` de React 19 met le composant en pause, chaque écran ou section doit être encapsulé dans un `<Suspense fallback={<Loader />}>`.
+- **Résilience** : Prévoir des composants `<ErrorBoundary>` globaux pour intercepter les plantages d'interface.
+
+### Props et Valeurs par défaut
+- **Validation** : Puisque le projet est en JavaScript, la validation des props se fait via des paramètres par défaut ES6 directement dans la déstructuration : `const MonComposant = ({ title = "Sans titre", isActive = false }) => { ... };`.
+
+## 6. Communication Client-Serveur (API)
+
+### Format de Nommage JSON
+- **CamelCase** : Les clés JSON renvoyées par Symfony et lues par React doivent toujours être formatées en `camelCase` (ex: `externalProductId`) pour correspondre aux standards JavaScript.
+
+### Pagination Obligatoire
+- **Performance** : Toute route retournant une liste d'éléments doit être paginée côté serveur et côté client pour éviter la surcharge de la mémoire locale ou de la base de données.

@@ -9,12 +9,16 @@ import GameDetails from "../screens/GameDetails.jsx";
 import MangaDetails from "../screens/MangaDetails.jsx";
 import VinylDetails from "../screens/VinylDetails.jsx";
 import PopDetails from "../screens/PopDetails.jsx";
+import Login from "../screens/Login.jsx";
+import Register from "../screens/Register.jsx";
 
 export const router = createBrowserRouter([
   {
     element: <App />,
     children: [
       { path: "/", element: <Home /> },
+      { path: "/login", element: <Login /> },
+      { path: "/register", element: <Register /> },
       { path: "/profile", element: <Profile /> },
       { path: "/my-collections", element: <MyCollections /> },
       { path: "/wishlist", element: <Wishlist /> },
