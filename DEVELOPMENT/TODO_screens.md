@@ -4,39 +4,25 @@ Ce document liste les tâches nécessaires pour finaliser l'interface utilisateu
 
 ## 1. Routage & Navigation
 
-- [] **Router** :
-  - [] Configurer le tableau de routes (`src/router/router.jsx`) en utilisant ce modèle d'objet pour les liens :
-  - [] Configurer le tableau de routes (`src/pages/router.jsx`) en utilisant ce modèle d'objet pour les liens :
-    ```javascript
-    {
-        path: "/", // chemin de la vue
-        element: <Home/>, // élément retourné
-    }
-    ```
-  - [] Créer le composant `src/router/AppRouter.jsx` avec comme modèle :
-  - [] Créer le composant `src/pages/AppRouter.jsx` avec comme modèle :
-    ```javascript
-    const AppRouter = () => {
-      return <RouterProvider router={Router} />;
-    };
-    ```
-  - [] Définir l'ensemble des chemins de l'application :
-    - [] `/` (Accueil)
-    - [] `/profile` (Profil)
-    - [] `/my-collections` (Mes Collections)
-    - [] `/wishlist` (Wishlist Commune)
-    - [] `/search` (Recherche avancée)
-    - [] `/details/game/:id` (Vue détaillée : Jeu Vidéo)
-    - [] `/details/manga/:id` (Vue détaillée : Manga)
-    - [] `/details/vinyl/:id` (Vue détaillée : Vinyle)
-    - [] `/details/pop/:id` (Vue détaillée : Figurine POP)
+- [x] **Router** :
+  - [x] Configurer le tableau de routes (`src/router/router.jsx`).
+  - [x] Créer le composant `src/router/AppRouter.jsx`.
+  - [x] Définir l'ensemble des chemins de l'application :
+    - [x] `/` (Accueil)
+    - [x] `/profile` (Profil)
+    - [x] `/my-collections` (Mes Collections)
+    - [x] `/wishlist` (Wishlist Commune)
+    - [x] `/search` (Recherche avancée)
+    - [x] `/details/game/:id` (Vue détaillée : Jeu Vidéo)
+    - [x] `/details/manga/:id` (Vue détaillée : Manga)
+    - [x] `/details/vinyl/:id` (Vue détaillée : Vinyle)
+    - [x] `/details/pop/:id` (Vue détaillée : Figurine POP)
 - [] **NavBar** (dans `src/components/Ui/NavBar.jsx`) :
   - [] Intégrer le logo OmniShelf.
   - [] Ajouter les liens de navigation.
   - [] Gérer l'affichage conditionnel : boutons "Connexion / Inscription" (si visiteur) vs bouton "Profil" (si utilisateur connecté via Zustand).
 
 ## 2. Écrans Principaux (dans `src/screens/`)
-## 2. Écrans Principaux (dans `src/pages/`)
 
 - [] **Page d'Accueil** (`Home.jsx`) :
   - [] Message de bienvenue interactif et présentation globale du site.
