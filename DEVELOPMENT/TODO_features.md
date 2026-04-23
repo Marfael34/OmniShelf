@@ -4,13 +4,13 @@ Ce document liste les tâches de développement restantes basées sur les spéci
 
 ## 1. Backend (Symfony & BFF Proxy)
 
-- [ ] **APIs Tierces (Proxy)** :
-  - [ ] Créer la route `GET /api/proxy/search?query={q}&category={cat}` (recherche unifiée).
-  - [ ] Créer la route `GET /api/proxy/details?external_id={id}&category={cat}` (métadonnées complètes).
-- [ ] **Moteur de Recommandation** :
-  - [ ] Implémenter `GET /api/users/{id}/recommendations`.
-  - [ ] Créer l'algorithme d'analyse des tags/genres des éléments de la collection de l'utilisateur.
-  - [ ] Exclure de la liste des recommandations les `external_product_id` déjà possédés.
+- [x] **APIs Tierces (Proxy)** :
+  - [x] Créer la route `GET /api/proxy/search?query={q}&category={cat}` (recherche unifiée).
+  - [x] Créer la route `GET /api/proxy/details?external_id={id}&category={cat}` (métadonnées complètes).
+- [x] **Moteur de Recommandation** :
+  - [x] Implémenter `GET /api/users/{id}/recommendations`.
+  - [x] Créer l'algorithme d'analyse des tags/genres des éléments de la collection de l'utilisateur.
+  - [x] Exclure de la liste des recommandations les `external_product_id` déjà possédés.
 
 ## 2. Frontend - Scanner EAN-13 (PWA)
 
