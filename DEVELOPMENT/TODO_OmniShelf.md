@@ -16,13 +16,14 @@ Ce document suit l'avancement du projet par rapport au cahier des charges et aux
 - [x] **Moteur de Recommandation** :
     - [x] Vérifier/Optimiser la logique backend pour agréger les tags des items possédés.
     - [x] Implémenter le "Cold Start" (afficher les tendances si la collection est vide).
-- [ ] **Affiliation Dynamique** : 
-    - [ ] Valider les tags Amazon/Fnac dans le hook `useAffiliationLink`.
+- [x] **Affiliation Dynamique** : 
+    - [x] Valider les tags Amazon/Fnac dans le hook `useAffiliationLink`.
+    - [x] Créer le composant `AffiliationButtons` pour une injection dynamique.
 
 ## 🟡 PWA & Offline
-- [ ] **Service Worker** : Vérifier la stratégie de cache `NetworkFirst` pour les items de collection.
-- [ ] **Manifest** : S'assurer que toutes les icônes (`pwa-192x192.png`, etc.) sont présentes dans `public/`.
-- [ ] **Offline UX** : Afficher un indicateur "Mode Hors-ligne" si la connexion est perdue.
+- [x] **Service Worker** : Vérifier la stratégie de cache `NetworkFirst` pour les items de collection.
+- [x] **Manifest** : S'assurer que toutes les icônes (`pwa-192x192.png`, etc.) sont présentes dans `public/`.
+- [x] **Offline UX** : Afficher un indicateur "Mode Hors-ligne" si la connexion est perdue (Standard PWA).
 
 ## 🟢 Backend & Sécurité
 - [ ] **Voters Symfony** : S'assurer qu'un utilisateur ne peut pas voir/modifier la collection d'un autre.
