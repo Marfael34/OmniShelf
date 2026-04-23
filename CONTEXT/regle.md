@@ -85,13 +85,17 @@ React 19 représente le plus grand changement de paradigme depuis l'introduction
 - **Expérience Utilisateur Optimiste** : Utilisez systématiquement le hook `useOptimistic` lors d'actions utilisateur (comme l'ajout d'un manga à la collection). L'UI doit se mettre à jour instantanément, et React fera le "rollback" en arrière-plan si l'API Symfony renvoie une erreur.
 - **L'API `use()` pour la lecture** : Pour consommer un contexte ou lire une promesse de donnée, utilisez la nouvelle API `use()`. Contrairement aux autres hooks, elle peut être appelée de manière conditionnelle (dans un `if`), ce qui simplifie énormément la logique d'affichage.
 - **Fonctions de nettoyage dans les Refs** : Les callbacks de `ref` peuvent désormais retourner une fonction de nettoyage. Utilisez ce standard pour détruire proprement l'instance de la caméra (Html5-Qrcode) lorsque le composant de scan est démonté, évitant ainsi les fuites de mémoire.
+- **Taille des Composants** : Aucun composant ne doit dépasser **60 lignes**. Découpez la logique en sous-composants dans `src/components/`. Créez des sous-dossiers pour l'organisation si nécessaire, en vérifiant toujours si l'architecture existante n'en possède pas déjà un équivalent.
+- **Routage et Écrans** : Tous les écrans doivent être placés dans `src/screens/`. Tout fichier contenant le mot "router" doit être dans `src/router/`.
+- **Structure de App.jsx** : `App.jsx` est la vue principale appelée sur tous les écrans, elle doit obligatoirement utiliser le composant `<Outlet />` de React Router.
+- **Stockage des Images** : Toutes les images du site doivent être stockées côté Backend dans `www/src/public/Asset/image`. Des sous-dossiers thématiques peuvent être créés si nécessaire, toujours en vérifiant et mettant à jour l'architecture existante.
 
 ### Architecture de Dossiers Frontend
 
-```plaintext
+````plaintext
 src/
 ├── assets/          # Images, polices, icônes globales
-├── components/      # Composants UI atomiques et réutilisables (Boutons, Inputs)
+├── components/      # Composants UI atomiques et réutilisables (Max 60 lignes, Boutons, Inputs)
 ├── config/          # Variables d'environnement, instances Axios, constantes
 ├── features/        # Le cœur de l'application (logique métier par domaine)
 │   ├── auth/        # Exemple : Authentification
@@ -102,7 +106,8 @@ src/
 │   └── products/    # Exemple : Catalogue produit
 ├── hooks/           # Hooks personnalisés globaux (useAuth, useLocalStorage)
 ├── layouts/         # Templates de pages (MainLayout, AuthLayout)
-├── pages/           # Composants de routage (liés à React Router)
+├── router/          # Fichiers de configuration du routage (contenant "router")
+├── screens/         # Écrans de l'application
 ├── services/        # Logique métier transverse (Analytics, Sentry)
 ├── store/           # État global (Redux Toolkit, Zustand, Pinia)
 ├── types/           # Définitions TypeScript globales
@@ -176,5 +181,8 @@ A insérer dans votre fichier `index.css` ou `global.css` :
   --gradient-brand: linear-gradient(135deg, #0A2647 0%, #2C016D 100%);
   --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
 }
+````
+
 ```
+
 ```
