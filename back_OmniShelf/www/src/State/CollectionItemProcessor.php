@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\HttpOperation;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Entity\CollectionItem;
+use App\Entity\User;
 use App\Service\ProxyService;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -18,44 +19,48 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final readonly class CollectionItemProcessor implements ProcessorInterface
 {
     public function __construct(
-        #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
-        private ProcessorInterface $persistProcessor,
         private Security $security,
         private ProxyService $proxyService,
+        private \Doctrine\ORM\EntityManagerInterface $entityManager,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
-        if ($data instanceof CollectionItem && $operation instanceof HttpOperation && $operation->getMethod() === 'POST') {
-            // 1. Assigner l'utilisateur connecté
+        if ($data instanceof \App\Dto\CollectionItemInput && $operation instanceof HttpOperation && $operation->getMethod() === 'POST') {
             $user = $this->security->getUser();
-            if ($user) {
-                $data->setUser($user);
+            if (!$user instanceof User) {
+                throw new \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException("Vous devez être connecté.");
             }
 
-            // 2. Enrichir avec les données du proxy si nécessaire
-            if ($data->getExternalProductId() && $data->getCategory()) {
-                $details = $this->proxyService->getDetails($data->getExternalProductId(), $data->getCategory());
+            $entity = new CollectionItem();
+            $entity->setUser($user);
+            $entity->setExternalProductId($data->externalProductId);
+            $entity->setCategory($data->category);
+            $entity->setIsWishlist($data->isWishlist);
+
+            if ($data->collection) {
+                $parts = explode('/', $data->collection);
+                $colId = (int) end($parts);
+                $collection = $this->entityManager->getRepository(\App\Entity\UserCollection::class)->find($colId);
                 
-                if (!empty($details)) {
-                    // Normalisation pour les jeux (IGDB renvoie 'name' au lieu de 'title' dans certains cas)
-                    $title = $details['name'] ?? $details['title'] ?? 'Inconnu';
-                    $imageUrl = $details['backgroundImage'] ?? $details['imageUrl'] ?? null;
-                    
-                    if (!$data->getTitle()) {
-                        $data->setTitle($title);
-                    }
-                    if (!$data->getImageUrl()) {
-                        $data->setImageUrl($imageUrl);
-                    }
-                    // On peut aussi stocker le rating si dispo
-                    if (isset($details['rating'])) {
-                        $data->setRating((float)$details['rating']);
-                    }
-                }
+                if (!$collection) throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException("Collection non trouvée.");
+                if ($collection->getUser() !== $user) throw new \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException("Cette collection ne vous appartient pas.");
+                $entity->setCollection($collection);
             }
+
+            $details = $this->proxyService->getDetails($data->externalProductId, $data->category);
+            if (!empty($details)) {
+                $entity->setTitle($details['name'] ?? $details['title'] ?? 'Inconnu');
+                $entity->setImageUrl($details['backgroundImage'] ?? $details['imageUrl'] ?? null);
+                if (isset($details['rating'])) $entity->setRating((float)$details['rating']);
+            }
+
+            $this->entityManager->persist($entity);
+            $this->entityManager->flush();
+
+            return $entity;
         }
 
-        return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+        return $data;
     }
 }

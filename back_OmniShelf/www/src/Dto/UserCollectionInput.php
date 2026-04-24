@@ -13,8 +13,4 @@ final class UserCollectionInput
     #[Assert\NotBlank]
     #[Assert\Length(min: 3, max: 255)]
     public string $name = '';
-
-    #[Groups(['collection:write'])]
-    #[Assert\NotBlank]
-    public string $user = '';
 }

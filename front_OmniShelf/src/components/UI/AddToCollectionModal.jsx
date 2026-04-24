@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUiStore } from "../../store/uiStore";
-import { useAuthStore } from "../../store/authStore";
 import api from "../../services/api";
 import { X, Plus, Loader2 } from "lucide-react";
 import CollectionList from "./CollectionList";
@@ -9,7 +8,6 @@ import NewCollectionForm from "./NewCollectionForm";
 
 const AddToCollectionModal = () => {
   const { isCollectionModalOpen, closeCollectionModal, selectedProduct, showToast } = useUiStore();
-  const { user } = useAuthStore();
   const [isCreating, setIsCreating] = useState(false);
   const [newName, setNewName] = useState("");
   const queryClient = useQueryClient();
@@ -21,7 +19,7 @@ const AddToCollectionModal = () => {
   });
 
   const createMutation = useMutation({
-    mutationFn: (name) => api.post("/user_collections", { name, user: `/api/users/${user.id}` }),
+    mutationFn: (name) => api.post("/user_collections", { name }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["user_collections"] }); setIsCreating(false); setNewName(""); showToast("Collection créée !", "success"); },
   });
 
@@ -30,8 +28,7 @@ const AddToCollectionModal = () => {
       externalProductId: String(selectedProduct.id || selectedProduct.externalProductId),
       category: selectedProduct.category,
       isWishlist: false,
-      collection: colId ? `/api/user_collections/${colId}` : null,
-      user: `/api/users/${user.id}`
+      collection: colId ? `/api/user_collections/${colId}` : null
     }),
     onSuccess: () => { showToast("Ajouté !", "success"); closeCollectionModal(); },
     onError: () => showToast("Erreur lors de l'ajout.", "error")

@@ -24,10 +24,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['item:read']],
     denormalizationContext: ['groups' => ['item:write']],
+    input: \App\Dto\CollectionItemInput::class,
     operations: [
-        new GetCollection(),
-        new Post(processor: \App\State\CollectionItemProcessor::class),
-        new Delete()
+        new GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
+        new Post(
+            processor: \App\State\CollectionItemProcessor::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')"
+        ),
+        new Delete(security: "is_granted('ROLE_USER') and object.getUser() == user")
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['isWishlist'])]

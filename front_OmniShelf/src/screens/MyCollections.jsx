@@ -36,7 +36,7 @@ const MyCollections = () => {
   const custom = Array.isArray(customRaw) ? customRaw : [];
 
   const createMutation = useMutation({
-    mutationFn: (name) => api.post("/user_collections", { name, user: `/api/users/${user.id}` }),
+    mutationFn: (name) => api.post("/user_collections", { name }),
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["user_collections"] }); setIsModalOpen(false); showToast("Collection créée !", "success"); },
     onError: () => showToast("Erreur lors de la création", "error")
   });

@@ -9,8 +9,8 @@ use ApiPlatform\State\ProcessorInterface;
 use App\Dto\UserCollectionInput;
 use App\Entity\UserCollection;
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * Processeur pour transformer le DTO UserCollectionInput en entité UserCollection
@@ -19,32 +19,28 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final readonly class UserCollectionProcessor implements ProcessorInterface
 {
     public function __construct(
-        #[Autowire(service: 'api_platform.doctrine.orm.state.persist_processor')]
-        private ProcessorInterface $persistProcessor,
-        private EntityManagerInterface $entityManager
+        private \Doctrine\ORM\EntityManagerInterface $entityManager,
+        private Security $security
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): mixed
     {
         if ($data instanceof UserCollectionInput) {
-            // Mapping manuel (ou via ObjectMapper si configuré, mais ici on reste explicite pour la clarté)
-            $entity = new UserCollection();
-            $entity->setName($data->name);
-
-            // Résolution de l'utilisateur (on attend un IRI comme /api/users/1)
-            if ($data->user) {
-                // Extraction de l'ID depuis l'IRI
-                $parts = explode('/', $data->user);
-                $userId = (int) end($parts);
-                $user = $this->entityManager->getRepository(User::class)->find($userId);
-                if ($user) {
-                    $entity->setUser($user);
-                }
+            $user = $this->security->getUser();
+            if (!$user instanceof User) {
+                throw new \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException("Vous devez être connecté.");
             }
 
-            return $this->persistProcessor->process($entity, $operation, $uriVariables, $context);
+            $entity = new UserCollection();
+            $entity->setName($data->name);
+            $entity->setUser($user);
+
+            $this->entityManager->persist($entity);
+            $this->entityManager->flush();
+
+            return $entity;
         }
 
-        return $this->persistProcessor->process($data, $operation, $uriVariables, $context);
+        return $data; // Devrait être géré par le fournisseur par défaut si pas un DTO
     }
 }

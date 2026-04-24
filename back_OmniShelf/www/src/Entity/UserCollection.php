@@ -22,11 +22,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
     denormalizationContext: ['groups' => ['collection:write']],
     input: \App\Dto\UserCollectionInput::class,
     operations: [
-        new GetCollection(),
-        new Get(),
-        new Post(processor: \App\State\UserCollectionProcessor::class),
-        new Put(),
-        new Delete(),
+        new GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
+        new Get(security: "is_granted('ROLE_USER') and object.getUser() == user"),
+        new Post(
+            processor: \App\State\UserCollectionProcessor::class,
+            security: "is_granted('IS_AUTHENTICATED_FULLY')"
+        ),
+        new Put(security: "is_granted('ROLE_USER') and object.getUser() == user"),
+        new Delete(security: "is_granted('ROLE_USER') and object.getUser() == user"),
     ]
 )]
 class UserCollection
