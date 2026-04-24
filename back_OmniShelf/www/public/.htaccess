@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# Autoriser l'en-tête Authorization (nécessaire pour JWT avec Apache)
+RewriteCond %{HTTP:Authorization} ^(.+)$
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 # Rediriger toutes les requêtes vers index.php sauf les fichiers existants
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

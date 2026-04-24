@@ -8,7 +8,6 @@ use App\Service\RecommendationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Uid\Uuid;
 
 #[Route('/api/users')]
 final class RecommendationController extends AbstractController
@@ -18,9 +17,8 @@ final class RecommendationController extends AbstractController
     ) {}
 
     #[Route('/{id}/recommendations', name: 'api_users_recommendations', methods: ['GET'])]
-    public function recommendations(string $id): JsonResponse
+    public function recommendations(int $id): JsonResponse
     {
-        $userId = Uuid::fromString($id);
-        return $this->json($this->recommendationService->getRecommendationsForUser($userId));
+        return $this->json($this->recommendationService->getRecommendationsForUser($id));
     }
 }

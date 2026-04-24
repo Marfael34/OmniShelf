@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use App\Entity\CollectionItem;
 
@@ -16,16 +15,16 @@ final readonly class RecommendationService
         private HttpClientInterface $httpClient,
     ) {}
 
-    public function getRecommendationsForUser(Uuid $userId): array
+    public function getRecommendationsForUser(int $userId): array
     {
         // 1. Récupérer les items de la collection de l'utilisateur
         $collectionItems = $this->entityManager->getRepository(CollectionItem::class)->findBy(['user' => $userId]);
-        
+
         $categories = [];
         foreach ($collectionItems as $item) {
             $categories[] = $item->getCategory();
         }
-        
+
         // Fréquence des catégories
         $categoryCounts = array_count_values($categories);
         arsort($categoryCounts);
@@ -93,9 +92,8 @@ final readonly class RecommendationService
         }
 
         return [
-            'userId' => $userId->toRfc4122(),
+            'userId' => $userId,
             'recommendations' => $recommendations,
         ];
     }
 }
-

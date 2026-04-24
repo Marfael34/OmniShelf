@@ -42,7 +42,7 @@ La base de données locale est volontairement minimale. Elle ne stocke que les i
 1.  **`User`**: Table pour l'authentification des utilisateurs (gérée par `lexik/jwt-authentication-bundle`).
 
 2.  **`Figurine` (Cache d'Items)**: Cette table agit comme un cache local pour les produits scannés ou recherchés.
-    - `id` (UuidV7): Identifiant unique et triable temporellement.
+    - `id` (int): Identifiant unique (Auto-incrément).
     - `barcode` (string, unique): Le code-barres EAN/UPC, qui sert de clé de recherche principale.
     - `name` (string): Nom du produit.
     - `brand` (string, nullable): Marque (ex: "Funko").
@@ -51,7 +51,7 @@ La base de données locale est volontairement minimale. Elle ne stocke que les i
     - `created_at` (datetime): Date de la première découverte de l'item.
 
 3.  **`CollectionItem`** (Table de jointure): Lie un utilisateur à une figurine de sa collection.
-    - `id` (UuidV7)
+    - `id` (int)
     - `user_id` (relation ManyToOne vers `User`)
     - `figurine_id` (relation ManyToOne vers `Figurine`)
     - `added_at` (datetime): Date d'ajout à la collection.
@@ -87,7 +87,7 @@ Le frontend est une **Progressive Web App (PWA)** construite avec React et Vite,
 
 Conformément au fichier `regle.md`, et après consolidation des différentes spécifications, voici l'architecture de dossiers officielle pour le frontend. Elle est conçue pour la clarté, la modularité et le respect strict des standards du projet (React 19 en JS natif, pas de TypeScript).
 
-````plaintext
+```plaintext
 src/
 ├── assets/          # Images, polices, icônes globales
 ├── components/     # Composants UI atomiques et réutilisables (Max 60 lignes, Boutons, Inputs, Navbar)
@@ -115,3 +115,4 @@ src/
 10. **Ajout à la collection (Frontend)**: L'utilisateur clique sur "Ajouter". Un hook `useMutation` de React Query envoie une requête `POST /api/collection` avec l'ID de la figurine.
 11. **Sauvegarde Collection (Backend)**: Le backend crée une nouvelle entrée dans la table `CollectionItem` qui lie l'ID de l'utilisateur et l'ID de la figurine.
 12. **Feedback (Frontend)**: L'UI se met à jour (par exemple, le bouton "Ajouter" devient "Dans la collection") et la requête pour `GET /api/collection` est automatiquement invalidée et rafraîchie par React Query.
+```

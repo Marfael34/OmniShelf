@@ -16,21 +16,25 @@ const Login = () => {
     setError("");
     try {
       const { token } = await loginApi(email, password);
-      // Fetch user info to get the ID
-      const userResponse = await api.get("/api/me", {
-        headers: { Authorization: `Bearer ${token}` }
-      });
       
+      // Mettre à jour le store avec le token immédiatement pour que les prochains appels API soient authentifiés
+      loginStore(null, token);
+
+      // Fetch user info to get the ID (l'intercepteur ajoutera maintenant le token automatiquement)
+      const userResponse = await api.get("/me");
+      
+      // Mettre à jour le store avec les données complètes
       loginStore(userResponse.data, token);
       navigate("/");
-    } catch {
+    } catch (e) {
+      console.error("Login error:", e);
       setError("Email ou mot de passe incorrect.");
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-20 p-8 bg-(--bg-bg-surface) rounded-2xl border border-gray-800 shadow-(--shadow-soft)">
-      <h2 className="text-3xl font-bold mb-6 text-center text-(--color-accent)">Connexion</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center text-accent">Connexion</h2>
       {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -39,7 +43,7 @@ const Login = () => {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 bg-(--bg-bg-main) border border-gray-700 rounded-xl focus:border-(--color-accent) outline-none transition-colors"
+            className="w-full p-3 bg-(--bg-bg-main) border border-gray-700 rounded-xl focus:border-accent outline-none transition-colors"
             required
           />
         </div>
@@ -49,20 +53,20 @@ const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-3 bg-(--bg-bg-main) border border-gray-700 rounded-xl focus:border-(--color-accent) outline-none transition-colors"
+            className="w-full p-3 bg-(--bg-bg-main) border border-gray-700 rounded-xl focus:border-accent outline-none transition-colors"
             required
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-(--color-accent) text-(--bg-bg-main) font-bold py-3 rounded-xl hover:opacity-90 transition-opacity mt-4"
+          className="w-full bg-accent text-(--bg-bg-main) font-bold py-3 rounded-xl hover:opacity-90 transition-opacity mt-4"
         >
           Se connecter
         </button>
       </form>
       <p className="mt-6 text-center text-(--text-text-dim)">
         Pas de compte ?{" "}
-        <Link to="/register" className="text-(--color-accent) hover:underline">
+        <Link to="/register" className="text-accent hover:underline">
           S'inscrire
         </Link>
       </p>

@@ -20,7 +20,7 @@ Feuille de route pour le développement du projet, basée sur le document `archi
 
 - [x] Créer l'entité `User` pour l'authentification.
 - [x] Créer l'entité `Figurine` pour mettre en cache les données des produits.
-  - `id` (UuidV7)
+  - `id` (int)
   - `barcode` (string, unique)
   - `name`, `brand`, `description`, `image_url`
   - `created_at`

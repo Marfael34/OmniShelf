@@ -52,7 +52,7 @@ Symfony 8 requiert au minimum PHP 8.4. Cette version majeure a nettoyé toutes l
 
 | Concept                             | Standard Symfony 8                      | Pratique Obsolète (à bannir)                  |
 | :---------------------------------- | :-------------------------------------- | :-------------------------------------------- |
-| **Identifiants (Bases de données)** | UuidV7 (Triable temporellement)         | Auto-incrément classique ou UuidV4            |
+| **Identifiants (Bases de données)** | Auto-incrément (Entiers)               | TOUT TYPE DE UUID (STRICTEMENT INTERDIT)      |
 | **Résolution des Types**            | Composant `TypeInfo` stabilisé          | Analyse manuelle ou via Reflection API lourde |
 | **Mappage de Données**              | Composant `ObjectMapper` stabilisé      | Sérialiseurs maison complexes                 |
 | **Gestion des dates**               | `DatePoint` / `TimePoint` (sans fuseau) | Objets `DateTime` globaux mal gérés           |
