@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     operations: [
         new GetCollection(),
         new Get(),
-        new Post(),
+        new Post(processor: \App\State\UserCollectionProcessor::class),
         new Put(),
         new Delete(),
     ]

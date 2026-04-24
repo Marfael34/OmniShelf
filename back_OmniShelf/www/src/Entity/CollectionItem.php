@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
     denormalizationContext: ['groups' => ['item:write']],
     operations: [
         new GetCollection(),
-        new Post(),
+        new Post(processor: \App\State\CollectionItemProcessor::class),
         new Delete()
     ]
 )]
