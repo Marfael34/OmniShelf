@@ -15,16 +15,16 @@ const Login = () => {
     e.preventDefault();
     setError("");
     try {
-      const { token } = await loginApi(email, password);
+      const { token, refresh_token } = await loginApi(email, password);
       
-      // Mettre à jour le store avec le token immédiatement pour que les prochains appels API soient authentifiés
-      loginStore(null, token);
+      // Mettre à jour le store avec les tokens immédiatement
+      loginStore(null, token, refresh_token);
 
-      // Fetch user info to get the ID (l'intercepteur ajoutera maintenant le token automatiquement)
+      // Fetch user info to get the ID
       const userResponse = await api.get("/me");
       
       // Mettre à jour le store avec les données complètes
-      loginStore(userResponse.data, token);
+      loginStore(userResponse.data, token, refresh_token);
       navigate("/");
     } catch (e) {
       console.error("Login error:", e);

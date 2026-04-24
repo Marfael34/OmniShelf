@@ -1,4 +1,4 @@
-import { Filter, Search as SearchIcon, Loader2, X } from "lucide-react";
+import { Filter, Search as SearchIcon, Loader2, X, ChevronDown } from "lucide-react";
 
 const SearchForm = ({ 
     query, 
@@ -11,82 +11,93 @@ const SearchForm = ({
     isFetching 
 }) => {
     const categories = [
-        { id: 'all', label: 'Tout', icon: '🌟' },
-        { id: 'game', label: 'Jeux Vidéo', icon: '🎮' },
+        { id: 'all', label: 'Global', icon: '🌟' },
+        { id: 'game', label: 'Jeux', icon: '🎮' },
         { id: 'manga', label: 'Mangas', icon: '📚' },
-        { id: 'vinyl', label: 'Vinyles', icon: '💿' },
-        { id: 'pop', label: 'Figurines POP', icon: '🧸' },
+        { id: 'vinyl', label: 'Vinyls', icon: '💿' },
+        { id: 'pop', label: 'Pops', icon: '🧸' },
     ];
 
     return (
-        <div className="w-full max-w-4xl mx-auto space-y-8 mt-12">
-            {/* Category Tabs */}
-            <div className="flex flex-wrap justify-center gap-2 p-1.5 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/5 w-fit mx-auto">
+        <div className="w-full max-w-4xl mx-auto mt-20 relative px-4">
+            {/* Minimalist Floating Categories */}
+            <div className="flex justify-center space-x-8 mb-6 overflow-x-auto no-scrollbar">
                 {categories.map((cat) => (
                     <button
                         key={cat.id}
                         type="button"
                         onClick={() => setCategory(cat.id)}
-                        className={`flex items-center space-x-2 px-6 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all ${
-                            category === cat.id 
-                            ? 'bg-accent text-bg-main shadow-lg shadow-accent/20 scale-105' 
-                            : 'text-text-dim hover:text-text-main hover:bg-white/5'
+                        className={`text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-300 relative pb-2 ${
+                            category === cat.id ? 'text-accent' : 'text-text-dim hover:text-text-main'
                         }`}
                     >
-                        <span>{cat.icon}</span>
-                        <span>{cat.label}</span>
+                        {cat.label}
+                        {category === cat.id && (
+                            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent rounded-full animate-in fade-in slide-in-from-left-2"></span>
+                        )}
                     </button>
                 ))}
             </div>
 
-            {/* Main Search Bar */}
-            <form onSubmit={onSearch} className="relative group">
-                <div className="absolute -inset-1 bg-linear-to-r from-accent/50 to-purple-500/50 rounded-4xl blur-xl opacity-0 group-focus-within:opacity-20 transition-opacity duration-700"></div>
+            <form onSubmit={onSearch} className="group relative">
+                {/* Glow effect */}
+                <div className="absolute -inset-1 bg-accent/20 rounded-full blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-700"></div>
                 
-                <div className="relative flex items-center bg-bg-surface/40 backdrop-blur-3xl rounded-4xl border border-white/10 p-2 shadow-2xl transition-all duration-500 group-focus-within:border-accent/50 group-focus-within:bg-bg-surface/60">
-                    <div className="pl-6 text-text-dim group-focus-within:text-accent transition-colors">
-                        <SearchIcon size={24} strokeWidth={2.5} />
+                <div className="relative flex items-center bg-bg-surface/80 backdrop-blur-2xl border border-white/5 rounded-full p-2 pl-6 shadow-[0_30px_60px_rgba(0,0,0,0.4)] transition-all duration-500 group-focus-within:border-accent/30">
+                    <div className="flex items-center text-text-dim group-focus-within:text-accent transition-colors">
+                        {isFetching ? <Loader2 size={22} className="animate-spin" /> : <SearchIcon size={22} strokeWidth={2.5} />}
                     </div>
-                    
+
                     <input 
                         type="text" 
-                        placeholder={`Chercher dans ${categories.find(c => c.id === category)?.label}...`}
-                        className="flex-1 bg-transparent text-text-main px-6 py-6 outline-none font-bold text-lg placeholder:text-text-dim/30"
+                        placeholder={`Chercher un ${categories.find(c => c.id === category)?.label.toLowerCase()}...`}
+                        className="flex-1 bg-transparent text-text-main px-6 py-4 outline-none font-bold text-lg placeholder:text-text-dim/20 tracking-tight"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                     />
 
-                    <div className="flex items-center pr-4 space-x-2">
+                    <div className="flex items-center space-x-2">
                         {query && (
                             <button 
                                 type="button"
                                 onClick={() => setQuery("")}
-                                className="p-3 text-text-dim hover:text-text-main transition-colors"
+                                className="p-2 text-text-dim hover:text-white transition-colors"
                             >
-                                <X size={20} />
+                                <X size={18} />
                             </button>
                         )}
-                        
-                        <div className="w-px h-8 bg-white/10 mx-2"></div>
+
+                        <div className="w-px h-6 bg-white/10 mx-2"></div>
 
                         <button 
                             type="button"
                             onClick={() => setShowFilters(!showFilters)}
-                            className={`p-4 rounded-2xl transition-all ${showFilters ? 'bg-accent text-bg-main shadow-lg shadow-accent/20' : 'text-text-dim hover:text-text-main hover:bg-white/5'}`}
+                            className={`p-3 rounded-full transition-all ${showFilters ? 'bg-accent text-bg-main' : 'text-text-dim hover:text-text-main hover:bg-white/5'}`}
+                            title="Filtres"
                         >
-                            <Filter size={20} />
+                            <Filter size={18} />
                         </button>
 
                         <button 
                             type="submit"
-                            disabled={isFetching}
-                            className="bg-accent text-bg-main px-10 py-5 rounded-3xl font-black text-sm tracking-widest hover:scale-[1.02] active:scale-[0.95] transition-all disabled:opacity-50 shadow-xl shadow-accent/20 uppercase"
+                            className="bg-accent text-bg-main px-8 py-4 rounded-full font-black text-[11px] uppercase tracking-widest hover:scale-[1.05] active:scale-[0.95] transition-all shadow-lg shadow-accent/20"
                         >
-                            {isFetching ? <Loader2 className="animate-spin" /> : "Rechercher"}
+                            Explorer
                         </button>
                     </div>
                 </div>
             </form>
+
+            <div className="mt-8 flex justify-center space-x-12 opacity-30">
+                 <div className="flex items-center space-x-2 text-[9px] font-black uppercase tracking-widest">
+                    <span className="w-1 h-1 bg-accent rounded-full"></span>
+                    <span>API Realtime</span>
+                 </div>
+                 <div className="flex items-center space-x-2 text-[9px] font-black uppercase tracking-widest">
+                    <span className="w-1 h-1 bg-accent rounded-full"></span>
+                    <span>Cloud Sync</span>
+                 </div>
+            </div>
         </div>
     );
 };

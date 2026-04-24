@@ -190,9 +190,10 @@ final readonly class ProxyService
                     ]);
                     $data = $response->toArray();
                     $info = $data['info'] ?? [];
+                    $title = $info['title'] ?? 'Inconnu';
                     
-                    return [
-                        'name' => $info['title'] ?? 'Inconnu',
+                    $details = [
+                        'name' => $title,
                         'description' => "Prix le plus bas constaté : " . ($data['cheapestPriceEver']['price'] ?? 'N/A') . "€",
                         'backgroundImage' => $info['thumb'] ?? null,
                         'genres' => [['name' => 'Jeu Vidéo']],
@@ -204,6 +205,34 @@ final readonly class ProxyService
                         'cheapsharkId' => $id,
                         'deals' => $data['deals'] ?? []
                     ];
+
+                    // Tenter un enrichissement via IGDB avec le titre
+                    try {
+                        $igdbSearch = $this->igdbService->search($title, 1);
+                        if (!empty($igdbSearch)) {
+                            $igdbId = str_replace('igdb-', '', $igdbSearch[0]->id);
+                            $igdbDetails = $this->igdbService->getDetails($igdbId);
+                            
+                            if (!empty($igdbDetails)) {
+                                // On préfère les données IGDB plus riches
+                                if (!empty($igdbDetails['summary'])) {
+                                    $details['description'] = $igdbDetails['summary'];
+                                }
+                                if (!empty($igdbDetails['backgroundImage'])) {
+                                    $details['backgroundImage'] = $igdbDetails['backgroundImage'];
+                                }
+                                $details['rating'] = $igdbDetails['rating'] ?? $details['rating'];
+                                $details['genres'] = !empty($igdbDetails['genres']) ? $igdbDetails['genres'] : $details['genres'];
+                                $details['platforms'] = !empty($igdbDetails['platforms']) ? $igdbDetails['platforms'] : $details['platforms'];
+                                $details['screenshots'] = !empty($igdbDetails['screenshots']) ? $igdbDetails['screenshots'] : $details['screenshots'];
+                                $details['releaseYear'] = $igdbDetails['releaseYear'] ?? $details['releaseYear'];
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        error_log("CheapShark Enrichment Error: " . $e->getMessage());
+                    }
+
+                    return $details;
                 } catch (\Exception $e) { return []; }
             }
 
@@ -343,11 +372,37 @@ final readonly class ProxyService
             $data = $response->toArray();
             $vol = $data['volumeInfo'] ?? [];
 
+            $imageLinks = $vol['imageLinks'] ?? [];
+            $img = $imageLinks['extraLarge'] ?? $imageLinks['large'] ?? $imageLinks['medium'] ?? $imageLinks['thumbnail'] ?? $imageLinks['smallThumbnail'] ?? null;
+            
+            // Si pas d'image, tenter une recherche par titre + auteur pour trouver une autre édition avec image
+            if (!$img && !empty($vol['title'])) {
+                try {
+                    $searchQuery = $vol['title'] . (isset($vol['authors'][0]) ? ' ' . $vol['authors'][0] : '');
+                    $fallbackResponse = $this->httpClient->request('GET', "https://www.googleapis.com/books/v1/volumes", [
+                        'query' => [
+                            'q' => $searchQuery,
+                            'maxResults' => 1,
+                            'key' => $this->booksApiKey
+                        ]
+                    ]);
+                    $fallbackData = $fallbackResponse->toArray();
+                    $fallbackItem = $fallbackData['items'][0]['volumeInfo'] ?? null;
+                    if ($fallbackItem && isset($fallbackItem['imageLinks']['thumbnail'])) {
+                        $img = $fallbackItem['imageLinks']['thumbnail'];
+                    }
+                } catch (\Exception $e) {}
+            }
+
+            if ($img) {
+                $img = str_replace('http://', 'https://', $img);
+            }
+
             return [
                 'name' => $vol['title'] ?? 'Inconnu',
                 'author' => ($vol['authors'] ?? [])[0] ?? 'Auteur inconnu',
                 'description' => $vol['description'] ?? '',
-                'backgroundImage' => $vol['imageLinks']['thumbnail'] ?? $vol['imageLinks']['smallThumbnail'] ?? null,
+                'backgroundImage' => $img,
                 'rating' => $vol['averageRating'] ?? null,
                 'releaseYear' => isset($vol['publishedDate']) ? substr($vol['publishedDate'], 0, 4) : null,
                 'publisher' => $vol['publisher'] ?? null,
