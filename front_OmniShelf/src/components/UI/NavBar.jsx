@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../../store/authStore";
-import { User, Menu, X } from "lucide-react";
+import { User, Menu, X, Home, Library, Heart } from "lucide-react";
 import CategoryLinks from "./CategoryLinks";
 
 const NavBar = () => {
@@ -18,14 +18,24 @@ const NavBar = () => {
 
         {/* Desktop Navigation - Tout à droite */}
         <div className="hidden lg:flex items-center space-x-8">
+            <Link to="/" className="flex items-center space-x-2 text-text-main/70 hover:text-accent transition-all group">
+                <Home size={14} className="group-hover:scale-110 transition-transform" />
+                <span className="font-black uppercase text-[10px] tracking-widest">Accueil</span>
+            </Link>
+            
             <CategoryLinks />
+
             <div className="flex items-center space-x-6">
-                <Link to="/my-collections" className="text-text-main/70 hover:text-accent transition-all font-black uppercase text-[10px] tracking-widest">Collections</Link>
-                <Link to="/wishlist" className="text-text-main/70 hover:text-accent transition-all font-black uppercase text-[10px] tracking-widest">Wishlist</Link>
+                <Link to="/my-collections" className="flex items-center space-x-2 text-text-main/70 hover:text-accent transition-all group">
+                    <Library size={14} className="group-hover:scale-110 transition-transform" />
+                    <span className="font-black uppercase text-[10px] tracking-widest">Collections</span>
+                </Link>
+                <Link to="/wishlist" className="flex items-center space-x-2 text-text-main/70 hover:text-accent transition-all group">
+                    <Heart size={14} className="group-hover:scale-110 transition-transform" />
+                    <span className="font-black uppercase text-[10px] tracking-widest">Wishlist</span>
+                </Link>
             </div>
             
-            <div className="h-4 w-px bg-white/10"></div>
-
             {isAuthenticated ? (
                 <Link to="/profile" className="w-10 h-10 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center text-accent hover:bg-accent hover:text-bg-main transition-all">
                     <User size={18} />
@@ -33,7 +43,7 @@ const NavBar = () => {
             ) : (
                 <div className="flex items-center space-x-6">
                     <Link to="/login" className="text-text-main/50 hover:text-accent transition-colors font-black text-[10px] tracking-[0.2em]">LOG_IN</Link>
-                    <Link to="/register" className="bg-accent text-bg-main px-6 py-2 rounded-xl font-black text-[10px] tracking-[0.2em] hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)] transition-all uppercase">S'inscrire</Link>
+                    <Link to="/register" className="bg-linear-to-r from-accent to-accent/80 text-bg-main px-6 py-2 rounded-xl font-black text-[10px] tracking-[0.2em] hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)] transition-all uppercase">S'inscrire</Link>
                 </div>
             )}
         </div>
@@ -58,17 +68,29 @@ const NavBar = () => {
       {isMobileMenuOpen && (
         <div className="lg:hidden absolute top-20 left-0 right-0 bg-bg-main/95 backdrop-blur-2xl border-b border-white/5 py-8 px-6 space-y-8 animate-in slide-in-from-top-4 duration-300">
             <div className="space-y-4">
-                <p className="text-[10px] font-black text-text-dim uppercase tracking-[0.3em]">Découvrir</p>
-                <div className="grid grid-cols-2 gap-4" onClick={() => setIsMobileMenuOpen(false)}>
-                    <CategoryLinks isMobile />
+                <p className="text-[10px] font-black text-text-dim uppercase tracking-[0.3em]">Navigation</p>
+                <div className="flex flex-col space-y-4" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Link to="/" className="flex items-center space-x-4 text-lg font-black text-text-main uppercase tracking-tighter italic">
+                        <Home size={20} className="text-accent" />
+                        <span>Accueil</span>
+                    </Link>
+                    <div className="grid grid-cols-1 gap-4">
+                        <CategoryLinks isMobile />
+                    </div>
                 </div>
             </div>
 
             <div className="space-y-4 pt-4 border-t border-white/5">
                 <p className="text-[10px] font-black text-text-dim uppercase tracking-[0.3em]">Ma Bibliothèque</p>
                 <div className="flex flex-col space-y-4" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Link to="/my-collections" className="text-lg font-black text-text-main uppercase tracking-tighter italic">Collections</Link>
-                    <Link to="/wishlist" className="text-lg font-black text-text-main uppercase tracking-tighter italic">Wishlist</Link>
+                    <Link to="/my-collections" className="flex items-center space-x-4 text-lg font-black text-text-main uppercase tracking-tighter italic">
+                        <Library size={20} className="text-accent" />
+                        <span>Collections</span>
+                    </Link>
+                    <Link to="/wishlist" className="flex items-center space-x-4 text-lg font-black text-text-main uppercase tracking-tighter italic">
+                        <Heart size={20} className="text-accent" />
+                        <span>Wishlist</span>
+                    </Link>
                 </div>
             </div>
 

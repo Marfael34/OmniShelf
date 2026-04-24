@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Trash2, ExternalLink, Package } from "lucide-react";
 
 const ProductCard = ({ item = {}, onDelete = null, showDelete = false }) => {
+  const [imageError, setImageError] = useState(false);
+
   return (
     <Link 
       to={`/details/${item.category}/${item.externalProductId || item.id}`}
@@ -21,15 +24,19 @@ const ProductCard = ({ item = {}, onDelete = null, showDelete = false }) => {
       )}
 
       <div className="flex-1 overflow-hidden relative">
-        {item.imageUrl ? (
+        {item.imageUrl && !imageError ? (
           <img 
             src={item.imageUrl} 
             alt={item.title} 
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+            onError={() => setImageError(true)}
           />
         ) : (
-          <div className="w-full h-full bg-gray-900 flex items-center justify-center text-gray-700">
-            <Package size={40} />
+          <div className="w-full h-full bg-gray-900 flex flex-col items-center justify-center text-gray-700 p-8 text-center space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5 group-hover:border-accent/20 group-hover:bg-accent/5 transition-all">
+                <Package size={32} />
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-widest opacity-40">No Preview</span>
           </div>
         )}
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
