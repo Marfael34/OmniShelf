@@ -43,7 +43,7 @@ final readonly class ProxyService
             }
         }
 
-        // 2. RAWG
+        // 2. RAWG (Jeux Vidéo)
         if (in_array($category, ['game', 'all'])) {
             try {
                 $apiKey = $_ENV['RAWG_API_KEY'] ?? null;
@@ -52,11 +52,10 @@ final readonly class ProxyService
                         'search' => $query,
                         'key' => $apiKey,
                         'page' => $page,
-                        'page_size' => $itemsPerPage
+                        'page_size' => $itemsPerPage,
+                        'search_precise' => true
                     ],
-                    'headers' => [
-                        'User-Agent' => 'OmniShelf/1.0'
-                    ]
+                    'headers' => ['User-Agent' => 'OmniShelf/1.0']
                 ]);
                 $data = $response->toArray();
                 foreach ($data['results'] ?? [] as $item) {
@@ -69,11 +68,51 @@ final readonly class ProxyService
                     ]);
                 }
             } catch (\Exception $e) {
-                error_log("RAWG Exception: " . $e->getMessage());
+                error_log("RAWG Search Error: " . $e->getMessage());
             }
         }
 
-        // 3. Discogs
+        // 3. Open Products Facts (Funko Pop)
+        if (in_array($category, ['pop', 'all'])) {
+            try {
+                // On ajoute "Funko Pop" à la recherche si ce n'est pas déjà présent pour filtrer
+                $searchQuery = (str_contains(strtolower($query), 'funko') || str_contains(strtolower($query), 'pop')) 
+                    ? $query 
+                    : "Funko Pop " . $query;
+
+                $response = $this->httpClient->request('GET', 'https://world.openproductsfacts.org/cgi/search.pl', [
+                    'query' => [
+                        'search_terms' => $searchQuery,
+                        'search_simple' => 1,
+                        'action' => 'process',
+                        'json' => 1,
+                        'page' => $page,
+                        'page_size' => $itemsPerPage
+                    ]
+                ]);
+                $data = $response->toArray();
+                foreach ($data['products'] ?? [] as $item) {
+                    // On ne garde que si c'est vraiment une Funko (filtre basique)
+                    if (isset($item['brands']) && str_contains(strtolower($item['brands']), 'funko')) {
+                        $results[] = ProductDto::fromArray([
+                            'id' => $item['_id'] ?? $item['code'],
+                            'title' => $item['product_name'] ?? 'Funko Pop Inconnue',
+                            'category' => 'pop',
+                            'imageUrl' => $item['image_url'] ?? null,
+                            'author' => $item['brands'] ?? 'Funko',
+                            'metadata' => [
+                                'universe' => $item['categories'] ?? null,
+                                'number' => $item['quantity'] ?? null, // Parfois le numéro est là
+                            ]
+                        ]);
+                    }
+                }
+            } catch (\Exception $e) {
+                error_log("Funko Search Error: " . $e->getMessage());
+            }
+        }
+
+        // 4. Discogs (Vinyles)
         if (in_array($category, ['vinyl', 'all'])) {
             try {
                 $token = $_ENV['DISCOGS_API'] ?? null;

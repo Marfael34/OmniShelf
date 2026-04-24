@@ -122,7 +122,7 @@ const MyCollections = () => {
 
       {filteredItems.length === 0 && !isLoading && (
         <div className="text-center py-12 text-(--text-text-dim)">
-          Aucun élément trouvé dans cette catégorie.
+          aucune collection pour le moment
         </div>
       )}
     </div>

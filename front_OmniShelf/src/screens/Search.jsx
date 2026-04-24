@@ -58,6 +58,7 @@ const Search = () => {
             <option value="game">Jeux</option>
             <option value="manga">Livres</option>
             <option value="vinyl">Vinyles</option>
+            <option value="pop">Figurines POP</option>
           </select>
           <input 
             type="text" 

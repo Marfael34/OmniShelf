@@ -1,21 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
-const dummyWishlist = [
-  {
-    id: "w1",
-    title: "Final Fantasy XVI",
-    category: "game",
-    added: "2023-10-01",
-  },
-  { id: "w2", title: "Berserk Tome 1", category: "manga", added: "2023-10-05" },
-  {
-    id: "w3",
-    title: "Daft Punk - Discovery",
-    category: "vinyl",
-    added: "2023-10-10",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "../store/authStore";
+import api from "../services/api";
+import ProductCard from "../components/UI/ProductCard";
 
 const filters = [
   { id: "all", label: "Toutes" },
@@ -27,34 +14,44 @@ const filters = [
 
 const Wishlist = () => {
   const [activeFilter, setActiveFilter] = useState("all");
+  const user = useAuthStore((state) => state.user);
+
+  const { data: items = [], isLoading } = useQuery({
+    queryKey: ["wishlist", user?.id],
+    queryFn: async () => {
+      const res = await api.get(`/users/${user.id}/collection_items`);
+      return res.data.filter(item => item.isWishlist);
+    },
+    enabled: !!user?.id,
+  });
 
   const filteredItems =
     activeFilter === "all"
-      ? dummyWishlist
-      : dummyWishlist.filter((item) => item.category === activeFilter);
+      ? items
+      : items.filter((item) => item.category === activeFilter);
 
   return (
     <div className="max-w-5xl mx-auto py-8 space-y-8">
       <div className="flex justify-between items-end">
         <div>
-          <h1 className="text-3xl font-extrabold text-text-text-main">
-            Wishlist Commune
+          <h1 className="text-3xl font-black text-text-text-main tracking-tighter">
+            Ma Wishlist
           </h1>
-          <p className="text-(--text-text-dim) mt-2">
+          <p className="text-(--text-text-dim) mt-2 font-medium">
             Retrouvez tous vos souhaits au même endroit.
           </p>
         </div>
       </div>
 
-      <div className="flex space-x-2 overflow-x-auto pb-2 border-b border-gray-800">
+      <div className="flex space-x-2 overflow-x-auto pb-4 scrollbar-hide">
         {filters.map((filter) => (
           <button
             key={filter.id}
             onClick={() => setActiveFilter(filter.id)}
-            className={`px-4 py-2 font-medium transition-colors whitespace-nowrap border-b-2 ${
+            className={`px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all ${
               activeFilter === filter.id
-                ? "border-(--color-accent) text-(--color-accent)"
-                : "border-transparent text-(--text-text-dim) hover:text-text-text-main"
+                ? "bg-accent text-(--bg-bg-main) shadow-lg shadow-accent/20 scale-105"
+                : "bg-(--bg-bg-surface) text-(--text-text-dim) hover:text-text-text-main border border-gray-800"
             }`}
           >
             {filter.label}
@@ -62,32 +59,24 @@ const Wishlist = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {filteredItems.map((item) => (
-          <div
-            key={item.id}
-            className="bg-(--bg-bg-surface) rounded-xl overflow-hidden border border-gray-800 flex items-center p-4 space-x-4"
-          >
-            <div className="w-20 h-20 bg-gray-800 rounded-lg shrink-0"></div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-lg truncate text-text-text-main">
-                {item.title}
-              </h3>
-              <p className="text-sm text-(--text-text-dim) uppercase tracking-wider">
-                {item.category}
-              </p>
-            </div>
-            <Link
-              to={`/details/${item.category}/${item.id}`}
-              className="p-2 bg-(--color-primary) text-(--color-accent) rounded-full hover:bg-(--color-accent) hover:text-(--bg-bg-main) transition-colors"
-            >
-              Voir
-            </Link>
-          </div>
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-(--bg-bg-surface) rounded-xl h-64 animate-pulse border border-gray-800"></div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {filteredItems.map((item) => (
+            <ProductCard
+              key={item.id}
+              item={item}
+            />
+          ))}
+        </div>
+      )}
 
-      {filteredItems.length === 0 && (
+      {filteredItems.length === 0 && !isLoading && (
         <div className="text-center py-12 text-(--text-text-dim)">
           Votre wishlist est vide pour cette catégorie.
         </div>

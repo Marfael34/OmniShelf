@@ -74,8 +74,35 @@ Feuille de route pour le développement du projet, basée sur le document `archi
 
 ---
 
-## Phase 3 : Déploiement & Finalisation
+## Phase 4 : Corrections & Améliorations (En cours)
 
-- [ ] Configurer une pipeline CI/CD simple (ex: GitHub Actions).
-- [ ] Préparer les configurations de production (variables d'environnement, désactivation du mode debug).
-- [ ] Mettre en place un reverse proxy (Apache ou ) pour le déploiement.
+### 4.1. Authentification & UI
+- [x] **Problème de connexion** : L'interface ne se met pas à jour après la connexion et le profil reste inaccessible. (Fixé: Unification des stores)
+- [x] **Affichage Collection** : Afficher un message "aucune collection pour le moment" si la liste est vide. (Mis à jour)
+
+### 4.2. Recherche & Wishlist
+- [x] **Recherche de jeux** : Corriger la barre de recherche qui ne retourne aucun résultat pour les jeux. (Amélioré: RAWG Search precise)
+- [x] **Recherche Figurine Pop** : Ajouter la recherche par nom, univers et numéro de figurine. (Ajouté: Open Products Facts Search)
+- [x] **Nettoyage Wishlist** : Supprimer les données de test/placeholder présentes dans la wishlist. (Refactorisé: Fetch API)
+
+---
+
+## Phase 5 : Stabilisation & Nouvelles Fonctionnalités
+
+### 5.1. Recherche & Suggestion (Bugs persistants)
+- [ ] **Recherche Jeux Vidéo** : Investiguer pourquoi aucun jeu n'apparaît (Vérifier logs RAWG et format de réponse).
+- [ ] **Recherche Figurines POP** : Investiguer pourquoi aucun résultat ne sort (Vérifier Open Products Facts).
+- [ ] **Suggestions** : Réparer le flux de suggestions qui est actuellement cassé.
+- [ ] **Persistance Recherche** : Mémoriser et afficher la dernière recherche lors du retour sur la page.
+- [ ] **Filtre Mangas** : Restreindre la recherche de livres aux mangas uniquement.
+
+### 5.2. Gestion des Collections & Wishlist
+- [ ] **Formulaire de Collection** : Créer un formulaire pour permettre la création de nouvelles collections.
+- [ ] **Ajout d'Items** : Implémenter la logique d'ajout d'un produit à une collection spécifique (existante ou nouvelle).
+- [ ] **Ajout Wishlist** : Permettre l'ajout d'éléments à la wishlist depuis la recherche ou les détails.
+
+### 5.3. Affiliation & Navigation
+- [ ] **Bouton Accueil** : Ajouter un bouton "Accueil" explicite dans la navigation.
+- [ ] **Liens Amazon/Fnac** : 
+    - [ ] Inclure dynamiquement le nom du produit dans les liens.
+    - [ ] Corriger le lien Fnac qui ne pointe pas vers le bon domaine.
