@@ -18,3 +18,4 @@
 ## 📜 Règles et Conformité
 - [x] Maintenir la règle des 60 lignes par composant.
 - [x] Utiliser systématiquement des DTOs pour les écritures.
+

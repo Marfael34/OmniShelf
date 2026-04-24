@@ -104,13 +104,14 @@ final readonly class ProxyService
     private function searchBooks(string $query, int $limit, int $page, array &$results): void
     {
         try {
-            $apiKey = $_SERVER['BOOKS_API_KEY'] ?? getenv('BOOKS_API_KEY');
+            $q = empty($query) ? "subject:manga" : "subject:manga {$query}";
             $response = $this->httpClient->request('GET', "https://www.googleapis.com/books/v1/volumes", [
                 'query' => [
-                    'q' => "subject:manga {$query}",
+                    'q' => $q,
                     'maxResults' => $limit,
                     'startIndex' => ($page - 1) * $limit,
-                    'key' => $this->booksApiKey
+                    'key' => $this->booksApiKey,
+                    'orderBy' => empty($query) ? 'newest' : 'relevance'
                 ]
             ]);
             if ($response->getStatusCode() === 200) {
@@ -130,11 +131,12 @@ final readonly class ProxyService
 
     private function searchPops(string $query, int $limit, int $page, array &$results): void
     {
+        $q = empty($query) ? "Funko Pop" : $query;
         $endpoints = ['https://world.openproductsfacts.org/cgi/search.pl', 'https://world.openfoodfacts.org/cgi/search.pl'];
         foreach ($endpoints as $endpoint) {
             try {
                 $response = $this->httpClient->request('GET', $endpoint, [
-                    'query' => ['search_terms' => $query, 'json' => 1, 'page' => $page, 'page_size' => $limit]
+                    'query' => ['search_terms' => $q, 'json' => 1, 'page' => $page, 'page_size' => $limit]
                 ]);
                 if ($response->getStatusCode() === 200) {
                     foreach ($response->toArray()['products'] ?? [] as $item) {
@@ -156,8 +158,9 @@ final readonly class ProxyService
     private function searchVinyls(string $query, int $limit, int $page, array &$results): void
     {
         try {
+            $q = empty($query) ? "2024" : $query; // Recherche par année si vide pour tendances
             $response = $this->httpClient->request('GET', 'https://api.discogs.com/database/search', [
-                'query' => ['q' => $query, 'type' => 'release', 'format' => 'vinyl', 'token' => $this->discogsApi, 'page' => $page, 'per_page' => $limit],
+                'query' => ['q' => $q, 'type' => 'release', 'format' => 'vinyl', 'token' => $this->discogsApi, 'page' => $page, 'per_page' => $limit],
                 'headers' => ['User-Agent' => 'OmniShelf/1.0']
             ]);
             if ($response->getStatusCode() === 200) {
