@@ -56,16 +56,16 @@ final readonly class IgdbService
         try {
             $token = $this->getAccessToken();
             
+            $body = $query 
+                ? sprintf('search "%s"; fields name, cover.url, first_release_date, total_rating; limit %d;', addslashes($query), $limit)
+                : sprintf('fields name, cover.url, first_release_date, total_rating; where total_rating_count > 50; sort total_rating desc; limit %d;', $limit);
+
             $response = $this->httpClient->request('POST', self::API_BASE_URL . '/games', [
                 'headers' => [
                     'Client-ID' => $this->igdbClientId,
                     'Authorization' => 'Bearer ' . $token,
                 ],
-                'body' => sprintf(
-                    'search "%s"; fields name, cover.url, first_release_date, total_rating; limit %d;',
-                    addslashes($query),
-                    $limit
-                ),
+                'body' => $body,
             ]);
 
             if ($response->getStatusCode() !== 200) {
@@ -129,7 +129,7 @@ final readonly class IgdbService
                 'name' => $game['name'],
                 'description' => $game['summary'] ?? 'Aucune description disponible.',
                 'storyline' => $game['storyline'] ?? null,
-                'background_image' => isset($game['cover']['url']) 
+                'backgroundImage' => isset($game['cover']['url']) 
                     ? 'https:' . str_replace('t_thumb', 't_1080p', $game['cover']['url']) 
                     : null,
                 'genres' => array_map(fn($g) => ['name' => $g['name']], $game['genres'] ?? []),
@@ -137,10 +137,10 @@ final readonly class IgdbService
                 'publishers' => array_map(fn($c) => ['publisher' => ['name' => $c['company']['name']]], $game['involved_companies'] ?? []),
                 'rating' => isset($game['total_rating']) ? (float)$game['total_rating'] / 10 : null,
                 'metacritic' => isset($game['aggregated_rating']) ? (int)$game['aggregated_rating'] : null,
-                'release_year' => isset($game['first_release_date']) ? (string)date('Y', $game['first_release_date']) : null,
+                'releaseYear' => isset($game['first_release_date']) ? (string)date('Y', $game['first_release_date']) : null,
                 'screenshots' => array_map(fn($s) => 'https:' . str_replace('t_thumb', 't_1080p', $s['url']), $game['screenshots'] ?? []),
                 'videos' => array_map(fn($v) => 'https://www.youtube.com/embed/' . $v['video_id'], $game['videos'] ?? []),
-                'igdb_id' => $game['id']
+                'igdbId' => $game['id']
             ];
         } catch (\Exception $e) {
             error_log("IGDB Details Error: " . $e->getMessage());

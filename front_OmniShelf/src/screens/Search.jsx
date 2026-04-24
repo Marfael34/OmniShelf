@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import api from "../services/api";
+import { proxyService } from "../services/api/proxy";
 import SearchForm from "../components/Search/SearchForm";
 import SearchFilters from "../components/Search/SearchFilters";
 import SearchResults from "../components/Search/SearchResults";
@@ -34,12 +34,7 @@ const Search = () => {
     queryKey: ["search", searchTerms, activeCategory, appliedFilters],
     queryFn: async ({ pageParam = 1 }) => {
       if (!searchTerms && !appliedFilters.publisher && !appliedFilters.genre && !appliedFilters.platform) return { data: [], hasMore: false };
-      let url = `/proxy/search?query=${encodeURIComponent(searchTerms)}&category=${activeCategory}&page=${pageParam}`;
-      if (appliedFilters.publisher) url += `&publisher=${encodeURIComponent(appliedFilters.publisher)}`;
-      if (appliedFilters.genre) url += `&genre=${encodeURIComponent(appliedFilters.genre)}`;
-      if (appliedFilters.platform) url += `&platform=${encodeURIComponent(appliedFilters.platform)}`;
-      const res = await api.get(url);
-      return res.data;
+      return proxyService.search(searchTerms, activeCategory, pageParam, appliedFilters);
     },
     getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.page + 1 : undefined,
     enabled: !!searchTerms || !!appliedFilters.publisher || !!appliedFilters.genre || !!appliedFilters.platform,

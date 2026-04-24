@@ -1,6 +1,6 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import api from "../services/api";
+import { proxyService } from "../services/api/proxy";
 import { useAffiliationLink } from "../hooks/useAffiliationLink";
 import ActionButtons from "../components/UI/ActionButtons";
 import { Loader2, ArrowLeft, Star, Globe, Cpu, Play, Image as ImageIcon, LayoutGrid } from "lucide-react";
@@ -11,8 +11,7 @@ const GameDetails = () => {
   const { data: game, isLoading, error } = useQuery({
     queryKey: ["game", id],
     queryFn: async () => {
-      const res = await api.get(`/proxy/details?external_id=${id}&category=game`);
-      return res.data.data;
+      return proxyService.getDetails(id, "game");
     },
     enabled: !!id,
   });
@@ -47,7 +46,7 @@ const GameDetails = () => {
       <div className="bg-bg-surface rounded-[2.5rem] overflow-hidden border border-gray-800/50 shadow-2xl flex flex-col lg:flex-row relative">
         <div className="lg:w-1/2 bg-gray-900 overflow-hidden relative group min-h-[400px]">
           <img 
-            src={game.background_image} 
+            src={game.backgroundImage} 
             alt={game.name} 
             className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-1000" 
           />
@@ -92,9 +91,9 @@ const GameDetails = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-text-dim text-[10px] font-black uppercase tracking-widest">
-                {game.release_year && (
+                {game.releaseYear && (
                     <span className="flex items-center bg-white/5 px-4 py-2 rounded-xl border border-white/10 backdrop-blur-md">
-                        🗓️ {game.release_year}
+                        🗓️ {game.releaseYear}
                     </span>
                 )}
                 {game.publishers?.[0] && (

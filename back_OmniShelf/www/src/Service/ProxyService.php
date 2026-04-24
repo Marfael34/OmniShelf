@@ -200,14 +200,14 @@ final readonly class ProxyService
                     return [
                         'name' => $info['title'] ?? 'Inconnu',
                         'description' => "Prix le plus bas constaté : " . ($data['cheapestPriceEver']['price'] ?? 'N/A') . "€",
-                        'background_image' => $info['thumb'] ?? null,
+                        'backgroundImage' => $info['thumb'] ?? null,
                         'genres' => [['name' => 'Jeu Vidéo']],
                         'platforms' => [['platform' => ['name' => 'PC / Multi']]],
                         'publishers' => [],
                         'rating' => null,
-                        'release_year' => null,
+                        'releaseYear' => null,
                         'screenshots' => [],
-                        'cheapshark_id' => $id,
+                        'cheapsharkId' => $id,
                         'deals' => $data['deals'] ?? []
                     ];
                 } catch (\Exception $e) { return []; }
@@ -227,14 +227,49 @@ final readonly class ProxyService
             try {
                 $response = $this->httpClient->request('GET', "https://world.openproductsfacts.org/api/v0/product/{$externalId}.json");
                 $data = $response->toArray();
-                return $data['product'] ?? $data;
+                $product = $data['product'] ?? null;
+                
+                if (!$product) return [];
+
+                return [
+                    'name' => $product['product_name'] ?? 'Pop Inconnue',
+                    'brand' => $product['brands'] ?? 'Funko',
+                    'imageUrl' => $product['image_url'] ?? null,
+                    'category' => 'pop',
+                    'id' => $product['code'] ?? $externalId,
+                    'categories' => explode(',', $product['categories'] ?? ''),
+                    'metadata' => [
+                        'source' => 'openproductsfacts'
+                    ]
+                ];
             } catch (\Exception $e) { return []; }
         }
 
         if ($category === 'vinyl') {
             try {
-                $response = $this->httpClient->request('GET', "https://api.discogs.com/releases/{$externalId}", ['query' => ['token' => $this->discogsApi], 'headers' => ['User-Agent' => 'OmniShelf/1.0']]);
-                return $response->toArray();
+                $response = $this->httpClient->request('GET', "https://api.discogs.com/releases/{$externalId}", [
+                    'query' => ['token' => $this->discogsApi],
+                    'headers' => ['User-Agent' => 'OmniShelf/1.0']
+                ]);
+                $data = $response->toArray();
+
+                return [
+                    'title' => $data['title'] ?? 'Inconnu',
+                    'artist' => $data['artists_sort'] ?? 'Artiste inconnu',
+                    'imageUrl' => $data['images'][0]['resource_url'] ?? $data['thumb'] ?? null,
+                    'releaseYear' => $data['released'] ?? null,
+                    'genres' => $data['genres'] ?? [],
+                    'tracklist' => array_map(fn($t) => [
+                        'position' => $t['position'],
+                        'title' => $t['title'],
+                        'duration' => $t['duration']
+                    ], $data['tracklist'] ?? []),
+                    'id' => (string)$data['id'],
+                    'category' => 'vinyl',
+                    'metadata' => [
+                        'source' => 'discogs'
+                    ]
+                ];
             } catch (\Exception $e) { return []; }
         }
 
@@ -290,11 +325,11 @@ final readonly class ProxyService
                 'name' => $vol['title'] ?? 'Inconnu',
                 'author' => ($vol['authors'] ?? [])[0] ?? 'Auteur inconnu',
                 'description' => $vol['description'] ?? '',
-                'background_image' => $vol['imageLinks']['thumbnail'] ?? $vol['imageLinks']['smallThumbnail'] ?? null,
+                'backgroundImage' => $vol['imageLinks']['thumbnail'] ?? $vol['imageLinks']['smallThumbnail'] ?? null,
                 'rating' => $vol['averageRating'] ?? null,
-                'release_year' => isset($vol['publishedDate']) ? substr($vol['publishedDate'], 0, 4) : null,
+                'releaseYear' => isset($vol['publishedDate']) ? substr($vol['publishedDate'], 0, 4) : null,
                 'publisher' => $vol['publisher'] ?? null,
-                'page_count' => $vol['pageCount'] ?? null,
+                'pageCount' => $vol['pageCount'] ?? null,
                 'categories' => $vol['categories'] ?? [],
             ];
         } catch (\Exception $e) { return []; }
