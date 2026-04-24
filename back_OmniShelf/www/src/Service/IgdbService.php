@@ -40,6 +40,7 @@ final readonly class IgdbService
             ]);
 
             $data = $response->toArray();
+            error_log("IGDB: New access token acquired.");
             
             // Set expiration to slightly less than the provided expires_in (usually 60 days)
             $item->expiresAfter($data['expires_in'] - 60);
@@ -69,6 +70,7 @@ final readonly class IgdbService
             ]);
 
             if ($response->getStatusCode() !== 200) {
+                error_log("IGDB Search Error: Status " . $response->getStatusCode() . " - " . $response->getContent(false));
                 return [];
             }
 

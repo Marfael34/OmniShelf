@@ -33,11 +33,10 @@ const Search = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetching, status } = useInfiniteQuery({
     queryKey: ["search", searchTerms, activeCategory, appliedFilters],
     queryFn: async ({ pageParam = 1 }) => {
-      if (!searchTerms && !appliedFilters.publisher && !appliedFilters.genre && !appliedFilters.platform) return { data: [], hasMore: false };
       return proxyService.search(searchTerms, activeCategory, pageParam, appliedFilters);
     },
     getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.page + 1 : undefined,
-    enabled: !!searchTerms || !!appliedFilters.publisher || !!appliedFilters.genre || !!appliedFilters.platform,
+    enabled: true,
     initialPageParam: 1,
   });
 

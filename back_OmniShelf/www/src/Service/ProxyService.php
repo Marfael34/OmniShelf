@@ -55,6 +55,8 @@ final readonly class ProxyService
 
     private function searchGames(string $query, int $limit, int $page, array &$results, array $filters = []): void
     {
+        error_log("--- ProxyService: searchGames ('$query') ---");
+        
         // 1. Essai avec IGDB (Source premium)
         try {
             $igdbResults = $this->igdbService->search($query, $limit);
@@ -62,18 +64,19 @@ final readonly class ProxyService
                 foreach ($igdbResults as $res) {
                     $results[] = $res;
                 }
+                return;
             }
         } catch (\Exception $e) {
             error_log("IGDB Integration Error: " . $e->getMessage());
         }
 
-        // 2. Fallback ou Complément avec CheapShark
-        if (count($results) < $limit) {
+        // 2. Fallback sur CheapShark si IGDB ne renvoie rien (et que la requête n'est pas vide)
+        if (!empty($query)) {
             try {
                 $response = $this->httpClient->request('GET', self::CHEAPSHARK_BASE_URL . "/games", [
                     'query' => [
                         'title' => $query,
-                        'limit' => $limit - count($results)
+                        'limit' => $limit
                     ]
                 ]);
 
@@ -85,11 +88,7 @@ final readonly class ProxyService
                             'title' => $item['external'],
                             'category' => 'game',
                             'imageUrl' => $item['thumb'] ?? null,
-                            'rating' => null,
-                            'year' => null,
                             'metadata' => [
-                                'cheapest' => $item['cheapest'] ?? null,
-                                'steamAppID' => $item['steamAppID'] ?? null,
                                 'source' => 'cheapshark'
                             ]
                         ]);
@@ -98,11 +97,6 @@ final readonly class ProxyService
             } catch (\Exception $e) {
                 error_log("CheapShark Search Error: " . $e->getMessage());
             }
-        }
-
-        // 3. Fallback ultime sur Google Books
-        if (empty($results) && !empty($query)) {
-            $this->searchBooks($query . " video game", $limit, $page, $results);
         }
     }
 
