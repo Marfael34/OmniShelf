@@ -101,7 +101,7 @@ final readonly class IgdbService
             return [
                 ProductDto::fromArray([
                     'id' => 'igdb-debug',
-                    'title' => 'DEBUG: IGDB Service is active but error occurred',
+                    'title' => 'DEBUG ERROR: ' . $e->getMessage(),
                     'category' => 'game',
                     'metadata' => ['error' => $e->getMessage()]
                 ])
