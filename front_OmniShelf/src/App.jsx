@@ -30,7 +30,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-main text-main font-sans relative">
+    <div className="min-h-screen bg-bg-main text-text-main font-sans relative">
       {isOffline && (
         <div className="bg-orange-600 text-white text-center py-1 text-sm font-bold sticky top-0 z-100 animate-pulse">
           Mode Hors-ligne : Affichage des données locales uniquement

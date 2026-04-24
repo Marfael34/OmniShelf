@@ -90,8 +90,9 @@ Conformément au fichier `regle.md`, et après consolidation des différentes sp
 ```plaintext
 src/
 ├── assets/          # Images, polices, icônes globales
-├── components/     # Composants UI atomiques et réutilisables (Max 60 lignes, Boutons, Inputs, Navbar)
-|   ├── UI
+├── components/     # Composants UI atomiques et réutilisables (Max 60 lignes)
+|   ├── UI          # NavBar, QuickSearch, CategoryLinks, ProductCard
+|   ├── Search      # SearchForm, SearchFilters, SearchResults
 ├── constants/       # toute les constante de l'application et de l'api
 ├── contexts         # contexte pour l'authentification
 ├── hooks/           # Hooks personnalisés globaux (useAuth, useLocalStorage)

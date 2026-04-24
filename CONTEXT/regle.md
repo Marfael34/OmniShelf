@@ -188,7 +188,7 @@ A insérer dans votre fichier `index.css` ou `global.css` :
 - **Logique métier** : Les contrôleurs ne doivent contenir aucune logique métier. Leur seul rôle est de réceptionner la requête HTTP, d'appeler un service dédié (situé dans `src/Service/` ou `src/UseCase/`), et de retourner une réponse.
 
 ### Gestion des Variables d'Environnement (.env)
-- **Secrets** : Aucune clé d'API tierce (Google Books, RAWG, Discogs) ou mot de passe de base de données ne doit apparaître en clair dans le code.
+- **Secrets** : Aucune clé d'API tierce (Google Books, IGDB, Discogs) ou mot de passe de base de données ne doit apparaître en clair dans le code.
 - **Injection** : Ces valeurs doivent être injectées via des variables d'environnement (`$_ENV`) et validées au démarrage de l'application via les attributs d'injection de configuration.
 
 ### Qualité du Code et Formatage (PER Coding Style)

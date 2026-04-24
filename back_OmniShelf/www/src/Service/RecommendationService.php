@@ -13,6 +13,7 @@ final readonly class RecommendationService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private HttpClientInterface $httpClient,
+        private ProxyService $proxyService,
     ) {}
 
     public function getRecommendationsForUser(int $userId): array
@@ -38,26 +39,16 @@ final readonly class RecommendationService
 
         try {
             if ($topCategory === 'game' || $topCategory === 'all') {
-                $apiKey = $_ENV['RAWG_API_KEY'] ?? $_SERVER['RAWG_API_KEY'] ?? null;
-                if ($apiKey) {
-                    $response = $this->httpClient->request('GET', 'https://api.rawg.io/api/games', [
-                        'query' => [
-                            'key' => $apiKey,
-                            'ordering' => '-rating',
-                            'page_size' => 5
-                        ]
-                    ]);
-                    $data = $response->toArray();
-                    foreach ($data['results'] ?? [] as $item) {
-                        $recommendations[] = [
-                            'id' => (string)$item['id'],
-                            'externalProductId' => (string)$item['id'],
-                            'title' => $item['name'] ?? 'Jeu suggéré',
-                            'category' => 'game',
-                            'imageUrl' => $item['background_image'] ?? null,
-                            'reason' => "Parce que vous aimez les jeux vidéo"
-                        ];
-                    }
+                $gameResults = $this->proxyService->search('', 'game', 1, 5);
+                foreach ($gameResults as $product) {
+                    $recommendations[] = [
+                        'id' => $product->id,
+                        'externalProductId' => $product->id,
+                        'title' => $product->title,
+                        'category' => 'game',
+                        'imageUrl' => $product->imageUrl,
+                        'reason' => "Les jeux les plus populaires du moment"
+                    ];
                 }
             }
 

@@ -5,7 +5,7 @@ const ProductCard = ({ item = {}, onDelete = null, showDelete = false }) => {
   return (
     <Link 
       to={`/details/${item.category}/${item.externalProductId || item.id}`}
-      className="group relative bg-surface rounded-2xl overflow-hidden border border-gray-800 hover:border-accent transition-all duration-300 flex flex-col h-72 shadow-lg hover:shadow-accent/10 animate-zoom-in"
+      className="group relative bg-bg-surface rounded-2xl overflow-hidden border border-gray-800 hover:border-accent transition-all duration-300 flex flex-col h-72 shadow-lg hover:shadow-accent/10 animate-zoom-in"
     >
       {showDelete && onDelete && (
         <button 
@@ -35,10 +35,24 @@ const ProductCard = ({ item = {}, onDelete = null, showDelete = false }) => {
         <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
       </div>
 
-      <div className="p-4 bg-surface/50 backdrop-blur-sm">
+      <div className="p-4 bg-bg-surface/50 backdrop-blur-sm space-y-1">
+        <div className="flex justify-between items-center">
+            <span className="text-[10px] font-black uppercase tracking-widest text-accent/70">
+                {item.category === 'manga' ? 'Livre' : 
+                 item.category === 'game' ? 'Jeu Vidéo' : 
+                 item.category === 'pop' ? 'Figurine' : 
+                 item.category === 'vinyl' ? 'Vinyle' : item.category}
+            </span>
+            {item.rating && (
+                <span className="text-[10px] font-bold text-yellow-500">★ {item.rating.toFixed(1)}</span>
+            )}
+        </div>
         <h3 className="font-bold text-sm line-clamp-1 group-hover:text-accent transition-colors">
           {item.title || "Produit sans titre"}
         </h3>
+        <p className="text-[10px] text-text-dim truncate">
+            {item.author || item.metadata?.publisher || item.metadata?.genre || "OmniShelf Collection"}
+        </p>
       </div>
     </Link>
   );

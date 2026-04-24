@@ -23,7 +23,7 @@ const GameDetails = () => {
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center py-24 space-y-4">
       <Loader2 className="animate-spin text-accent" size={48} />
-      <p className="text-(--text-text-dim) font-bold animate-pulse">Chargement des données RAWG...</p>
+      <p className="text-text-dim font-bold animate-pulse">Chargement des données IGDB...</p>
     </div>
   );
 
@@ -75,8 +75,8 @@ const GameDetails = () => {
 
             <div className="grid grid-cols-2 gap-6 pt-4 border-t border-gray-800/50">
               <div className="space-y-1">
-                <div className="flex items-center text-(--text-text-dim) text-xs font-bold uppercase tracking-widest mb-1">
-                    <Star size={12} className="mr-2 text-yellow-500" /> Note RAWG
+                <div className="flex items-center text-text-dim text-xs font-bold uppercase tracking-widest mb-1">
+                    <Star size={12} className="mr-2 text-yellow-500" /> Note IGDB
                 </div>
                 <div className="text-xl font-black text-text-text-main">{game.rating} / 5</div>
               </div>

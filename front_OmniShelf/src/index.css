@@ -2,16 +2,18 @@
 
 @theme {
   --color-accent: #06b6d4;
-  --bg-main: #020617;
-  --bg-surface: #0f172a;
-  --text-main: #f8fafc;
-  --text-dim: #94a3b8;
+  --color-bg-main: #020617;
+  --color-bg-surface: #0f172a;
+  --color-text-main: #f8fafc;
+  --color-text-dim: #94a3b8;
   --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 @layer base {
   body {
-    @apply bg-(--bg-main) text-(--text-main) min-h-screen font-sans;
+    background-color: var(--color-bg-main);
+    color: var(--color-text-main);
+    @apply min-h-screen font-sans;
   }
 }
 

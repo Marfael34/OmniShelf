@@ -24,13 +24,19 @@ final class ProxyController extends AbstractController
         $category = $request->query->getString('category', 'all');
         $page = $request->query->getInt('page', 1);
         $itemsPerPage = 10;
+        
+        $filters = [
+            'publisher' => $request->query->get('publisher'),
+            'genre' => $request->query->get('genre'),
+            'platform' => $request->query->get('platform'),
+        ];
 
-        if (!$query) {
+        if (!$query && empty(array_filter($filters))) {
             return $this->json(['data' => []]);
         }
 
         try {
-            $results = $this->proxyService->search($query, $category, $page, $itemsPerPage);
+            $results = $this->proxyService->search($query, $category, $page, $itemsPerPage, $filters);
 
             return $this->json([
                 'data' => $results,

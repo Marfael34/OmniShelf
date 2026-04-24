@@ -38,7 +38,7 @@ const Home = () => {
         <div className="pt-4">
           <Link 
             to="/search" 
-            className="inline-flex items-center space-x-3 bg-accent text-bg-bg-main px-8 py-4 rounded-2xl font-black uppercase tracking-tighter hover:scale-105 transition-all shadow-xl shadow-accent/20"
+            className="inline-flex items-center space-x-3 bg-accent text-bg-main px-8 py-4 rounded-2xl font-black uppercase tracking-tighter hover:scale-105 transition-all shadow-xl shadow-accent/20"
           >
             <span>Démarrer l'exploration</span>
             <ArrowRight size={20} />

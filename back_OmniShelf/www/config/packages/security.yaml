@@ -20,6 +20,9 @@ security:
                 username_path: email
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        proxy:
+            pattern: ^/api/proxy
+            security: false
         api:
             pattern: ^/api
             stateless: true
