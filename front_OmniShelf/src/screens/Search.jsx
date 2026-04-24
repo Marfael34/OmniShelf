@@ -5,10 +5,10 @@ import ProductCard from "../components/UI/ProductCard";
 import { Search as SearchIcon, Loader2, ChevronDown } from "lucide-react";
 
 const Search = () => {
-  const [query, setQuery] = useState("");
-  const [category, setCategory] = useState("all");
-  const [searchTerms, setSearchTerms] = useState("");
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [query, setQuery] = useState(localStorage.getItem("lastSearchQuery") || "");
+  const [category, setCategory] = useState(localStorage.getItem("lastSearchCategory") || "all");
+  const [searchTerms, setSearchTerms] = useState(localStorage.getItem("lastSearchQuery") || "");
+  const [activeCategory, setActiveCategory] = useState(localStorage.getItem("lastSearchCategory") || "all");
 
   const { 
     data, 
@@ -33,6 +33,8 @@ const Search = () => {
     e.preventDefault();
     setSearchTerms(query);
     setActiveCategory(category);
+    localStorage.setItem("lastSearchQuery", query);
+    localStorage.setItem("lastSearchCategory", category);
   };
 
   const results = data?.pages.flatMap(page => page.data || []).filter(Boolean) || [];
@@ -75,6 +77,14 @@ const Search = () => {
             <span>CHERCHER</span>
           </button>
         </form>
+
+        {status === "error" && (
+          <div className="mt-8 p-6 bg-red-900/20 border border-red-500/50 rounded-3xl text-red-400 font-bold animate-shake text-center">
+            Oups ! Une erreur est survenue lors de la recherche. 
+            <br />
+            <span className="text-xs opacity-70">Vérifiez vos clés d'API ou votre connexion.</span>
+          </div>
+        )}
       </div>
 
       <div className="pt-8">
@@ -95,7 +105,7 @@ const Search = () => {
             <div className="space-y-12">
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
                     {results.map((item, idx) => (
-                        <ProductCard key={item.id || idx} item={item} />
+                        <ProductCard key={`${item.category}-${item.id}-${idx}`} item={item} />
                     ))}
                 </div>
                 

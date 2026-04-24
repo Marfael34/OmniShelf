@@ -40,7 +40,7 @@ const MangaDetails = () => {
     <div className="max-w-6xl mx-auto py-12 px-4 space-y-8">
       <div className="flex items-center justify-between">
           <button 
-            onClick={() => navigate(-1)}
+            onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/search')}
             className="flex items-center space-x-2 text-accent hover:opacity-80 transition-all font-bold"
           >
             <ArrowLeft size={20} />

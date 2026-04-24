@@ -17,11 +17,14 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CollectionItemRepository::class)]
 #[ORM\Table(name: 'collection_item')]
-#[ORM\UniqueConstraint(name: 'UNIQ_COLLECTION_USER_PRODUCT', columns: ['user_id', 'external_product_id', 'category'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_COLLECTION_USER_PRODUCT', columns: ['user_id', 'external_product_id', 'category', 'is_wishlist'])]
 #[ApiResource(
+    normalizationContext: ['groups' => ['item:read']],
+    denormalizationContext: ['groups' => ['item:write']],
     security: "is_granted('ROLE_USER')",
     operations: [
         new GetCollection(
@@ -29,9 +32,12 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
             uriVariables: [
                 'userId' => new Link(toProperty: 'user', fromClass: User::class)
             ],
-            security: "is_granted('ROLE_USER') and userId == user.getId()"
+            security: "is_granted('ROLE_USER') and (userId == user.getId() or is_granted('ROLE_ADMIN'))"
         ),
-        new Post(security: "is_granted('ROLE_USER')"),
+        new Post(
+            security: "is_granted('ROLE_USER')",
+            denormalizationContext: ['groups' => ['item:write']]
+        ),
         new Delete(security: "is_granted('COLLECTION_ITEM_DELETE', object)")
     ]
 )]
@@ -42,6 +48,7 @@ class CollectionItem
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['item:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -50,18 +57,23 @@ class CollectionItem
 
     #[ORM\ManyToOne(targetEntity: UserCollection::class, inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups(['item:read', 'item:write'])]
     private ?UserCollection $collection = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['item:read', 'item:write'])]
     private ?string $externalProductId = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['item:read', 'item:write'])]
     private ?string $category = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    #[Groups(['item:read', 'item:write'])]
     private bool $isWishlist = false;
 
     #[ORM\Column]
+    #[Groups(['item:read'])]
     private ?\DateTimeImmutable $addedAt = null;
 
     public function __construct()

@@ -90,19 +90,19 @@ Feuille de route pour le développement du projet, basée sur le document `archi
 ## Phase 5 : Stabilisation & Nouvelles Fonctionnalités
 
 ### 5.1. Recherche & Suggestion (Bugs persistants)
-- [ ] **Recherche Jeux Vidéo** : Investiguer pourquoi aucun jeu n'apparaît (Vérifier logs RAWG et format de réponse).
-- [ ] **Recherche Figurines POP** : Investiguer pourquoi aucun résultat ne sort (Vérifier Open Products Facts).
-- [ ] **Suggestions** : Réparer le flux de suggestions qui est actuellement cassé.
-- [ ] **Persistance Recherche** : Mémoriser et afficher la dernière recherche lors du retour sur la page.
-- [ ] **Filtre Mangas** : Restreindre la recherche de livres aux mangas uniquement.
+- [x] **Recherche Jeux Vidéo** : Investiguer pourquoi aucun jeu n'apparaît (Désactivation search_precise + fallbacks API keys).
+- [x] **Recherche Figurines POP** : Investiguer pourquoi aucun résultat ne sort (Assouplissement du filtrage + fallbacks API keys).
+- [ ] **Suggestions** : Réparer le flux de suggestions qui est actuellement cassé. (Logs ajoutés + fallbacks API keys)
+- [x] **Persistance Recherche** : Mémoriser et afficher la dernière recherche lors du retour sur la page. (Localisation storage implémentée)
+- [x] **Filtre Mangas** : Restreindre la recherche de livres aux mangas uniquement. (Suffixe 'manga' ajouté)
 
 ### 5.2. Gestion des Collections & Wishlist
-- [ ] **Formulaire de Collection** : Créer un formulaire pour permettre la création de nouvelles collections.
-- [ ] **Ajout d'Items** : Implémenter la logique d'ajout d'un produit à une collection spécifique (existante ou nouvelle).
-- [ ] **Ajout Wishlist** : Permettre l'ajout d'éléments à la wishlist depuis la recherche ou les détails.
+- [x] **Formulaire de Collection** : Créer un formulaire pour permettre la création de nouvelles collections. (Modal AddToCollection implémentée)
+- [x] **Ajout d'Items** : Implémenter la logique d'ajout d'un produit à une collection spécifique (existante ou nouvelle). (Modal fonctionnelle)
+- [x] **Ajout Wishlist** : Permettre l'ajout d'éléments à la wishlist depuis la recherche ou les détails. (Corrigé dans ActionButtons)
 
 ### 5.3. Affiliation & Navigation
-- [ ] **Bouton Accueil** : Ajouter un bouton "Accueil" explicite dans la navigation.
-- [ ] **Liens Amazon/Fnac** : 
-    - [ ] Inclure dynamiquement le nom du produit dans les liens.
-    - [ ] Corriger le lien Fnac qui ne pointe pas vers le bon domaine.
+- [x] **Bouton Accueil** : Ajouter un bouton "Accueil" explicite dans la navigation. (Ajouté dans NavBar)
+- [x] **Liens Amazon/Fnac** : 
+    - [x] Inclure dynamiquement le nom du produit dans les liens. (Priorité nom sur EAN)
+    - [x] Corriger le lien Fnac qui ne pointe pas vers le bon domaine. (Lien direct implémenté)

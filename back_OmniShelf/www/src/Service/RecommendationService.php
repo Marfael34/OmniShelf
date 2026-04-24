@@ -17,6 +17,8 @@ final readonly class RecommendationService
 
     public function getRecommendationsForUser(int $userId): array
     {
+        error_log("Getting recommendations for user: {$userId}");
+        
         // 1. Récupérer les items de la collection de l'utilisateur
         $collectionItems = $this->entityManager->getRepository(CollectionItem::class)->findBy(['user' => $userId]);
 
@@ -30,33 +32,37 @@ final readonly class RecommendationService
         arsort($categoryCounts);
         $topCategory = !empty($categoryCounts) ? array_key_first($categoryCounts) : 'all';
 
+        error_log("Top category for user {$userId}: {$topCategory}");
+
         $recommendations = [];
 
         try {
             if ($topCategory === 'game' || $topCategory === 'all') {
-                $apiKey = $_ENV['RAWG_API_KEY'] ?? null;
-                $response = $this->httpClient->request('GET', 'https://api.rawg.io/api/games', [
-                    'query' => [
-                        'key' => $apiKey,
-                        'ordering' => '-rating',
-                        'page_size' => 5
-                    ]
-                ]);
-                $data = $response->toArray();
-                foreach ($data['results'] ?? [] as $item) {
-                    $recommendations[] = [
-                        'id' => (string)$item['id'],
-                        'externalProductId' => (string)$item['id'],
-                        'title' => $item['name'] ?? 'Jeu suggéré',
-                        'category' => 'game',
-                        'imageUrl' => $item['background_image'] ?? null,
-                        'reason' => "Parce que vous aimez les jeux vidéo"
-                    ];
+                $apiKey = $_ENV['RAWG_API_KEY'] ?? $_SERVER['RAWG_API_KEY'] ?? null;
+                if ($apiKey) {
+                    $response = $this->httpClient->request('GET', 'https://api.rawg.io/api/games', [
+                        'query' => [
+                            'key' => $apiKey,
+                            'ordering' => '-rating',
+                            'page_size' => 5
+                        ]
+                    ]);
+                    $data = $response->toArray();
+                    foreach ($data['results'] ?? [] as $item) {
+                        $recommendations[] = [
+                            'id' => (string)$item['id'],
+                            'externalProductId' => (string)$item['id'],
+                            'title' => $item['name'] ?? 'Jeu suggéré',
+                            'category' => 'game',
+                            'imageUrl' => $item['background_image'] ?? null,
+                            'reason' => "Parce que vous aimez les jeux vidéo"
+                        ];
+                    }
                 }
             }
 
             if ($topCategory === 'manga' || $topCategory === 'book' || $topCategory === 'all') {
-                $apiKey = $_ENV['BOOKS_API_KEY'] ?? null;
+                $apiKey = $_ENV['BOOKS_API_KEY'] ?? $_SERVER['BOOKS_API_KEY'] ?? null;
                 $response = $this->httpClient->request('GET', 'https://www.googleapis.com/books/v1/volumes', [
                     'query' => [
                         'q' => 'subject:manga',
@@ -78,7 +84,7 @@ final readonly class RecommendationService
                 }
             }
         } catch (\Exception $e) {
-            // Log error
+            error_log("Recommendation Error for user {$userId}: " . $e->getMessage());
         }
 
         // Fallback final si vide

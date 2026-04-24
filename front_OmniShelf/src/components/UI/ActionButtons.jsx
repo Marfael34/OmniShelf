@@ -12,17 +12,19 @@ const ActionButtons = ({ externalId, category }) => {
     (state, newState) => ({ ...state, ...newState })
   );
 
+  const openCollectionModal = useUiStore((state) => state.openCollectionModal);
+
   const [formState, formAction] = useActionState(async (prevState, formData) => {
-    const type = formData.get("type"); // "collection" or "wishlist"
+    const type = formData.get("type"); // "wishlist"
     const isWishlist = type === "wishlist";
 
     try {
       await api.post("/collection_items", {
-        externalProductId: externalId,
+        externalProductId: String(externalId),
         category: category,
         isWishlist: isWishlist
       });
-      showToast(isWishlist ? "Ajouté à votre wishlist !" : "Ajouté à votre collection !", "success");
+      showToast("Ajouté à votre wishlist !", "success");
       return { success: true, type };
     } catch (err) {
       console.error("Erreur", err);
@@ -32,39 +34,36 @@ const ActionButtons = ({ externalId, category }) => {
   }, { success: false });
 
   const handleAdd = (type) => {
+    if (type === "collection") {
+      openCollectionModal({ id: externalId, category });
+      return;
+    }
+
     startTransition(() => {
-      // Mise à jour optimiste immédiate
-      setOptimisticState(type === "wishlist" ? { inWishlist: true } : { inCollection: true });
-      
+      setOptimisticState({ inWishlist: true });
       const formData = new FormData();
       formData.append("type", type);
       formAction(formData);
     });
   };
 
-  const inCollection = optimisticState.inCollection || (formState.success && formState.type === "collection");
   const inWishlist = optimisticState.inWishlist || (formState.success && formState.type === "wishlist");
 
   return (
     <div className="flex space-x-4">
       <button 
         onClick={() => handleAdd("collection")}
-        disabled={isPending || inCollection}
-        className={`flex-1 font-bold py-3 rounded-xl transition-all ${
-            inCollection 
-            ? "bg-green-600 text-white cursor-default" 
-            : "bg-accent text-bg-main hover:opacity-90 shadow-lg shadow-accent/20"
-        }`}
+        className="flex-1 font-bold py-4 rounded-2xl bg-accent text-bg-main hover:opacity-90 shadow-lg shadow-accent/20 transition-all active:scale-95"
       >
-        {isPending && optimisticState.inCollection ? "Ajout..." : inCollection ? "Possédé" : "Ajouter à la collection"}
+        Ajouter à la collection
       </button>
       <button 
         onClick={() => handleAdd("wishlist")}
         disabled={isPending || inWishlist}
-        className={`flex-1 font-bold py-3 rounded-xl transition-all border-2 ${
+        className={`flex-1 font-bold py-4 rounded-2xl transition-all border-2 ${
             inWishlist
             ? "bg-purple-600 border-purple-600 text-white cursor-default"
-            : "border-accent text-accent hover:bg-accent hover:text-bg-main"
+            : "border-accent text-accent hover:bg-accent hover:text-bg-main active:scale-95"
         }`}
       >
         {isPending && optimisticState.inWishlist ? "Ajout..." : inWishlist ? "Dans la Wishlist" : "Wishlist"}

@@ -7,6 +7,7 @@ import Loader from "./components/UI/Loader";
 import ErrorBoundary from "./components/UI/ErrorBoundary";
 import { useState, useEffect, Suspense } from "react";
 import { useUiStore } from "./store/uiStore";
+import AddToCollectionModal from "./components/UI/AddToCollectionModal";
 
 const App = () => {
   const [isScannerOpen, setIsScannerOpen] = useState(false);
@@ -46,6 +47,7 @@ const App = () => {
       
       <FloatingScanBtn onOpen={() => setIsScannerOpen(true)} />
       {isScannerOpen && <ScannerModal onClose={() => setIsScannerOpen(false)} />}
+      <AddToCollectionModal />
       
       {toast && (
         <Toast 

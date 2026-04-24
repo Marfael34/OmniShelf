@@ -37,7 +37,10 @@ const GameDetails = () => {
 
   return (
     <div className="max-w-6xl mx-auto py-12 px-4 space-y-8">
-      <button onClick={() => navigate(-1)} className="flex items-center text-(--text-text-dim) hover:text-accent font-bold transition-colors">
+      <button 
+        onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/search')} 
+        className="flex items-center text-text-dim hover:text-accent font-bold transition-colors"
+      >
         <ArrowLeft size={20} className="mr-2" /> Retour
       </button>
 

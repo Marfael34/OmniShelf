@@ -29,13 +29,20 @@ final class ProxyController extends AbstractController
             return $this->json(['data' => []]);
         }
 
-        $results = $this->proxyService->search($query, $category, $page, $itemsPerPage);
+        try {
+            $results = $this->proxyService->search($query, $category, $page, $itemsPerPage);
 
-        return $this->json([
-            'data' => $results,
-            'page' => $page,
-            'hasMore' => count($results) >= $itemsPerPage
-        ]);
+            return $this->json([
+                'data' => $results,
+                'page' => $page,
+                'hasMore' => count($results) >= $itemsPerPage
+            ]);
+        } catch (\Exception $e) {
+            return $this->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
+        }
     }
 
     #[Route('/details', name: 'api_proxy_details', methods: ['GET'])]
