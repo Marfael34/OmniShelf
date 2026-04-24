@@ -20,13 +20,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['collection:read']],
     denormalizationContext: ['groups' => ['collection:write']],
-    security: "is_granted('ROLE_USER')",
+    input: \App\Dto\UserCollectionInput::class,
     operations: [
         new GetCollection(),
-        new Get(security: "is_granted('ROLE_USER') and object.getUser() == user"),
+        new Get(),
         new Post(),
-        new Put(security: "is_granted('ROLE_USER') and object.getUser() == user"),
-        new Delete(security: "is_granted('ROLE_USER') and object.getUser() == user"),
+        new Put(),
+        new Delete(),
     ]
 )]
 class UserCollection
@@ -34,11 +34,11 @@ class UserCollection
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['collection:read'])]
+    #[Groups(['collection:read', 'item:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['collection:read', 'collection:write'])]
+    #[Groups(['collection:read', 'collection:write', 'item:read'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -50,7 +50,6 @@ class UserCollection
      * @var Collection<int, CollectionItem>
      */
     #[ORM\OneToMany(targetEntity: CollectionItem::class, mappedBy: 'collection', cascade: ['remove'])]
-    #[Groups(['collection:read'])]
     private Collection $items;
 
     public function __construct()

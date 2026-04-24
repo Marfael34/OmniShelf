@@ -21,29 +21,17 @@ use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CollectionItemRepository::class)]
 #[ORM\Table(name: 'collection_item')]
-#[ORM\UniqueConstraint(name: 'UNIQ_COLLECTION_USER_PRODUCT', columns: ['user_id', 'external_product_id', 'category', 'is_wishlist'])]
 #[ApiResource(
     normalizationContext: ['groups' => ['item:read']],
     denormalizationContext: ['groups' => ['item:write']],
-    security: "is_granted('ROLE_USER')",
     operations: [
-        new GetCollection(
-            uriTemplate: '/users/{userId}/collection_items',
-            uriVariables: [
-                'userId' => new Link(toProperty: 'user', fromClass: User::class)
-            ],
-            security: "is_granted('ROLE_USER') and (userId == user.getId() or is_granted('ROLE_ADMIN'))"
-        ),
-        new Post(
-            security: "is_granted('ROLE_USER')",
-            denormalizationContext: ['groups' => ['item:write']],
-            processor: \App\State\CollectionItemProcessor::class
-        ),
-        new Delete(security: "is_granted('COLLECTION_ITEM_DELETE', object)")
+        new GetCollection(),
+        new Post(),
+        new Delete()
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['isWishlist'])]
-#[ApiFilter(SearchFilter::class, properties: ['category' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['category' => 'exact', 'collection.id' => 'exact', 'user' => 'exact'])]
 class CollectionItem
 {
     #[ORM\Id]
@@ -58,7 +46,7 @@ class CollectionItem
 
     #[ORM\ManyToOne(targetEntity: UserCollection::class, inversedBy: 'items')]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups(['item:read', 'item:write'])]
+    #[Groups(['item:read', 'item:write', 'collection:read'])]
     private ?UserCollection $collection = null;
 
     #[ORM\Column(length: 255)]
@@ -66,7 +54,7 @@ class CollectionItem
     private ?string $externalProductId = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['item:read', 'item:write'])]
+    #[Groups(['item:read', 'item:write', 'collection:read'])]
     private ?string $category = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
@@ -74,15 +62,15 @@ class CollectionItem
     private bool $isWishlist = false;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['item:read', 'item:write'])]
+    #[Groups(['item:read', 'item:write', 'collection:read'])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['item:read', 'item:write'])]
+    #[Groups(['item:read', 'item:write', 'collection:read'])]
     private ?string $imageUrl = null;
 
     #[ORM\Column(type: 'float', nullable: true)]
-    #[Groups(['item:read'])]
+    #[Groups(['item:read', 'collection:read'])]
     private ?float $rating = null;
 
     #[ORM\Column]
@@ -157,6 +145,12 @@ class CollectionItem
         return $this->collection;
     }
 
+    public function setCollection(?UserCollection $collection): static
+    {
+        $this->collection = $collection;
+        return $this;
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
@@ -187,12 +181,6 @@ class CollectionItem
     public function setRating(?float $rating): static
     {
         $this->rating = $rating;
-        return $this;
-    }
-
-    public function setCollection(?UserCollection $collection): static
-    {
-        $this->collection = $collection;
         return $this;
     }
 }

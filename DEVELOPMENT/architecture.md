@@ -34,6 +34,7 @@ Le backend est construit sur **Symfony 8** et fonctionne en mode **Backend-For-F
 - **Langage**: PHP 8.4+ (typage strict)
 - **Base de Données**: MariaDB 11.3
 - **ORM**: Doctrine
+- **Data Transfer**: DTOs + ObjectMapper (Symfony 8)
 
 ### Schéma de la Base de Données (Principe du "Live Data")
 
@@ -91,7 +92,7 @@ Conformément au fichier `regle.md`, et après consolidation des différentes sp
 src/
 ├── assets/          # Images, polices, icônes globales
 ├── components/     # Composants UI atomiques et réutilisables (Max 60 lignes)
-|   ├── UI          # NavBar, QuickSearch, CategoryLinks, ProductCard
+|   ├── UI          # NavBar, QuickSearch, CategoryLinks, ProductCard, CreateCollectionModal, CollectionFilters
 |   ├── Search      # SearchForm, SearchFilters, SearchResults
 ├── constants/       # toute les constante de l'application et de l'api
 ├── contexts         # contexte pour l'authentification
