@@ -97,7 +97,15 @@ final readonly class IgdbService
             return $results;
         } catch (\Exception $e) {
             error_log("IGDB Search Error: " . $e->getMessage());
-            return [];
+            // DUMMY RESULT FOR DEBUGGING
+            return [
+                ProductDto::fromArray([
+                    'id' => 'igdb-debug',
+                    'title' => 'DEBUG: IGDB Service is active but error occurred',
+                    'category' => 'game',
+                    'metadata' => ['error' => $e->getMessage()]
+                ])
+            ];
         }
     }
 

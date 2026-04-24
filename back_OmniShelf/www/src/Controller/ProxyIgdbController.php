@@ -23,9 +23,6 @@ final class ProxyIgdbController extends AbstractController
         $query = $request->query->getString('query');
         $limit = $request->query->getInt('limit', 10);
 
-        if (!$query) {
-            return $this->json(['data' => []]);
-        }
 
         try {
             $results = $this->igdbService->search($query, $limit);

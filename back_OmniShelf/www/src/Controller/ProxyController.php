@@ -31,9 +31,6 @@ final class ProxyController extends AbstractController
             'platform' => $request->query->get('platform'),
         ];
 
-        if (!$query && empty(array_filter($filters))) {
-            return $this->json(['data' => []]);
-        }
 
         try {
             $results = $this->proxyService->search($query, $category, $page, $itemsPerPage, $filters);
