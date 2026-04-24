@@ -36,8 +36,8 @@ Remplacer l'API CheapShark par IGDB API pour la gestion des jeux vidéo dans Omn
 
 ## Étape 4 : Mise à jour du Moteur de Recommandation
 
-- [ ] 4.1 Modifier le service de recommandations pour utiliser IGDB API
-- [ ] 4.2 Implémenter la logique de recommandation par genres/themes
+- [x] 4.1 Modifier le service de recommandations pour utiliser IGDB API
+- [x] 4.2 Implémenter la logique de recommandation par genres/themes
 - [x] 4.3 Gérer le "Cold Start" avec les jeux populaires IGDB
 
 ---
@@ -52,21 +52,21 @@ Remplacer l'API CheapShark par IGDB API pour la gestion des jeux vidéo dans Omn
 ## Étape 6 : Frontend - Composants
 
 - [x] 6.1 Vérifier que `GameDetails.jsx` affiche correctement les données IGDB
-- [ ] 6.2 Vérifier que le scanner fonctionne avec les jeux vidéo
-- [ ] 6.3 Tester l'affichage dans `MyCollections` et `Wishlist`
+- [x] 6.2 Vérifier que le scanner fonctionne avec les jeux vidéo
+- [x] 6.3 Tester l'affichage dans `MyCollections` et `Wishlist`
 
 ---
 
 ## Étape 7 : Tests et Validation
 
-- [ ] 7.1 Tester la recherche de jeux (terme exact, partiel)
-- [ ] 7.2 Tester les détails d'un jeu (cover, summary, platforms, genres)
-- [ ] 7.3 Tester le moteur de recommandations
-- [ ] 7.4 Vérifier la gestion des erreurs (404, rate limit, etc.)
+- [x] 7.1 Tester la recherche de jeux (terme exact, partiel)
+- [x] 7.2 Tester les détails d'un jeu (cover, summary, platforms, genres)
+- [x] 7.3 Tester le moteur de recommandations
+- [x] 7.4 Vérifier la gestion des erreurs (404, rate limit, etc.)
 
 ---
 
 ## Étape 8 : Documentation
 
-- [ ] 8.1 Mettre à jour `CONTEXT/cahier_des_charge.md` si nécessaire
-- [ ] 8.2 Documenter les endpoints IGDB dans le README du backend
+- [x] 8.1 Mettre à jour `CONTEXT/cahier_des_charge.md` si nécessaire
+- [x] 8.2 Documenter les endpoints IGDB dans le README du backend

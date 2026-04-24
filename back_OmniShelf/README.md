@@ -608,5 +608,24 @@ Ce template est fourni tel quel pour vos projets.
 
 ---
 
+## 🎮 API Proxy IGDB
+
+Le backend sert de proxy pour l'API IGDB afin de protéger les clés API et de normaliser les réponses pour le frontend.
+
+### Endpoints
+- `GET /api/proxy/igdb/search?query=...` : Recherche de jeux sur IGDB.
+- `GET /api/proxy/igdb/details?external_id=...` : Détails complets d'un jeu.
+- `GET /api/proxy/search?query=...&category=game` : Recherche générique (orchestrée par `ProxyService`).
+- `GET /api/proxy/details?external_id=...&category=game` : Détails génériques.
+
+### Configuration
+Assurez-vous que les variables suivantes sont définies dans votre `.env` (dans `www/`) :
+```env
+IGDB_CLIENT_ID=votre_client_id
+IGDB_CLIENT_SECRET=votre_client_secret
+```
+
+---
+
 **Créé avec ❤️ pour Symfony 8**
 

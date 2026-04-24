@@ -36,7 +36,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Post(
             security: "is_granted('ROLE_USER')",
-            denormalizationContext: ['groups' => ['item:write']]
+            denormalizationContext: ['groups' => ['item:write']],
+            processor: \App\State\CollectionItemProcessor::class
         ),
         new Delete(security: "is_granted('COLLECTION_ITEM_DELETE', object)")
     ]
@@ -71,6 +72,18 @@ class CollectionItem
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     #[Groups(['item:read', 'item:write'])]
     private bool $isWishlist = false;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['item:read', 'item:write'])]
+    private ?string $title = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['item:read', 'item:write'])]
+    private ?string $imageUrl = null;
+
+    #[ORM\Column(type: 'float', nullable: true)]
+    #[Groups(['item:read'])]
+    private ?float $rating = null;
 
     #[ORM\Column]
     #[Groups(['item:read'])]
@@ -142,6 +155,39 @@ class CollectionItem
     public function getCollection(): ?UserCollection
     {
         return $this->collection;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): static
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(?string $imageUrl): static
+    {
+        $this->imageUrl = $imageUrl;
+        return $this;
+    }
+
+    public function getRating(): ?float
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?float $rating): static
+    {
+        $this->rating = $rating;
+        return $this;
     }
 
     public function setCollection(?UserCollection $collection): static

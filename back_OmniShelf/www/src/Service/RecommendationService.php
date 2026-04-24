@@ -14,6 +14,7 @@ final readonly class RecommendationService
         private EntityManagerInterface $entityManager,
         private HttpClientInterface $httpClient,
         private ProxyService $proxyService,
+        private IgdbService $igdbService,
     ) {}
 
     public function getRecommendationsForUser(int $userId): array
@@ -39,7 +40,15 @@ final readonly class RecommendationService
 
         try {
             if ($topCategory === 'game' || $topCategory === 'all') {
-                $gameResults = $this->proxyService->search('', 'game', 1, 5);
+                // Get IGDB IDs from user's game collection
+                $igdbIds = [];
+                foreach ($collectionItems as $item) {
+                    if ($item->getCategory() === 'game' && str_starts_with($item->getExternalProductId(), 'igdb-')) {
+                        $igdbIds[] = str_replace('igdb-', '', $item->getExternalProductId());
+                    }
+                }
+
+                $gameResults = $this->igdbService->getRecommendations($igdbIds, 5);
                 foreach ($gameResults as $product) {
                     $recommendations[] = [
                         'id' => $product->id,
@@ -47,7 +56,7 @@ final readonly class RecommendationService
                         'title' => $product->title,
                         'category' => 'game',
                         'imageUrl' => $product->imageUrl,
-                        'reason' => "Les jeux les plus populaires du moment"
+                        'reason' => empty($igdbIds) ? "Les jeux les plus populaires du moment" : "Basé sur vos genres préférés"
                     ];
                 }
             }

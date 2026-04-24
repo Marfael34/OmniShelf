@@ -147,4 +147,89 @@ final readonly class IgdbService
             return [];
         }
     }
+    /**
+     * Get recommendations based on a list of IGDB game IDs (by finding their genres/themes)
+     */
+    public function getRecommendations(array $igdbIds, int $limit = 5): array
+    {
+        if (empty($igdbIds)) {
+            return $this->search('', $limit); // Fallback to popular games
+        }
+
+        try {
+            $token = $this->getAccessToken();
+            
+            // 1. Get genres and themes of these games
+            $ids = implode(',', array_map('intval', $igdbIds));
+            $response = $this->httpClient->request('POST', self::API_BASE_URL . '/games', [
+                'headers' => [
+                    'Client-ID' => $this->igdbClientId,
+                    'Authorization' => 'Bearer ' . $token,
+                ],
+                'body' => "fields genres, themes; where id = ({$ids});",
+            ]);
+
+            $gamesInfo = $response->toArray();
+            $genreIds = [];
+            $themeIds = [];
+
+            foreach ($gamesInfo as $game) {
+                foreach ($game['genres'] ?? [] as $gid) $genreIds[] = $gid;
+                foreach ($game['themes'] ?? [] as $tid) $themeIds[] = $tid;
+            }
+
+            if (empty($genreIds)) {
+                return $this->search('', $limit);
+            }
+
+            // 2. Find most frequent genres
+            $genreCounts = array_count_values($genreIds);
+            arsort($genreCounts);
+            $topGenres = array_slice(array_keys($genreCounts), 0, 3);
+            $topGenresStr = implode(',', $topGenres);
+
+            // 3. Query for similar games
+            $queryBody = sprintf(
+                'fields name, cover.url, first_release_date, total_rating; 
+                 where genres = (%s) & id != (%s) & total_rating > 70; 
+                 sort total_rating desc; limit %d;',
+                $topGenresStr,
+                $ids,
+                $limit
+            );
+
+            $response = $this->httpClient->request('POST', self::API_BASE_URL . '/games', [
+                'headers' => [
+                    'Client-ID' => $this->igdbClientId,
+                    'Authorization' => 'Bearer ' . $token,
+                ],
+                'body' => $queryBody,
+            ]);
+
+            $results = [];
+            foreach ($response->toArray() as $item) {
+                $results[] = ProductDto::fromArray([
+                    'id' => 'igdb-' . (string)$item['id'],
+                    'title' => $item['name'],
+                    'category' => 'game',
+                    'imageUrl' => isset($item['cover']['url']) 
+                        ? 'https:' . str_replace('t_thumb', 't_cover_big', $item['cover']['url']) 
+                        : null,
+                    'rating' => isset($item['total_rating']) ? (float)$item['total_rating'] / 10 : null,
+                    'year' => isset($item['first_release_date']) 
+                        ? (string)date('Y', $item['first_release_date']) 
+                        : null,
+                    'metadata' => [
+                        'source' => 'igdb',
+                        'igdb_id' => $item['id']
+                    ]
+                ]);
+            }
+
+            return $results;
+        } catch (\Exception $e) {
+            error_log("IGDB Recommendation Error: " . $e->getMessage());
+            return $this->search('', $limit);
+        }
+    }
 }

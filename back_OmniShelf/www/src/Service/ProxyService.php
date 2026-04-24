@@ -284,7 +284,35 @@ final readonly class ProxyService
             if ($response->getStatusCode() === 200) {
                 $item = $response->toArray()['items'][0] ?? null;
                 if ($item) {
-                    return ['id' => $ean, 'title' => $item['title'], 'category' => 'game', 'imageUrl' => $item['images'][0] ?? null];
+                    $title = $item['title'];
+                    $imageUrl = $item['images'][0] ?? null;
+
+                    // Essayer de trouver un match sur IGDB pour avoir des données plus riches
+                    $igdbResults = $this->igdbService->search($title, 1);
+                    if (!empty($igdbResults)) {
+                        $game = $igdbResults[0];
+                        return [
+                            'id' => $game->id, 
+                            'title' => $game->title, 
+                            'category' => 'game', 
+                            'imageUrl' => $game->imageUrl,
+                            'year' => $game->year,
+                            'metadata' => [
+                                'ean' => $ean,
+                                'source' => 'igdb'
+                            ]
+                        ];
+                    }
+
+                    return [
+                        'id' => $ean, 
+                        'title' => $title, 
+                        'category' => 'game', 
+                        'imageUrl' => $imageUrl,
+                        'metadata' => [
+                            'source' => 'upcitemdb'
+                        ]
+                    ];
                 }
             }
         } catch (\Exception $e) {}
