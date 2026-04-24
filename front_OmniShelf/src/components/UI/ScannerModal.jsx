@@ -151,7 +151,7 @@ const ScannerModal = ({ onClose = () => {} }) => {
                 </div>
                 <div className="space-y-2">
                     <div className="text-red-400 font-black text-2xl tracking-tighter uppercase italic">Code inconnu</div>
-                    <p className="text-dim text-sm font-medium px-4">Le code {scannedCode} ne figure pas dans nos bases de données (Google, RAWG, Discogs).</p>
+                    <p className="text-dim text-sm font-medium px-4">Le code {scannedCode} ne figure pas dans nos bases de données (Google, CheapShark, Discogs).</p>
                 </div>
                 <div className="flex flex-col space-y-3 px-8">
                     <button 

@@ -12,6 +12,11 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        # Preflight CORS : les requêtes OPTIONS ne sont jamais authentifiées
+        options:
+            pattern: .*
+            methods: [OPTIONS]
+            security: false
         login:
             pattern: ^/api/login
             stateless: true

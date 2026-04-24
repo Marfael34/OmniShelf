@@ -23,7 +23,7 @@ La base de données respecte strictement la règle du **"Live Data"**.
 
 #### BFF (Backend For Frontend) - Proxy APIs Tierces
 
-_Note : Ces endpoints interrogent les APIs tierces côté serveur pour cacher les clés d'API (Google Books, IGDB/Twitch, Discogs, Apify) et retournent un format JSON unifié au front._
+_Note : Ces endpoints interrogent les APIs tierces côté serveur pour cacher les clés d'API (Google Books, IGDB API, Discogs, Apify) et retournent un format JSON unifié au front._
 
 - `GET /api/proxy/search?query={q}&category={cat}` : Recherche unifiée.
 - `GET /api/proxy/scan?ean={ean13}&category={cat}` : Résolution d'un code-barres.
@@ -107,6 +107,6 @@ Intégration de la librairie `Html5-Qrcode`.
 
 ### B. Moteur de Recommandation & Live Data
 
-- **Test du "Cold Start"** : Si un nouvel utilisateur n'a aucun item dans sa collection, l'algorithme doit retourner des recommandations génériques (Les plus populaires du moment via IGDB/Google Books).
+- **Test du "Cold Start"** : Si un nouvel utilisateur n'a aucun item dans sa collection, l'algorithme doit retourner des recommandations génériques (Les plus populaires du moment via IGDB API/Google Books).
 - **Test de performance d'hydratation** : Afficher une collection de 100 items ne doit pas déclencher 100 requêtes HTTP simultanées directes vers les APIs tierces. Vérifier que l'API Platform (BFF) ou React Query batch les requêtes ou gère la pagination efficacement avec des Skeleton Loaders.
 - **Test d'exclusion** : Un produit déjà présent dans la collection de l'utilisateur (vérification de `external_product_id`) ne DOIT PAS apparaître dans la section des suggestions.

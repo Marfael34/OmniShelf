@@ -65,7 +65,8 @@ RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available
     AllowOverride All\n\
     Require all granted\n\
     </Directory>" >> /etc/apache2/apache2.conf \
-    && a2enmod rewrite
+    && a2enmod rewrite headers
+
 
 # 9. PERMISSIONS
 # L'utilisateur www-data doit pouvoir écrire dans les répertoires var/log et var/cache.

@@ -61,10 +61,10 @@ const Search = () => {
     <div className="max-w-6xl mx-auto py-12 space-y-12 px-4">
       <div className="text-center space-y-4 max-w-3xl mx-auto">
         <h1 className="text-5xl font-black tracking-tighter text-text-main">Recherche <span className="text-accent">Avancée</span></h1>
-        <p className="text-xl text-text-dim font-medium italic">Exploitez la puissance de l'API Twitch (IGDB).</p>
+        <p className="text-xl text-text-dim font-medium italic">Accédez à des millions de références en temps réel.</p>
         <SearchForm query={query} setQuery={setQuery} category={category} setCategory={setCategory} showFilters={showFilters} setShowFilters={setShowFilters} onSearch={handleSearch} isFetching={isFetching} />
         {showFilters && category === 'game' && <SearchFilters publisher={publisher} setPublisher={setPublisher} genre={genre} setGenre={setGenre} platform={platform} setPlatform={setPlatform} />}
-        {status === "error" && <div className="mt-8 p-6 bg-red-900/20 border border-red-500/50 rounded-3xl text-red-400 font-bold animate-shake text-center">Oups ! Erreur de recherche. <br /><span className="text-xs opacity-70">Vérifiez vos clés d'API Twitch.</span></div>}
+        {status === "error" && <div className="mt-8 p-6 bg-red-900/20 border border-red-500/50 rounded-3xl text-red-400 font-bold animate-shake text-center">Oups ! Erreur de recherche. <br /><span className="text-xs opacity-70">Vérifiez votre connexion réseau ou réessayez plus tard.</span></div>}
       </div>
       <div className="pt-8">
         <div className="flex justify-between items-center mb-10"><h2 className="text-3xl font-black text-text-main">{searchTerms || appliedFilters.publisher ? "Résultats" : "Tendances"}</h2>{results.length > 0 && <span className="text-text-dim font-bold">{results.length} références</span>}</div>

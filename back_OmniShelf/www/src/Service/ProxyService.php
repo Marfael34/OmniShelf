@@ -6,42 +6,21 @@ namespace App\Service;
 
 use App\Dto\ProductDto;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 final readonly class ProxyService
 {
-    private const IGDB_AUTH_URL = "https://id.twitch.tv/oauth2/token";
-    private const IGDB_BASE_URL = "https://api.igdb.com/v4";
+    private const CHEAPSHARK_BASE_URL = "https://www.cheapshark.com/api/1.0";
 
     public function __construct(
         private HttpClientInterface $httpClient,
+        private CacheInterface $cache,
+        private IgdbService $igdbService,
+        private string $booksApiKey,
+        private string $discogsApi,
     ) {}
 
-    /**
-     * Récupère un token d'accès IGDB (Twitch)
-     */
-    private function getIgdbToken(): ?string
-    {
-        try {
-            $clientId = $_ENV['IGDB_CLIENT_ID'] ?? $_SERVER['IGDB_CLIENT_ID'] ?? null;
-            $clientSecret = $_ENV['IGDB_CLIENT_SECRET'] ?? $_SERVER['IGDB_CLIENT_SECRET'] ?? null;
-
-            if (!$clientId || !$clientSecret || $clientSecret === 'A_REMPLIR') return null;
-
-            $response = $this->httpClient->request('POST', self::IGDB_AUTH_URL, [
-                'query' => [
-                    'client_id' => $clientId,
-                    'client_secret' => $clientSecret,
-                    'grant_type' => 'client_credentials'
-                ]
-            ]);
-
-            $data = $response->toArray();
-            return $data['access_token'] ?? null;
-        } catch (\Exception $e) {
-            error_log("IGDB Auth Error: " . $e->getMessage());
-            return null;
-        }
-    }
 
     /**
      * Recherche multi-sources avec filtres avancés
@@ -76,101 +55,68 @@ final readonly class ProxyService
 
     private function searchGames(string $query, int $limit, int $page, array &$results, array $filters = []): void
     {
-        $token = $this->getIgdbToken();
-        $clientId = $_ENV['IGDB_CLIENT_ID'] ?? $_SERVER['IGDB_CLIENT_ID'] ?? null;
+        // 1. Essai avec IGDB (Source premium)
+        try {
+            $igdbResults = $this->igdbService->search($query, $limit);
+            if (!empty($igdbResults)) {
+                foreach ($igdbResults as $res) {
+                    $results[] = $res;
+                }
+            }
+        } catch (\Exception $e) {
+            error_log("IGDB Integration Error: " . $e->getMessage());
+        }
 
-        if ($token && $clientId) {
+        // 2. Fallback ou Complément avec CheapShark
+        if (count($results) < $limit) {
             try {
-                $whereClauses = [];
-                
-                if (!empty($filters['genre'])) {
-                    $whereClauses[] = "genres.name = \"{$filters['genre']}\"";
-                }
-                if (!empty($filters['platform'])) {
-                    $whereClauses[] = "platforms.name = \"{$filters['platform']}\"";
-                }
-                if (!empty($filters['publisher'])) {
-                    $whereClauses[] = "involved_companies.company.name ~ *\"{$filters['publisher']}\"*";
-                }
-
-                $where = count($whereClauses) > 0 ? "where " . implode(" & ", $whereClauses) . ";" : "";
-                $search = !empty($query) ? "search \"{$query}\";" : "";
-                
-                // Si pas de query mais des filtres, on trie par popularité
-                $sort = empty($query) ? "sort total_rating_count desc;" : "";
-
-                $body = "{$search} {$where} {$sort} fields name, cover.url, total_rating, genres.name, platforms.name, involved_companies.company.name, involved_companies.publisher; limit {$limit}; offset " . (($page - 1) * $limit) . ";";
-                
-                $response = $this->httpClient->request('POST', self::IGDB_BASE_URL . "/games", [
-                    'headers' => [
-                        'Client-ID' => $clientId,
-                        'Authorization' => "Bearer {$token}"
-                    ],
-                    'body' => $body
+                $response = $this->httpClient->request('GET', self::CHEAPSHARK_BASE_URL . "/games", [
+                    'query' => [
+                        'title' => $query,
+                        'limit' => $limit - count($results)
+                    ]
                 ]);
 
                 if ($response->getStatusCode() === 200) {
-                    foreach ($response->toArray() as $item) {
-                        $publisher = null;
-                        foreach ($item['involved_companies'] ?? [] as $ic) {
-                            if ($ic['publisher'] ?? false) {
-                                $publisher = $ic['company']['name'];
-                                break;
-                            }
-                        }
-
+                    $data = $response->toArray();
+                    foreach ($data as $item) {
                         $results[] = ProductDto::fromArray([
-                            'id' => 'igdb-' . $item['id'],
-                            'title' => $item['name'],
+                            'id' => 'cs-' . (string)$item['gameID'],
+                            'title' => $item['external'],
                             'category' => 'game',
-                            'imageUrl' => isset($item['cover']['url']) ? "https:" . str_replace('t_thumb', 't_cover_big', $item['cover']['url']) : null,
-                            'rating' => isset($item['total_rating']) ? $item['total_rating'] / 20 : null,
+                            'imageUrl' => $item['thumb'] ?? null,
+                            'rating' => null,
+                            'year' => null,
                             'metadata' => [
-                                'publisher' => $publisher,
-                                'genre' => ($item['genres'] ?? [])[0]['name'] ?? null,
-                                'platform' => ($item['platforms'] ?? [])[0]['name'] ?? null,
+                                'cheapest' => $item['cheapest'] ?? null,
+                                'steamAppID' => $item['steamAppID'] ?? null,
+                                'source' => 'cheapshark'
                             ]
                         ]);
                     }
-                    if (count($results) > 0) return;
-                } else {
-                    error_log("IGDB API Error: " . $response->getStatusCode() . " - " . $response->getContent(false));
                 }
-            } catch (\Exception $e) { error_log("IGDB Error: " . $e->getMessage()); }
+            } catch (\Exception $e) {
+                error_log("CheapShark Search Error: " . $e->getMessage());
+            }
         }
 
-        // Fallback RAWG (inchangé)
-        if (!empty($query)) {
-            try {
-                $apiKey = $_ENV['RAWG_API_KEY'] ?? $_SERVER['RAWG_API_KEY'] ?? null;
-                $response = $this->httpClient->request('GET', 'https://api.rawg.io/api/games', [
-                    'query' => ['search' => $query, 'key' => $apiKey, 'page' => $page, 'page_size' => $limit]
-                ]);
-                if ($response->getStatusCode() === 200) {
-                    foreach ($response->toArray()['results'] ?? [] as $item) {
-                        $results[] = ProductDto::fromArray([
-                            'id' => (string)$item['id'],
-                            'title' => $item['name'],
-                            'category' => 'game',
-                            'imageUrl' => $item['background_image'] ?? null,
-                            'rating' => $item['rating'] ?? null,
-                        ]);
-                    }
-                }
-            } catch (\Exception $e) { error_log("RAWG Error: " . $e->getMessage()); }
+        // 3. Fallback ultime sur Google Books
+        if (empty($results) && !empty($query)) {
+            $this->searchBooks($query . " video game", $limit, $page, $results);
         }
     }
+
 
     private function searchBooks(string $query, int $limit, int $page, array &$results): void
     {
         try {
-            $apiKey = $_ENV['BOOKS_API_KEY'] ?? $_SERVER['BOOKS_API_KEY'] ?? null;
+            $apiKey = $_SERVER['BOOKS_API_KEY'] ?? getenv('BOOKS_API_KEY');
             $response = $this->httpClient->request('GET', "https://www.googleapis.com/books/v1/volumes", [
                 'query' => [
                     'q' => "subject:manga {$query}",
                     'maxResults' => $limit,
                     'startIndex' => ($page - 1) * $limit,
-                    'key' => $apiKey
+                    'key' => $this->booksApiKey
                 ]
             ]);
             if ($response->getStatusCode() === 200) {
@@ -216,9 +162,8 @@ final readonly class ProxyService
     private function searchVinyls(string $query, int $limit, int $page, array &$results): void
     {
         try {
-            $apiKey = $_ENV['DISCOGS_API'] ?? $_SERVER['DISCOGS_API'] ?? null;
             $response = $this->httpClient->request('GET', 'https://api.discogs.com/database/search', [
-                'query' => ['q' => $query, 'type' => 'release', 'format' => 'vinyl', 'token' => $apiKey, 'page' => $page, 'per_page' => $limit],
+                'query' => ['q' => $query, 'type' => 'release', 'format' => 'vinyl', 'token' => $this->discogsApi, 'page' => $page, 'per_page' => $limit],
                 'headers' => ['User-Agent' => 'OmniShelf/1.0']
             ]);
             if ($response->getStatusCode() === 200) {
@@ -236,24 +181,46 @@ final readonly class ProxyService
 
     public function getDetails(string $externalId, string $category): array
     {
-        if ($category === 'game' && str_starts_with($externalId, 'igdb-')) {
-            return $this->getIgdbDetails(str_replace('igdb-', '', $externalId));
-        }
-
         if ($category === 'game') {
-            try {
-                $apiKey = $_ENV['RAWG_API_KEY'] ?? $_SERVER['RAWG_API_KEY'] ?? null;
-                $response = $this->httpClient->request('GET', "https://api.rawg.io/api/games/{$externalId}", ['query' => ['key' => $apiKey]]);
-                return $response->toArray();
-            } catch (\Exception $e) { return []; }
+            // IGDB Details
+            if (str_starts_with($externalId, 'igdb-')) {
+                return $this->igdbService->getDetails(str_replace('igdb-', '', $externalId));
+            }
+
+            // CheapShark Details
+            if (str_starts_with($externalId, 'cs-')) {
+                $id = str_replace('cs-', '', $externalId);
+                try {
+                    $response = $this->httpClient->request('GET', self::CHEAPSHARK_BASE_URL . "/games", [
+                        'query' => ['id' => $id]
+                    ]);
+                    $data = $response->toArray();
+                    $info = $data['info'] ?? [];
+                    
+                    return [
+                        'name' => $info['title'] ?? 'Inconnu',
+                        'description' => "Prix le plus bas constaté : " . ($data['cheapestPriceEver']['price'] ?? 'N/A') . "€",
+                        'background_image' => $info['thumb'] ?? null,
+                        'genres' => [['name' => 'Jeu Vidéo']],
+                        'platforms' => [['platform' => ['name' => 'PC / Multi']]],
+                        'publishers' => [],
+                        'rating' => null,
+                        'release_year' => null,
+                        'screenshots' => [],
+                        'cheapshark_id' => $id,
+                        'deals' => $data['deals'] ?? []
+                    ];
+                } catch (\Exception $e) { return []; }
+            }
+
+            // Fallback Google Books si l'ID correspond
+            if (strlen($externalId) > 10 && !is_numeric($externalId)) {
+                return $this->getBookDetails($externalId);
+            }
         }
 
         if ($category === 'manga' || $category === 'book') {
-            try {
-                $apiKey = $_ENV['BOOKS_API_KEY'] ?? $_SERVER['BOOKS_API_KEY'] ?? null;
-                $response = $this->httpClient->request('GET', "https://www.googleapis.com/books/v1/volumes/{$externalId}", ['query' => ['key' => $apiKey]]);
-                return $response->toArray();
-            } catch (\Exception $e) { return []; }
+            return $this->getBookDetails($externalId);
         }
 
         if ($category === 'pop') {
@@ -266,8 +233,7 @@ final readonly class ProxyService
 
         if ($category === 'vinyl') {
             try {
-                $apiKey = $_ENV['DISCOGS_API'] ?? $_SERVER['DISCOGS_API'] ?? null;
-                $response = $this->httpClient->request('GET', "https://api.discogs.com/releases/{$externalId}", ['query' => ['token' => $apiKey], 'headers' => ['User-Agent' => 'OmniShelf/1.0']]);
+                $response = $this->httpClient->request('GET', "https://api.discogs.com/releases/{$externalId}", ['query' => ['token' => $this->discogsApi], 'headers' => ['User-Agent' => 'OmniShelf/1.0']]);
                 return $response->toArray();
             } catch (\Exception $e) { return []; }
         }
@@ -275,55 +241,9 @@ final readonly class ProxyService
         return [];
     }
 
-    private function getIgdbDetails(string $id): array
-    {
-        $token = $this->getIgdbToken();
-        $clientId = $_ENV['IGDB_CLIENT_ID'] ?? $_SERVER['IGDB_CLIENT_ID'] ?? null;
-        if (!$token || !$clientId) return [];
-
-        try {
-            $body = "fields name, summary, cover.url, genres.name, platforms.name, involved_companies.company.name, involved_companies.publisher, first_release_date, total_rating; where id = {$id};";
-            $response = $this->httpClient->request('POST', self::IGDB_BASE_URL . "/games", [
-                'headers' => ['Client-ID' => $clientId, 'Authorization' => "Bearer {$token}"],
-                'body' => $body
-            ]);
-            $data = $response->toArray()[0] ?? [];
-            
-            return [
-                'name' => $data['name'] ?? 'Inconnu',
-                'description' => $data['summary'] ?? '',
-                'background_image' => isset($data['cover']['url']) ? "https:" . str_replace('t_thumb', 't_1080p', $data['cover']['url']) : null,
-                'genres' => array_map(fn($g) => ['name' => $g['name']], $data['genres'] ?? []),
-                'platforms' => array_map(fn($p) => ['platform' => ['name' => $p['name']]], $data['platforms'] ?? []),
-                'publishers' => array_map(fn($c) => ['name' => $c['company']['name']], array_filter($data['involved_companies'] ?? [], fn($ic) => $ic['publisher'] ?? false)),
-                'rating' => isset($data['total_rating']) ? $data['total_rating'] / 20 : null,
-            ];
-        } catch (\Exception $e) { return []; }
-    }
 
     public function scan(string $ean): ?array
     {
-        $token = $this->getIgdbToken();
-        $clientId = $_ENV['IGDB_CLIENT_ID'] ?? $_SERVER['IGDB_CLIENT_ID'] ?? null;
-        if ($token && $clientId) {
-            try {
-                $body = "fields game.name, game.cover.url; where uid = \"{$ean}\" & category = 26;";
-                $response = $this->httpClient->request('POST', self::IGDB_BASE_URL . "/external_games", [
-                    'headers' => ['Client-ID' => $clientId, 'Authorization' => "Bearer {$token}"],
-                    'body' => $body
-                ]);
-                $ext = $response->toArray()[0] ?? null;
-                if ($ext && isset($ext['game'])) {
-                    return [
-                        'id' => 'igdb-' . $ext['game']['id'],
-                        'title' => $ext['game']['name'],
-                        'category' => 'game',
-                        'imageUrl' => isset($ext['game']['cover']['url']) ? "https:" . str_replace('t_thumb', 't_cover_big', $ext['game']['cover']['url']) : null,
-                    ];
-                }
-            } catch (\Exception $e) {}
-        }
-
         try {
             $response = $this->httpClient->request('GET', "https://api.upcitemdb.com/prod/trial/lookup", ['query' => ['upc' => $ean]]);
             if ($response->getStatusCode() === 200) {
@@ -357,5 +277,26 @@ final readonly class ProxyService
             }
         }
         return $unique;
+    }
+
+    private function getBookDetails(string $externalId): array
+    {
+        try {
+            $response = $this->httpClient->request('GET', "https://www.googleapis.com/books/v1/volumes/{$externalId}", ['query' => ['key' => $this->booksApiKey]]);
+            $data = $response->toArray();
+            $vol = $data['volumeInfo'] ?? [];
+
+            return [
+                'name' => $vol['title'] ?? 'Inconnu',
+                'author' => ($vol['authors'] ?? [])[0] ?? 'Auteur inconnu',
+                'description' => $vol['description'] ?? '',
+                'background_image' => $vol['imageLinks']['thumbnail'] ?? $vol['imageLinks']['smallThumbnail'] ?? null,
+                'rating' => $vol['averageRating'] ?? null,
+                'release_year' => isset($vol['publishedDate']) ? substr($vol['publishedDate'], 0, 4) : null,
+                'publisher' => $vol['publisher'] ?? null,
+                'page_count' => $vol['pageCount'] ?? null,
+                'categories' => $vol['categories'] ?? [],
+            ];
+        } catch (\Exception $e) { return []; }
     }
 }

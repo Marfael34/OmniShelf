@@ -81,7 +81,7 @@ Le frontend est une **Progressive Web App (PWA)** construite avec React et Vite,
 
 - **React Compiler**: Le code est écrit de manière simple, sans `useMemo` ou `useCallback`. Le compilateur se charge d'optimiser les re-renders.
 - **TanStack Query**: Toute interaction avec le backend Symfony passe par React Query pour gérer automatiquement le cache, les états de chargement (`isLoading`), les erreurs et la synchronisation des données.
-- **Scanner via `html5-qrcode`**: La librairie est intégrée dans un composant React qui, une fois un code-barres détecté, déclenche un appel à l'API `/api/scan/{barcode}` via React Query.
+- **Scanner via `html5-qrcode`**: La librairie est intégrée dans un composant React qui, une fois un code-barres détecté, déclenche un appel à l'API `/api/scan/{barcode}` via React Query (interrogeant Google, CheapShark ou Discogs).
 
 ### Structure des Dossiers Frontend
 
@@ -105,7 +105,7 @@ src/
 ## 4. Workflow Détaillé : Scan d'une nouvelle Funko Pop
 
 1.  **Scan (Frontend)**: L'utilisateur ouvre la modale de scan. `html5-qrcode` détecte le code-barres `0889698565551`.
-2.  **Appel API (Frontend)**: Le hook `useQuery` de React Query est appelé pour l'endpoint `GET /api/scan/0889698565551`. L'UI affiche un composant de chargement (skeleton).
+2.  **Appel API (Frontend)**: Le hook `useQuery` de React Query est appelé pour l'endpoint `GET /api/scan/0889698565551`. L'UI affiche un composant de chargement (skeleton) pendant que le backend interroge CheapShark ou Google Books.
 3.  **Réception (Backend)**: Le `FunkoController` reçoit la requête.
 4.  **Cache Check (Backend)**: Doctrine cherche dans la table `Figurine` un enregistrement où `barcode` = `0889698565551`.
 5.  **Cache Miss (Backend)**: La figurine n'est pas trouvée. Le contrôleur appelle le `BarcodeLookupService`.

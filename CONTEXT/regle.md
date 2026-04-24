@@ -52,7 +52,7 @@ Symfony 8 requiert au minimum PHP 8.4. Cette version majeure a nettoyé toutes l
 
 | Concept                             | Standard Symfony 8                      | Pratique Obsolète (à bannir)                  |
 | :---------------------------------- | :-------------------------------------- | :-------------------------------------------- |
-| **Identifiants (Bases de données)** | Auto-incrément (Entiers)               | TOUT TYPE DE UUID (STRICTEMENT INTERDIT)      |
+| **Identifiants (Bases de données)** | Auto-incrément (Entiers)                | TOUT TYPE DE UUID (STRICTEMENT INTERDIT)      |
 | **Résolution des Types**            | Composant `TypeInfo` stabilisé          | Analyse manuelle ou via Reflection API lourde |
 | **Mappage de Données**              | Composant `ObjectMapper` stabilisé      | Sérialiseurs maison complexes                 |
 | **Gestion des dates**               | `DatePoint` / `TimePoint` (sans fuseau) | Objets `DateTime` globaux mal gérés           |
@@ -188,7 +188,7 @@ A insérer dans votre fichier `index.css` ou `global.css` :
 - **Logique métier** : Les contrôleurs ne doivent contenir aucune logique métier. Leur seul rôle est de réceptionner la requête HTTP, d'appeler un service dédié (situé dans `src/Service/` ou `src/UseCase/`), et de retourner une réponse.
 
 ### Gestion des Variables d'Environnement (.env)
-- **Secrets** : Aucune clé d'API tierce (Google Books, IGDB, Discogs) ou mot de passe de base de données ne doit apparaître en clair dans le code.
+- **Secrets** : Aucune clé d'API tierce (Google Books, IGDB API, Discogs) ou mot de passe de base de données ne doit apparaître en clair dans le code.
 - **Injection** : Ces valeurs doivent être injectées via des variables d'environnement (`$_ENV`) et validées au démarrage de l'application via les attributs d'injection de configuration.
 
 ### Qualité du Code et Formatage (PER Coding Style)
@@ -229,3 +229,4 @@ A insérer dans votre fichier `index.css` ou `global.css` :
 
 ### Pagination Obligatoire
 - **Performance** : Toute route retournant une liste d'éléments doit être paginée côté serveur et côté client pour éviter la surcharge de la mémoire locale ou de la base de données.
+````

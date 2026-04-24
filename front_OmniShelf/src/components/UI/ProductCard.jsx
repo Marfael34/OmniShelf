@@ -51,6 +51,9 @@ const ProductCard = ({ item = {}, onDelete = null, showDelete = false }) => {
           {item.title || "Produit sans titre"}
         </h3>
         <p className="text-[10px] text-text-dim truncate">
+            {item.metadata?.platform && <span className="text-accent/90">{item.metadata.platform}</span>}
+            {item.metadata?.releaseYear && ` (${item.metadata.releaseYear})`}
+            {(item.metadata?.platform || item.metadata?.releaseYear) && " • "}
             {item.author || item.metadata?.publisher || item.metadata?.genre || "OmniShelf Collection"}
         </p>
       </div>

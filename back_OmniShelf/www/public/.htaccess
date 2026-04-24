@@ -1,5 +1,12 @@
 RewriteEngine On
 
+# -------------------------------------------------------
+# CORS Preflight : passer OPTIONS directement à Symfony
+# Les headers CORS sont gérés par le CorsSubscriber PHP
+# -------------------------------------------------------
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^ index.php [QSA,L]
+
 # Autoriser l'en-tête Authorization (nécessaire pour JWT avec Apache)
 RewriteCond %{HTTP:Authorization} ^(.+)$
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -13,4 +20,3 @@ RewriteRule ^(.*)$ index.php [QSA,L]
 <FilesMatch "\.(env|log|ini|conf)$">
     Require all denied
 </FilesMatch>
-
